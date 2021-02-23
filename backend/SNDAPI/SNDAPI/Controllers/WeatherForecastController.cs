@@ -1,14 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SNDAPI.Helpers;
+using SNDAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace SNDAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]/[action]")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -23,8 +27,9 @@ namespace SNDAPI.Controllers
             _logger = logger;
         }
 
+        [AuthorizeRoles(Rol.Customer)]
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public IEnumerable<WeatherForecast> GetUserData()
         {
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
@@ -34,6 +39,23 @@ namespace SNDAPI.Controllers
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [AuthorizeRoles(Rol.Administrator)]
+        [HttpGet]
+        public IActionResult GetAdminData()
+        {
+            try
+            {
+                var role = User.Claims.First(x => x.Type == ClaimTypes.Role).Value;
+                var userId = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+                var text = $"Hello from DataController. Only users above admin can access this endpoint. Your role is {role} with id {userId}.";
+                return Ok(text);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
     }
 }
