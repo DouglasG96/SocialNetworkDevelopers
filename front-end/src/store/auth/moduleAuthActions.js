@@ -7,7 +7,6 @@
   Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
-import jwt from "../../http/requests/auth/jwt/index.js"
 
 
 import firebase from 'firebase/app'

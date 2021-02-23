@@ -1494,12 +1494,14 @@ router.beforeEach((to, from, next) => {
     //     return next();
     // }
 
-    // If auth required, check login. If login fails redirect to login page
+    // If auth required, check login. If login fails redirect to login page}
+    /*
     if (to.meta.authRequired) {
       if (!(auth.isAuthenticated() || firebaseCurrentUser)) {
         router.push({ path: "/pages/login", query: { to: to.path } });
       }
     }
+    */
 
     return next();
     // Specify the current path as the customState parameter, meaning it
