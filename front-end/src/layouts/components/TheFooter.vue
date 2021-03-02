@@ -11,11 +11,13 @@
 
 <template functional>
     <footer class="the-footer flex-wrap justify-between" :class="classes">
-        <span>COPYRIGHT &copy; {{ new Date().getFullYear() }} <a href="https://1.envato.market/vuexy_admin" target="_blank" rel="nofollow">Pixinvent</a>, All rights Reserved</span>
-        <span class="md:flex hidden items-center">
+        <span>COPYRIGHT &copy; {{ new Date().getFullYear() }}, {{'Todos los derechos reservados'}} </span>
+      <!--
+      <span class="md:flex hidden items-center">
             <span>Hand-crafted & Made with</span>
             <feather-icon icon="HeartIcon" svgClasses="stroke-current text-danger w-6 h-6" class="ml-2" />
         </span>
+      -->
 
         <!-- buyNow component -->
         <component :is="injections.components.BuyNow"></component>
@@ -23,7 +25,7 @@
 </template>
 
 <script>
-import BuyNow from '../../components/BuyNow.vue'
+//import BuyNow from '../../components/BuyNow.vue'
 
 export default {
     name: "the-footer",
@@ -35,7 +37,7 @@ export default {
     inject: {
       components:{
           default: {
-            BuyNow
+            //BuyNow
           }
       }
     }

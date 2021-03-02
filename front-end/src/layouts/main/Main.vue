@@ -11,7 +11,7 @@
 <template>
   <div class="layout--main" :class="[layoutTypeClass, navbarClasses, footerClasses, {'no-scroll': isAppPage}]">
 
-    <vx-tour :steps="steps" v-if="!disableThemeTour && (windowWidth >= 1200 && mainLayoutType === 'vertical' && verticalNavMenuWidth == 'default')" />
+    <!--<vx-tour :steps="steps" v-if="!disableThemeTour && (windowWidth >= 1200 && mainLayoutType === 'vertical' && verticalNavMenuWidth == 'default')" />-->
 
     <the-customizer
       v-if                    = "!disableCustomizer"
@@ -28,7 +28,7 @@
 
     <v-nav-menu
       :navMenuItems = "navMenuItems"
-      title         = "Vuexy"
+      title         = "SND"
       parent        = ".layout--main" />
 
     <div id="content-area" :class="[contentAreaClass, {'show-overlay': bodyOverlay}]">
@@ -140,7 +140,7 @@ import TheFooter           from '@/layouts/components/TheFooter.vue'
 import themeConfig         from '@/../themeConfig.js'
 import VNavMenu            from '@/layouts/components/vertical-nav-menu/VerticalNavMenu.vue'
 
-const VxTour = () => import('@/components/VxTour.vue')
+//const VxTour = () => import('@/components/VxTour.vue')
 
 export default {
   components: {
@@ -151,7 +151,7 @@ export default {
     TheNavbarHorizontal,
     TheNavbarVertical,
     VNavMenu,
-    VxTour
+    //VxTour
   },
   data() {
     return {

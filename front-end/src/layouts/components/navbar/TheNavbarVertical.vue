@@ -23,7 +23,7 @@
 
         <vs-spacer />
 
-        <i18n />
+        <!--<i18n />-->
 
         <search-bar />
 
@@ -41,7 +41,7 @@
 
 <script>
 import Bookmarks            from "./components/Bookmarks.vue"
-import I18n                 from "./components/I18n.vue"
+//import I18n                 from "./components/I18n.vue"
 import SearchBar            from "./components/SearchBar.vue"
 import CartDropDown         from "./components/CartDropDown.vue"
 import NotificationDropDown from "./components/NotificationDropDown.vue"
@@ -57,7 +57,7 @@ export default {
   },
   components: {
     Bookmarks,
-    I18n,
+    //I18n,
     SearchBar,
     CartDropDown,
     NotificationDropDown,
