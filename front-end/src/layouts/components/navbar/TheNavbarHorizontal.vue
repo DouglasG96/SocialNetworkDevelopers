@@ -25,7 +25,7 @@
 
       <search-bar />
 
-      <cart-drop-down />
+      <!--<cart-drop-down />-->
 
       <notification-drop-down />
 
@@ -40,7 +40,7 @@
 import Bookmarks            from "./components/Bookmarks.vue"
 //import I18n                 from "./components/I18n.vue"
 import SearchBar            from "./components/SearchBar.vue"
-import CartDropDown         from "./components/CartDropDown.vue"
+//import CartDropDown         from "./components/CartDropDown.vue"
 import NotificationDropDown from "./components/NotificationDropDown.vue"
 import ProfileDropDown      from "./components/ProfileDropDown.vue"
 import Logo                 from "../Logo.vue"
@@ -59,7 +59,7 @@ export default {
     Bookmarks,
     //I18n,
     SearchBar,
-    CartDropDown,
+    //CartDropDown,
     NotificationDropDown,
     ProfileDropDown,
   },

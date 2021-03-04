@@ -50,9 +50,9 @@ export default [
   //   ]
   // },
   {
-    header: "Mas Vendidos",
+    header: "Categorias",
     icon: "PackageIcon",
-    i18n: "Mas Vendidos",
+    i18n: "Categorias",
     items: [
       {
         url: null,
@@ -62,10 +62,11 @@ export default [
         submenu: [
           {
             url: '/apps/eCommerce/shop',
-            name: "Comprar",
+            name: "Telefonos",
             slug: "ecommerce-shop",
-            i18n: "Comprar",
+            i18n: "Telefonos",
           },
+
         //   {
         //     url: '/apps/eCommerce/item/',
         //     name: "Item Details",
@@ -86,6 +87,20 @@ export default [
         //   },
         ]
       },
+      {
+        url: null,
+        name: "Servicios",
+        icon: "Services",
+        i18n: "Servicios",
+        submenu: [
+          {
+            url: '',
+            name: "Limpieza",
+            slug: "ecommerce-shop",
+            i18n: "Limpieza",
+          },
+        ]
+      }
       // {
       //   url: null,
       //   name: "User",
