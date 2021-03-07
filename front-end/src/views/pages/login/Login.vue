@@ -27,19 +27,21 @@
                   <h4 class="mb-4">Login</h4>
                   <p>Welcome back, please login to your account.</p>
                 </div>
-
                 <vs-tabs>
+<!--
                   <vs-tab label="JWT">
                     <login-jwt></login-jwt>
                   </vs-tab>
+    -->
 
                   <vs-tab label="Firebase">
                     <login-firebase></login-firebase>
                   </vs-tab>
-
+<!--
                   <vs-tab label="Auth0">
                     <login-auth0></login-auth0>
                   </vs-tab>
+                  -->
                 </vs-tabs>
 
               </div>
@@ -53,13 +55,11 @@
 
 
 <script>
-import LoginJwt from "./LoginJWT.vue"
 import LoginFirebase from "./LoginFirebase.vue"
 import LoginAuth0 from "./LoginAuth0.vue"
 
 export default {
   components: {
-    LoginJwt,
     LoginFirebase,
     LoginAuth0
   }

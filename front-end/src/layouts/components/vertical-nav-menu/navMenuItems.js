@@ -27,94 +27,80 @@ export default [
   //   icon: "MailIcon",
   //   i18n: "Email",
   // },
+  // {
+  //   url: null,
+  //   name: "Dashboard",
+  //   tag: "2",
+  //   tagColor: "warning",
+  //   icon: "HomeIcon",
+  //   i18n: "Dashboard",
+  //   submenu: [
+  //     {
+  //       url: '/dashboard/analytics',
+  //       name: "Analytics",
+  //       slug: "dashboard-analytics",
+  //       i18n: "Analytics",
+  //     },
+  //     {
+  //       url: '/dashboard/ecommerce',
+  //       name: "eCommerce",
+  //       slug: "dashboard-ecommerce",
+  //       i18n: "eCommerce",
+  //     },
+  //   ]
+  // },
   {
-    url: null,
-    name: "Dashboard",
-    tag: "2",
-    tagColor: "warning",
-    icon: "HomeIcon",
-    i18n: "Dashboard",
-    submenu: [
-      {
-        url: '/dashboard/analytics',
-        name: "Analytics",
-        slug: "dashboard-analytics",
-        i18n: "Analytics",
-      },
-      {
-        url: '/dashboard/ecommerce',
-        name: "eCommerce",
-        slug: "dashboard-ecommerce",
-        i18n: "eCommerce",
-      },
-    ]
-  },
-  {
-    header: "Apps",
+    header: "Categorias",
     icon: "PackageIcon",
-    i18n: "Apps",
+    i18n: "Categorias",
     items: [
-      // {
-      //   url: "/apps/email",
-      //   name: "Email",
-      //   slug: "email",
-      //   icon: "MailIcon",
-      //   i18n: "Email",
-      // },
-      // {
-      //   url: "/apps/chat",
-      //   name: "Chat",
-      //   slug: "chat",
-      //   icon: "MessageSquareIcon",
-      //   i18n: "Chat",
-      // },
-      // {
-      //   url: "/apps/todo",
-      //   name: "Todo",
-      //   slug: "todo",
-      //   icon: "CheckSquareIcon",
-      //   i18n: "Todo",
-      // },
-      // {
-      //   url: "/apps/calendar/vue-simple-calendar",
-      //   name: "Calendar",
-      //   slug: "calendar-simple-calendar",
-      //   icon: "CalendarIcon",
-      //   tagColor: "success",
-      //   i18n: "Calendar",
-      // },
       {
         url: null,
-        name: "eCommerce",
+        name: "Productos",
         icon: "ShoppingCartIcon",
-        i18n: "eCommerce",
+        i18n: "Productos",
         submenu: [
           {
             url: '/apps/eCommerce/shop',
-            name: "Shop",
+            name: "Telefonos",
             slug: "ecommerce-shop",
-            i18n: "Shop",
+            i18n: "Telefonos",
           },
-          {
-            url: '/apps/eCommerce/item/',
-            name: "Item Details",
-            slug: "ecommerce-item-detail-view",
-            i18n: "ItemDetails",
-          },
-          {
-            url: '/apps/eCommerce/wish-list',
-            name: "Wish List",
-            slug: "ecommerce-wish-list",
-            i18n: "WishList",
-          },
-          {
-            url: '/apps/eCommerce/checkout',
-            name: "Checkout",
-            slug: "ecommerce-checkout",
-            i18n: "Checkout",
-          },
+
+        //   {
+        //     url: '/apps/eCommerce/item/',
+        //     name: "Item Details",
+        //     slug: "ecommerce-item-detail-view",
+        //     i18n: "ItemDetails",
+        //   },
+        //   {
+        //     url: '/apps/eCommerce/wish-list',
+        //     name: "Wish List",
+        //     slug: "ecommerce-wish-list",
+        //     i18n: "WishList",
+        //   },
+        //   {
+        //     url: '/apps/eCommerce/checkout',
+        //     name: "Checkout",
+        //     slug: "ecommerce-checkout",
+        //     i18n: "Checkout",
+        //   },
         ]
       },
+      {
+        url: null,
+        name: "Servicios",
+        icon: "Services",
+        i18n: "Servicios",
+        submenu: [
+          {
+            url: '',
+            name: "Limpieza",
+            slug: "ecommerce-shop",
+            i18n: "Limpieza",
+          },
+        ]
+      }
       // {
       //   url: null,
       //   name: "User",
