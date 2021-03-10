@@ -40,7 +40,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-
+import api from '../api/users';
 export default {
   data() {
     return {
@@ -49,31 +49,21 @@ export default {
     };
   },
   async mounted() {
-    console.log(this.user);
-    this.loginUser({
-      user: this.email,
-      password: this.password,
-    });
-    if (this.user != null) {
-     await this.$router.push({
-        path: "/",
-      });
-    }
   },
   computed: {
-    ...mapState("users", ["user"]),
+    ...mapState("auth", ["user"]),
   },
   methods: {
-    ...mapActions("users", ["loginUser"]),
+    ...mapActions("auth", ["loginUser"]),
     async login() {
-      this.loginUser({
-        user: this.email,
-        password: this.password,
-      });
-      if (this.user != null) {
-        await this.$router.push({
-          path: "/Pricing",
-        });
+      try {
+        const resp = await this.loginUser({email: this.email,password: this.password});
+        console.log(resp);
+        this.$router.push({path: '/Pricing'}).catch(error => { });
+        this.email = "";
+        this.password = "";
+      } catch (error) {
+        console.log(error);
       }
     },
   },
