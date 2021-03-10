@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SNDAPI.DTO;
 using SNDAPI.Exceptions;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace SNDAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]/v1/[action]")]
     public class LoginController : ControllerBase
     {
         private readonly IUser _user;
@@ -35,7 +36,7 @@ namespace SNDAPI.Controllers
             }
             catch (UserNotFoundException e)
             {
-                return NotFound(e.Message);
+                return StatusCode(StatusCodes.Status404NotFound, e.Message);
             }
             catch (Exception e)
             {

@@ -28,12 +28,21 @@ export default function ({ store }) {
   })
 
   Router.beforeEach((to, from, next) => {
-    if (to.meta.requireAuth && store.state.users.user === null) {
-      console.log('validando');
-      next('/Login');
+    // if (to.meta.requireAuth && store.getters['auth/isLoggedIn']) {
+    //   next('/Login');
 
+    // } else {
+    //   next();
+    // }
+
+    if (to.meta.requireAuth) {
+      if (store.getters['auth/isLoggedIn']) {
+        next()
+        return
+      }
+      next('/Login');
     } else {
-      next();
+      next()
     }
 
   });

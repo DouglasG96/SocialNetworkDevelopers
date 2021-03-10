@@ -27,11 +27,19 @@ namespace SNDAPI.Services
         }
         public async Task<string> Login(UserDTO userDTO)
         {
-            var user = await _context.Usuarios.FirstOrDefaultAsync(x => x.CorreoElectronico == userDTO.Email && x.Contrasena == userDTO.Password);
-            if (user == null)
-                throw new UserNotFoundException($"Login Credenciales Incorrectas.");
-            var jwt = GenerateJwt(user);
-            return jwt ; 
+            try
+            {
+                var user = await _context.Usuarios.FirstOrDefaultAsync(x => x.CorreoElectronico == userDTO.Email && x.Contrasena == userDTO.Password);
+                if (user == null)
+                    throw new UserNotFoundException($"Login Credenciales Incorrectas.");
+                var jwt = GenerateJwt(user);
+                return jwt ; 
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
         }
 
         private string GenerateJwt(Usuario user)

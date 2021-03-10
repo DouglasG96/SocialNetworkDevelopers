@@ -12,7 +12,8 @@ using System.Threading.Tasks;
 namespace SNDAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]/v1/[action]")]
+
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]

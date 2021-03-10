@@ -32,7 +32,7 @@ namespace APISND
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddCors();
             services.AddControllers();
 
             // Registro del Contexto de datos como Servicio Cadena conexion
@@ -104,6 +104,14 @@ namespace APISND
             }
 
             app.UseRouting();
+
+            app.UseCors(builder =>
+            builder
+                .WithOrigins("http://localhost:8080", "http://localhost:8081")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials()
+        );
 
             app.UseAuthentication();
             app.UseAuthorization();
