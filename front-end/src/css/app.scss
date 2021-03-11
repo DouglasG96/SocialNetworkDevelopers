@@ -1,0 +1,19 @@
+// app global css in SCSS form
+body{
+color: #303332
+}
+
+//colores
+.text-myBrand{
+  color: #a8875a
+}
+.bg-myBrand{
+  background: #d32079
+}
+.text-someTextColor{
+  color: rgb(31, 190, 45)
+}
+// quito logo map-box
+a.mapboxgl-ctrl-logo {
+  display: none !important;
+}
