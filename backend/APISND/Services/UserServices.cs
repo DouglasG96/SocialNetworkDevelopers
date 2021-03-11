@@ -59,22 +59,6 @@ namespace SNDAPI.Services
 
             var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], _configuration["Jwt:Audience"], claims, expires: DateTime.Now.AddHours(24), signingCredentials: signIn);
             return new JwtSecurityTokenHandler().WriteToken(token);
-            //var key = _configuration["Jwt:Key"]; //_configuration.GetValue<string>("jwt-signing-key");
-            //var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-            //var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-            //var tokenOptions = new JwtSecurityToken(
-            //    issuer: _configuration["Jwt:Issuer"],
-            //    audience: _configuration["Jwt:Audience"],
-            //    claims: new List<Claim>
-            //    {
-            //        new Claim(ClaimTypes.NameIdentifier,user.IdUsuario.ToString()),
-            //        new Claim(ClaimTypes.Role,user.IdRol.ToString()),
-            //    },
-            //    expires: DateTime.Now.AddHours(24),
-            //    signingCredentials: signinCredentials
-            //);
-
-            //return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
         }
     }
 }

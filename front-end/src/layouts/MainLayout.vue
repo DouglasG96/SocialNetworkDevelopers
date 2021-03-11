@@ -43,6 +43,9 @@
               <img src="https://cdn.quasar.dev/img/boy-avatar.png">
             </q-avatar>
           </q-btn>
+          <q-btn round flat v-if="isLoggedIn" @click="logout()">
+            Cerrar Sesión
+          </q-btn>
         </div>
       </q-toolbar>
     </q-header>
@@ -302,8 +305,9 @@
 </template>
 
 <script>
-    import EssentialLink from 'components/EssentialLink'
-    import Messages from "./Messages";
+import EssentialLink from 'components/EssentialLink'
+import Messages from "./Messages";
+import { mapActions } from "vuex";
 
     export default {
         name: 'MainLayout',
@@ -317,6 +321,22 @@
             return {
                 leftDrawerOpen: false,
             }
-        }
+        },
+    computed : {
+      isLoggedIn : function(){ return this.$store.getters['auth/isLoggedIn']}
+    },
+        methods: {
+          ...mapActions("auth", ["logout"]),
+          async logout() {
+            console.log('logout');
+            try {
+              const resp = await this.logout();
+              console.log(resp);
+              await this.$router.push({path: '/Login'}).catch(error => { });
+            } catch (error) {
+              console.log(error);
+            }
+          },
+        },
     }
 </script>

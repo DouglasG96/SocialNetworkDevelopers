@@ -49,10 +49,14 @@ export default {
     };
   },
   async mounted() {
+    // if (this.$store.getters['auth/isLoggedIn']) {
+    //   this.$router.push({path: '/'}).catch(error => { });
+    // }
   },
   computed: {
     ...mapState("auth", ["user"]),
   },
+
   methods: {
     ...mapActions("auth", ["loginUser"]),
     async login() {

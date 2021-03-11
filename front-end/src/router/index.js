@@ -28,14 +28,8 @@ export default function ({ store }) {
   })
 
   Router.beforeEach((to, from, next) => {
-    // if (to.meta.requireAuth && store.getters['auth/isLoggedIn']) {
-    //   next('/Login');
-
-    // } else {
-    //   next();
-    // }
-
     if (to.meta.requireAuth) {
+      //si existe token
       if (store.getters['auth/isLoggedIn']) {
         next()
         return

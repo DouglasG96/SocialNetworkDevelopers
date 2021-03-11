@@ -7,11 +7,18 @@ export async function loginUser ({ commit }, payload) {
         try {
             const resp = await api.Login(payload);
             LocalStorage.set('token', JSON.stringify(resp))
-            commit('auth_success', resp)
-            resolve(resp)
+            commit('auth_success', resp);
+            resolve(resp);
         } catch (error) {
             console.log(error.response);
             reject(error)
         }
+    })
+}
+export  function logout ({ commit }) {
+    return new Promise((resolve, reject) => {
+        commit('logout')
+        LocalStorage.remove('token');
+        resolve()
     })
 }
