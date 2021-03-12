@@ -10,15 +10,18 @@ export async function loginUser ({ commit }, payload) {
             commit('auth_success', resp);
             resolve(resp);
         } catch (error) {
-            console.log(error.response);
-            reject(error)
+            reject(error.response)
         }
     })
 }
-export  function logout ({ commit }) {
+export async function logoutUsers ({ commit }) {
     return new Promise((resolve, reject) => {
-        commit('logout')
-        LocalStorage.remove('token');
-        resolve()
+        try {            
+            commit('logout')
+            LocalStorage.remove('token');
+            resolve()
+        } catch (error) {
+           reject(error)
+        }
     })
 }

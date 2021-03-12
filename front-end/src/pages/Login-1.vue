@@ -16,7 +16,7 @@
             </div>
           </q-card-section>
           <q-card-section>
-            <q-form class="q-gutter-md"  @submit.prevent="login">
+            <q-form class="q-gutter-md" @submit.prevent="login">
               <q-input filled v-model="email" label="Username" lazy-rules />
 
               <q-input
@@ -28,7 +28,7 @@
               />
 
               <div>
-                <q-btn label="Login"  type="submit" color="primary" />
+                <q-btn label="Login" type="submit" color="primary" />
               </div>
             </q-form>
           </q-card-section>
@@ -40,37 +40,45 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-import api from '../api/users';
+import api from "../api/users";
 export default {
   data() {
     return {
       email: "",
-      password: "",
+      password: ""
     };
   },
   async mounted() {
-    // if (this.$store.getters['auth/isLoggedIn']) {
-    //   this.$router.push({path: '/'}).catch(error => { });
-    // }
+    //si hay token no mostrar vista login
+    if (this.$store.getters["auth/isLoggedIn"]) {
+      this.$router.push({ path: "/" }).catch(error => {});
+    }
   },
   computed: {
-    ...mapState("auth", ["user"]),
+    ...mapState("auth", ["user"])
   },
 
   methods: {
     ...mapActions("auth", ["loginUser"]),
     async login() {
       try {
-        const resp = await this.loginUser({email: this.email,password: this.password});
-        console.log(resp);
-        this.$router.push({path: '/Pricing'}).catch(error => { });
+        const resp = await this.loginUser({
+          email: this.email,
+          password: this.password
+        });
+        this.$router.push({ path: "/Pricing" }).catch(error => {});
         this.email = "";
         this.password = "";
       } catch (error) {
         console.log(error);
+        this.$q.notify({
+          type: 'negative',
+          position: 'center',
+          message: error.data
+        });
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
