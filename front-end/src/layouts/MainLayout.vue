@@ -25,6 +25,7 @@
             v-if="$q.screen.gt.sm"
           >
           </q-btn>
+            <!--
           <q-btn
             round
             dense
@@ -66,6 +67,7 @@
               </q-list>
             </q-menu>
           </q-btn>
+            -->
           <q-btn round flat>
             <q-avatar size="26px">
               <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
@@ -90,7 +92,15 @@
             <q-icon name="shopping_cart" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Product Catalogues</q-item-label>
+            <q-item-label>Catalogo de productos</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item to="/catalogo_servicios" active-class="q-item-no-link-highlighting">
+          <q-item-section avatar>
+            <q-icon name="home_repair_service" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Catalogo de servicios</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -288,6 +298,7 @@
             <q-item-label>Product Catalogues</q-item-label>
           </q-item-section>
         </q-item>
+      -->
         <q-expansion-item
           icon="menu_open"
           label="Menu Levels"
@@ -323,7 +334,7 @@
             </q-expansion-item>
           </q-expansion-item>
         </q-expansion-item>
-      </q-list> -->
+      </q-list>
     </q-drawer>
 
     <q-page-container class="bg-grey-2">
@@ -334,14 +345,14 @@
 
 <script>
 import EssentialLink from "components/EssentialLink";
-import Messages from "./Messages";
+//import Messages from "./Messages";
 import { mapActions } from "vuex";
 
 export default {
   name: "MainLayout",
 
   components: {
-    Messages,
+    //Messages,
     EssentialLink
   },
 

@@ -3,8 +3,7 @@
     <div>
       <q-card class="no-border no-shadow bg-transparent">
         <q-card-section class="q-pa-sm">
-          <!-- <q-input filled  label="Buscar..." v-model="search" /> -->
-          <q-input rounded v-model="search" outlined placeholder="Search Product">
+          <q-input rounded v-model="search" outlined placeholder="Buscar...">
             <template v-slot:append>
               <q-icon v-if="search === ''" name="search"/>
               <q-icon v-else name="clear" class="cursor-pointer" @click="search = ''"/>
@@ -36,7 +35,7 @@
                         rating: 2,
                         amount: '$30',
                         img: require('../assets/products/c-d-x-PDX_a_82obo-unsplash.jpg'),
-                        chip: 'Discount 90%',
+                        chip: '90% de Descuento',
                         chip_color: 'grey-4',
                         chip_class: 'text-blue absolute-top-right'
                     },
@@ -53,7 +52,7 @@
                         rating: 1,
                         amount: '$50',
                         img: require('../assets/products/giorgio-trovato-K62u25Jk6vo-unsplash.jpg'),
-                        chip: 'Sold Out',
+                        chip: 'Vendido',
                         chip_color: 'grey-8',
                         chip_class: 'text-white absolute-top-right'
                     },
@@ -98,7 +97,6 @@
       return this.texto
     },
     set(value){
-      console.log('search ejecutado!');
       value = value.toLowerCase();
       this.dataFilterd = this.data.filter(x => x.title.toLowerCase().indexOf(value) !== -1)
       this.texto = value
