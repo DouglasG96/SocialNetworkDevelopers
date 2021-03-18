@@ -40,6 +40,7 @@ namespace APISND
                options.UseSqlServer(Configuration.GetConnectionString("AppConnection")).EnableSensitiveDataLogging());
 
             services.AddTransient<IUser, UserServices>();
+            services.AddTransient<ICategories, CategoriesServices>();
 
 
             //swagger
