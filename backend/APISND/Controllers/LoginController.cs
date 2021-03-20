@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace SNDAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/v1/[action]")]
+    [Route("api/v1/[controller][action]")]
     public class LoginController : ControllerBase
     {
         private readonly IUser _user;
@@ -27,7 +27,7 @@ namespace SNDAPI.Controllers
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(401)]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] UserDTO user)
+        public async Task<IActionResult> Login([FromBody] AuthDTO user)
         {
             try
             {

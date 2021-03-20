@@ -8,6 +8,8 @@ namespace SNDAPI.Interface
 {
     public interface IUser
     {
-        Task<string> Login(UserDTO user);
+        Task<string> Login(AuthDTO user);
+
+
     }
 }

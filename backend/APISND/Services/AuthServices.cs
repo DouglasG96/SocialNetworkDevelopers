@@ -15,17 +15,18 @@ using System.Threading.Tasks;
 
 namespace SNDAPI.Services
 {
-    public class UserServices : IUser
+    public class AuthServices : IUser
     {
         private readonly SocialNetworkDeveloperContext _context;
         private IConfiguration _configuration;
 
-        public UserServices(SocialNetworkDeveloperContext context, IConfiguration configuration)
+        public AuthServices(SocialNetworkDeveloperContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
         }
-        public async Task<string> Login(UserDTO userDTO)
+
+        public async Task<string> Login(AuthDTO userDTO)
         {
             try
             {

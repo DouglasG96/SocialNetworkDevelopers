@@ -39,7 +39,7 @@ namespace APISND
             services.AddDbContext<SocialNetworkDeveloperContext>(options =>
                options.UseSqlServer(Configuration.GetConnectionString("AppConnection")).EnableSensitiveDataLogging());
 
-            services.AddTransient<IUser, UserServices>();
+            services.AddTransient<IUser, AuthServices>();
 
 
             //swagger
