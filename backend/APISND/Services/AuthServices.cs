@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace SNDAPI.Services
 {
-    public class AuthServices : IUser
+    public class AuthServices : IAuth
     {
         private readonly SocialNetworkDeveloperContext _context;
         private IConfiguration _configuration;

@@ -15,9 +15,9 @@ namespace SNDAPI.Controllers
     [Route("api/v1/[controller][action]")]
     public class LoginController : ControllerBase
     {
-        private readonly IUser _user;
+        private readonly IAuth _user;
 
-        public LoginController(IUser user)
+        public LoginController(IAuth user)
         {
             _user = user;
         }
