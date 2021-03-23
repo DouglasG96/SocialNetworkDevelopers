@@ -40,7 +40,7 @@ namespace SNDAPI.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500);
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
     }

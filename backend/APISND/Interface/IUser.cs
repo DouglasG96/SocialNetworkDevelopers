@@ -1,4 +1,4 @@
-﻿using APISND.DTO;
+﻿using APISND.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +8,13 @@ namespace APISND.Interface
 {
     public interface IUser
     {
-        List<UserDTO> GetUsers();
+        List<Usuario> GetUsers();
+        Task<Usuario> GetUserByID(int id);
+        Task<Usuario> AddUser(Usuario user);
+        Task<Usuario> UpdateUser(Usuario user);
+        Task<Usuario> DeleteUser(int id);
+        bool UserExists(int id);
+
+
     }
 }
