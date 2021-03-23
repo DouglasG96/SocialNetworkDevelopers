@@ -8,6 +8,6 @@ namespace APISND.Interface
 {
     public interface IUser
     {
-        Task<List<UserDTO>> GetUsers();
+        List<UserDTO> GetUsers();
     }
 }

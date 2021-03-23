@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace APISND.DTO
 {
-    public class UsersDTO
+    public class UserDTO
     {
         public int IdUsuario { get; set; }
         public int? IdRol { get; set; }
