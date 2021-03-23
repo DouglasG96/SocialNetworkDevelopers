@@ -1,4 +1,6 @@
+using APISND.Interface;
 using APISND.Models;
+using APISND.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,7 +41,9 @@ namespace APISND
             services.AddDbContext<SocialNetworkDeveloperContext>(options =>
                options.UseSqlServer(Configuration.GetConnectionString("AppConnection")).EnableSensitiveDataLogging());
 
-            services.AddTransient<IUser, AuthServices>();
+            services.AddTransient<IAuth, AuthServices>();
+            services.AddTransient<IUser, UserServices>();
+
 
 
             //swagger

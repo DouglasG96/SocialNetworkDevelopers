@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using APISND.DTO;
+using APISND.Models;
+using AutoMapper;
 
 namespace APISND.Mapper
 {
@@ -6,7 +8,7 @@ namespace APISND.Mapper
     {
         public AutoMapping()
         {
-            //CreateMap<QueueOrder, QueueOrderRequest>().ReverseMap();
+            CreateMap<Usuario, UserDTO>().ReverseMap();
         }
     }
 }

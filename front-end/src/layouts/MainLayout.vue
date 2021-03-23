@@ -93,6 +93,21 @@
             <q-item-label>Product Catalogues</q-item-label>
           </q-item-section>
         </q-item>
+                <q-expansion-item
+          icon="settings"
+          label="Mantenimientos"
+        >
+          <q-list class="q-pl-lg">
+            <q-item to="/Mantenimientos/Usuarios" active-class="q-item-no-link-highlighting">
+              <q-item-section avatar>
+                <q-icon name="person"/>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Usuarios</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-expansion-item>
       </q-list>
 
       <!-- <q-list>

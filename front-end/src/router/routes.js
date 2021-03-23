@@ -31,6 +31,11 @@ const routes = [
     component: () => import('pages/Login-1.vue'),
     meta: { requireAuth: false }
   },
+  {
+    path: '/Mantenimientos/Usuarios',
+    component: () => import('pages/mantenimientos/Usuarios/UsersMaintenance.vue'),
+    meta: { requireAuth: false }
+  },
   // {
   //   path: '/Lock',
   //   component: () => import('pages/LockScreen.vue')
