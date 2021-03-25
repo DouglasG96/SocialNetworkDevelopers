@@ -31,7 +31,10 @@ namespace APISND.Controllers
         /// Peticion para obtener todos los Usuarios
         /// </summary>
         /// <returns></returns>
-        [AuthorizeRoles(Rol.Administrator)]
+        //[AuthorizeRoles(Rol.Administrator)]
+        [ProducesResponseType(typeof(UserDTO), 200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         [HttpGet]
         public IActionResult GetUsers()
         {
@@ -39,14 +42,14 @@ namespace APISND.Controllers
             {
                 var resp = _mapper.Map<List<UserDTO>>(_user.GetUsers());
 
-                if(resp == null)
-                    return StatusCode(StatusCodes.Status404NotFound);
+                if (resp == null)
+                    return NotFound(resp);
 
                 return Ok(resp);
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
             }
         }
 
@@ -56,6 +59,9 @@ namespace APISND.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [AuthorizeRoles(Rol.Administrator)]
+        [ProducesResponseType(typeof(UserDTO), 200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserByID(int id)
         {
@@ -64,13 +70,13 @@ namespace APISND.Controllers
                 var resp =  _mapper.Map<UserDTO>(await _user.GetUserByID(id));
 
                 if (resp == null)
-                    return NotFound($"Usuario con Id = {id} no encontrado");
+                    return NotFound(new { message = $"Usuario con Id = {id} no encontrado" });
 
                 return Ok(resp);
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
             }
         }
 
@@ -103,10 +109,10 @@ namespace APISND.Controllers
             }
         }
 
-        // PUT api/<UsersController>/5
-        [AuthorizeRoles(Rol.Administrator)]
+        //[AuthorizeRoles(Rol.Administrator)]
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(UserDTO), 204)]
+        [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UserDTO userDTO)
@@ -117,7 +123,7 @@ namespace APISND.Controllers
                     return BadRequest();
 
                 if (!_user.UserExists(id))
-                    return NotFound($"Usuario con Id = {id} no existe");
+                    return NotFound(new { message = $"Usuario con Id = {id} no existe" } );
 
                 var user = _mapper.Map<Usuario>(userDTO);
                 await _user.UpdateUser(user);
@@ -127,29 +133,30 @@ namespace APISND.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
             }
         }
 
 
-        [AuthorizeRoles(Rol.Administrator)]
+        //[AuthorizeRoles(Rol.Administrator)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             try
             {
-                var user = await _user.GetUserByID(id);
+                if (!_user.UserExists(id))
+                    return NotFound(new { message = $"Usuario con Id = {id} no existe" });
 
-                if (user == null)
-                {
-                    return NotFound($"Usuario con Id = {id} no encontrado");
-                }
+                await _user.DeleteUser(id);
 
                 return NoContent();
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
             }
         }
     }

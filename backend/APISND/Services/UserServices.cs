@@ -106,7 +106,7 @@ namespace APISND.Services
             }
             catch (Exception e)
             {
-                log.ErrorFormat("Error al Crear Validar si Existe Usuario UserExists()  {0} : {1} ", e.Source, e.Message);
+                log.ErrorFormat("Error al Validar si Existe Usuario UserExists()  {0} : {1} ", e.Source, e.Message);
                 throw;
             }
         }
@@ -124,7 +124,7 @@ namespace APISND.Services
                 }
                 return null;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 log.ErrorFormat("Error al Crear Validar si Existe Usuario UserExists()  {0} : {1} ", e.Source, e.Message);
                 throw;
