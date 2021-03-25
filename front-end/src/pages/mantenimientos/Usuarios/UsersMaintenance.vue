@@ -5,8 +5,10 @@
       :data="data"
       :columns="columns"
       row-key="name"
+      :pagination.sync="pagination"
       binary-state-sort
     >
+      <!-- Dialogo para agregar y editar Registros -->
       <template v-slot:top>
         <q-btn
           dense
@@ -16,112 +18,114 @@
           no-caps
         ></q-btn>
 
-        <div class="q-pa-sm q-gutter-sm">
+        <div class="row q-col-gutter-sm">
           <q-dialog v-model="show_dialog">
-            <q-card>
-              <q-card-section>
-                <div class="text-h6">Nuevo Usuario</div>
-              </q-card-section>
+            <div>
+              <q-form ref="formUser" autocomplete="off">
+                <q-card>
+                  <q-card-section>
+                    <div class="text-h6">Nuevo Usuario</div>
+                  </q-card-section>
+                  <q-card-section>
+                    <div class="row">
+                      <div class="col-6">
+                        <q-item>
+                          <q-input
+                            filled
+                            v-model="editedItem.idRol"
+                            label="Rol"
+                            lazy-rules
+                            :rules="rules.required"
+                          ></q-input>
+                        </q-item>
+                      </div>
+                      <div class="col-6">
+                        <q-item>
+                          <q-input
+                            filled
+                            v-model="editedItem.nombres"
+                            label="Nombres"
+                            lazy-rules
+                            :rules="rules.required"
+                          ></q-input>
+                        </q-item>
+                      </div>
+                      <div class="col-6">
+                        <q-item>
+                          <q-input
+                            filled
+                            v-model="editedItem.apellidos"
+                            label="Apellidos"
+                            lazy-rules
+                            :rules="rules.required"
+                          ></q-input>
+                        </q-item>
+                      </div>
+                    </div>
+                  </q-card-section>
 
-              <q-card-section>
-                <div class="row">
-                  <q-input
-                    v-model="editedItem.name"
-                    label="Dessert Name"
-                  ></q-input>
-                  <q-input
-                    v-model="editedItem.calories"
-                    label="Calories"
-                  ></q-input>
-                  <q-input v-model="editedItem.fat" label="Fat"></q-input>
-                  <q-input v-model="editedItem.carbs" label="Carbs"></q-input>
-                  <q-input
-                    v-model="editedItem.protein"
-                    label="Protein"
-                  ></q-input>
-                  <q-input v-model="editedItem.sodium" label="Sodium"></q-input>
-                  <q-input
-                    v-model="editedItem.calcium"
-                    label="Calcium"
-                  ></q-input>
-                  <q-input v-model="editedItem.iron" label="Iron"></q-input>
-                </div>
-              </q-card-section>
-
-              <q-card-actions align="right">
-                <q-btn
-                  flat
-                  label="OK"
-                  color="primary"
-                  v-close-popup
-                  @click="addRow"
-                ></q-btn>
-              </q-card-actions>
-            </q-card>
+                  <q-card-actions align="right">
+                    <q-btn flat color="red" label="Cancelar" v-close-popup />
+                    <q-btn
+                      flat
+                      label="OK"
+                      color="primary"
+                      @click="save"
+                    ></q-btn>
+                  </q-card-actions>
+                </q-card>
+              </q-form>
+            </div>
           </q-dialog>
         </div>
       </template>
 
+      <!-- Renderiza data en tabla -->
       <template v-slot:body="props">
         <q-tr :props="props">
-          <q-td key="desc" :props="props">
-            {{ props.row.name }}
-            <q-popup-edit v-model="props.row.name">
+          <q-td key="Id" :props="props">
+            {{ props.row.idUsuario }}
+            <q-popup-edit v-model="props.row.idUsuario">
               <q-input
-                v-model="props.row.name"
+                v-model="props.row.idUsuario"
                 dense
                 autofocus
                 counter
               ></q-input>
             </q-popup-edit>
           </q-td>
-          <q-td key="calories" :props="props">
-            {{ props.row.calories }}
+          <q-td key="IdRol" :props="props">
+            {{ props.row.idRol }}
             <q-popup-edit
-              v-model="props.row.calories"
-              title="Update calories"
+              v-model="props.row.idRol"
+              title="Actualizar Id Rol"
               buttons
             >
               <q-input
                 type="number"
-                v-model="props.row.calories"
+                v-model="props.row.idRol"
                 dense
                 autofocus
               ></q-input>
             </q-popup-edit>
           </q-td>
-          <q-td key="fat" :props="props">
-            <div class="text-pre-wrap">{{ props.row.fat }}</div>
-            <q-popup-edit v-model="props.row.fat">
+          <q-td key="Nombre" :props="props">
+            <div class="text-pre-wrap">{{ props.row.nombres }}</div>
+            <q-popup-edit v-model="props.row.nombres">
+              <q-input v-model="props.row.nombres" dense autofocus></q-input>
+            </q-popup-edit>
+          </q-td>
+          <q-td key="Apellidos" :props="props">
+            <div class="text-pre-wrap">{{ props.row.apellidos }}</div>
+            <q-popup-edit v-model="props.row.apellidos">
               <q-input
                 type="textarea"
-                v-model="props.row.fat"
+                v-model="props.row.apellidos"
                 dense
                 autofocus
               ></q-input>
             </q-popup-edit>
           </q-td>
-          <q-td key="carbs" :props="props">
-            {{ props.row.carbs }}
-            <q-popup-edit
-              v-model="props.row.carbs"
-              title="Update carbs"
-              buttons
-              persistent
-            >
-              <q-input
-                type="number"
-                v-model="props.row.carbs"
-                dense
-                autofocus
-                hint="Use buttons to close"
-              ></q-input>
-            </q-popup-edit>
-          </q-td>
-          <q-td key="protein" :props="props">{{ props.row.protein }}</q-td>
-          <q-td key="sodium" :props="props">{{ props.row.sodium }}</q-td>
-          <q-td key="calcium" :props="props">{{ props.row.calcium }}</q-td>
-          <q-td key="iron" :props="props">{{ props.row.iron }}</q-td>
           <q-td key="actions" :props="props">
             <q-btn
               icon="edit"
@@ -138,8 +142,6 @@
               dense
               @click="deleteItem(props.row)"
             />
-            <!-- <q-btn color="blue" label="Update" @click="editItem(props.row)" size=sm no-caps></q-btn>
-              <q-btn color="red" label="Delete"  @click="deleteItem(props.row)" size=sm no-caps></q-btn> -->
           </q-td>
         </q-tr>
       </template>
@@ -148,183 +150,70 @@
 </template>
 
 <script>
+import api from "src/api/user";
 export default {
   data() {
     return {
       show_dialog: false,
       editedIndex: -1,
       editedItem: {
-        name: "",
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
-        sodium: 0,
-        calcium: "0%",
-        iron: "0%",
-      },
-      defaultItem: {
-        name: "",
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
-        sodium: 0,
-        calcium: "0%",
-        iron: "0%",
+        idUsuario: 0,
+        idRol: null,
+        nombres: null,
+        apellidos: null
       },
       columns: [
         {
-          name: "desc",
-          required: true,
-          label: "Dessert (100g serving)",
-          align: "left",
-          field: (row) => row.name,
-          format: (val) => `${val}`,
-          sortable: true,
+          name: "Id",
+          label: "ID",
+          field: "idUsuario"
         },
         {
-          name: "calories",
-          align: "center",
-          label: "Calories",
-          field: "calories",
-          sortable: true,
+          name: "IdRol",
+          label: "Rol",
+          field: "idRol"
         },
         {
-          name: "fat",
-          label: "Fat (g)",
-          field: "fat",
-          sortable: true,
-          style: "width: 10px",
-        },
-        { name: "carbs", label: "Carbs (g)", field: "carbs" },
-        { name: "protein", label: "Protein (g)", field: "protein" },
-        { name: "sodium", label: "Sodium (mg)", field: "sodium" },
-        {
-          name: "calcium",
-          label: "Calcium (%)",
-          field: "calcium",
-          sortable: true,
-          sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
+          name: "Nombre",
+          label: "Nombres",
+          field: "nombres"
         },
         {
-          name: "iron",
-          label: "Iron (%)",
-          field: "iron",
-          sortable: true,
-          sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
+          name: "Apellidos",
+          label: "Apellidos",
+          field: "apellidos"
         },
         {
           name: "actions",
           label: "Actions",
-          field: "actions",
-        },
+          field: "actions"
+        }
       ],
-      data: [
-        {
-          name: "Frozen Yogurt",
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          sodium: 87,
-          calcium: "14%",
-          iron: "1%",
-        },
-        {
-          name: "Ice cream sandwich",
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          sodium: 129,
-          calcium: "8%",
-          iron: "1%",
-        },
-        {
-          name: "Eclair",
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          sodium: 337,
-          calcium: "6%",
-          iron: "7%",
-        },
-        {
-          name: "Cupcake",
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          sodium: 413,
-          calcium: "3%",
-          iron: "8%",
-        },
-        {
-          name: "Gingerbread",
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          sodium: 327,
-          calcium: "7%",
-          iron: "16%",
-        },
-        {
-          name: "Jelly bean",
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          sodium: 50,
-          calcium: "0%",
-          iron: "0%",
-        },
-        {
-          name: "Lollipop",
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          sodium: 38,
-          calcium: "0%",
-          iron: "2%",
-        },
-        {
-          name: "Honeycomb",
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          sodium: 562,
-          calcium: "0%",
-          iron: "45%",
-        },
-        {
-          name: "Donut",
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          sodium: 326,
-          calcium: "2%",
-          iron: "22%",
-        },
-        {
-          name: "KitKat",
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          sodium: 54,
-          calcium: "12%",
-          iron: "6%",
-        },
-      ],
+      pagination: {
+        rowsPerPage: 15 
+      },
+      data: [],
+      rules: {
+        required: [val => (val && val.length > 0) || "Campo Requerido"],
+        requiredNumber: [
+          val => (val !== null && val !== "") || "Please type your age",
+          val => (val > 0 && val < 100) || "Please type a real age"
+        ]
+      }
     };
   },
+  async mounted() {
+    this.getUsers();
+  },
   methods: {
+    async getUsers() {
+      try {
+        const resp = await api.getUsers();
+        this.data = resp;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     addRow() {
       if (this.editedIndex > -1) {
         Object.assign(this.data[this.editedIndex], this.editedItem);
@@ -345,14 +234,74 @@ export default {
     },
     close() {
       this.show_dialog = false;
-      setTimeout(() => {
+      this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
-      }, 300);
+      });
     },
-  },
+    async save() {
+      //valido formulario
+      var validate = await this.$refs.formUser.validate();
+      if (!validate) {
+        return;
+      }
+
+      //creo usuario
+      if (this.editedIndex > -1) {
+        try {
+          await api.addUser({
+            idRol: this.editedItem.idRol,
+            nombreCompleto:
+              this.editedItem.nombres + " " + this.editedItem.apellidos,
+            nombres: this.editedItem.nombres,
+            apellidos: this.editedItem.apellidos
+          });
+          this.$q.notify({
+            type: "positivo",
+            position: "center",
+            message: "Usuario Creado Correctamente"
+          });
+          this.close();
+          await this.getUsers();
+        } catch (error) {
+          console.log(error);
+          this.$q.notify({
+            type: "negative",
+            position: "center",
+            message: "Error Interno, Intente mas Tarde"
+          });
+        }
+      } else {
+        //edito usuario
+        // try {
+        //   await api.addUser({
+        //     idRol: this.editedItem.idRol,
+        //     nombreCompleto:
+        //       this.editedItem.nombres + " " + this.editedItem.apellidos,
+        //     nombres: this.editedItem.nombres,
+        //     apellidos: this.editedItem.apellidos
+        //   });
+        //   this.$q.notify({
+        //     type: "positivo",
+        //     position: "center",
+        //     message: "Usuario Editado Correctamente"
+        //   });
+        //   this.close();
+        //   this.getUsers();
+        // } catch (error) {
+        //   console.log(error);
+        //   this.$q.notify({
+        //     type: "negative",
+        //     position: "center",
+        //     message: "Error Interno, Intente mas Tarde"
+        //   });
+        // }
+      }
+
+      this.$refs.formUser.resetValidation();
+    }
+  }
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

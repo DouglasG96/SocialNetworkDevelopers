@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace APISND.Controllers
 {
-    [Route("api/v1/[controller][action]")]
+    [Route("api/v1/[controller]/[action]")]
     [ApiController]
     public class UsersController : ControllerBase
     {

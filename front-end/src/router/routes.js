@@ -4,6 +4,11 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {path: '', component: () => import('pages/ProductCatalogues.vue')},
+      {
+        path: '/Mantenimientos/Usuarios',
+        component: () => import('pages/mantenimientos/Usuarios/UsersMaintenance.vue'),
+        meta: { requireAuth: false }
+      },
       // { path: '', component: () => import('pages/Dashboard.vue'),},
       // { path: '/Dashboard2', component: () => import('pages/Dashboard2.vue'),},
       // { path: '/Profile', component: () => import('pages/UserProfile.vue'), meta: { requireAuth: true }},
@@ -31,11 +36,7 @@ const routes = [
     component: () => import('pages/Login-1.vue'),
     meta: { requireAuth: false }
   },
-  {
-    path: '/Mantenimientos/Usuarios',
-    component: () => import('pages/mantenimientos/Usuarios/UsersMaintenance.vue'),
-    meta: { requireAuth: false }
-  },
+
   // {
   //   path: '/Lock',
   //   component: () => import('pages/LockScreen.vue')

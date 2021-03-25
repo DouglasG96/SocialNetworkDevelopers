@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace SNDAPI.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller][action]")]
+    [Route("api/v1/[controller]/[action]")]
     public class LoginController : ControllerBase
     {
         private readonly IAuth _user;

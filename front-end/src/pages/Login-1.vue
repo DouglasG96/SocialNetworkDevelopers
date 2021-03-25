@@ -40,7 +40,6 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-import api from "../api/users";
 export default {
   data() {
     return {
