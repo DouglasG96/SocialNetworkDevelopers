@@ -83,15 +83,10 @@
       <!-- Renderiza data en tabla -->
       <template v-slot:body="props">
         <q-tr :props="props">
-          <q-td key="Id" :props="props">
+          <q-td key="IdUsuario" :props="props">
             {{ props.row.idUsuario }}
             <q-popup-edit v-model="props.row.idUsuario">
-              <q-input
-                v-model="props.row.idUsuario"
-                dense
-                autofocus
-                counter
-              ></q-input>
+              <q-input v-model="props.row.idUsuario" dense autofocus></q-input>
             </q-popup-edit>
           </q-td>
           <q-td key="IdRol" :props="props">
@@ -118,12 +113,7 @@
           <q-td key="Apellidos" :props="props">
             <div class="text-pre-wrap">{{ props.row.apellidos }}</div>
             <q-popup-edit v-model="props.row.apellidos">
-              <q-input
-                type="textarea"
-                v-model="props.row.apellidos"
-                dense
-                autofocus
-              ></q-input>
+              <q-input v-model="props.row.apellidos" dense autofocus></q-input>
             </q-popup-edit>
           </q-td>
           <q-td key="actions" :props="props">
@@ -157,14 +147,14 @@ export default {
       show_dialog: false,
       editedIndex: -1,
       editedItem: {
-        idUsuario: 0,
+        idUsuario: null,
         idRol: null,
         nombres: null,
         apellidos: null
       },
       columns: [
         {
-          name: "Id",
+          name: "IdUsuario",
           label: "ID",
           field: "idUsuario"
         },
@@ -190,11 +180,11 @@ export default {
         }
       ],
       pagination: {
-        rowsPerPage: 15 
+        rowsPerPage: 15
       },
       data: [],
       rules: {
-        required: [val => (val && val.length > 0) || "Campo Requerido"],
+        required: [v => !!v || "Campo Requerido."],
         requiredNumber: [
           val => (val !== null && val !== "") || "Please type your age",
           val => (val > 0 && val < 100) || "Please type a real age"
@@ -214,22 +204,47 @@ export default {
         console.log(error);
       }
     },
-    addRow() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.data[this.editedIndex], this.editedItem);
-      } else {
-        this.data.push(this.editedItem);
-      }
-      this.close();
-    },
-    deleteItem(item) {
-      const index = this.data.indexOf(item);
-      confirm("Are you sure you want to delete this item?") &&
-        this.data.splice(index, 1);
+    async deleteItem(item) {
+      this.$q
+        .dialog({
+          title: "Confirm",
+          dark: true,
+          message: "Seguro que quieres Eliminar El Registro?",
+          cancel: true,
+          persistent: true
+        })
+        .onOk(async () => {
+          try {
+            await api.deleteUser(item.idUsuario);
+            const index = this.data.indexOf(item);
+            this.data.splice(index, 1);
+            this.$q.notify({
+              type: "positive",
+              position: "center",
+              message: "Usuario Eliminado Correctamente"
+            });
+          } catch (error) {
+            this.$q.notify({
+              type: "negative",
+              position: "center",
+              message: "Error Interno, Intente mas Tarde"
+            });
+          }
+        })
+        .onOk(() => {
+          // console.log('>>>> second OK catcher')
+        })
+        .onCancel(() => {
+          console.log(">>>> Cancel");
+        })
+        .onDismiss(() => {
+          // console.log('I am triggered on both OK and Cancel')
+        });
     },
     editItem(item) {
       this.editedIndex = this.data.indexOf(item);
       this.editedItem = Object.assign({}, item);
+      console.log(this.editedItem);
       this.show_dialog = true;
     },
     close() {
@@ -238,6 +253,7 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
+      this.$refs.formUser.resetValidation();
     },
     async save() {
       //valido formulario
@@ -246,8 +262,34 @@ export default {
         return;
       }
 
-      //creo usuario
+      //Edito usuario
       if (this.editedIndex > -1) {
+        try {
+          await api.updateUser(this.editedItem.idUsuario, {
+            idUsuario: this.editedItem.idUsuario,
+            idRol: this.editedItem.idRol,
+            nombreCompleto:
+              this.editedItem.nombres + " " + this.editedItem.apellidos,
+            nombres: this.editedItem.nombres,
+            apellidos: this.editedItem.apellidos
+          });
+          this.$q.notify({
+            type: "positive",
+            position: "center",
+            message: "Usuario Editado Correctamente"
+          });
+          this.close();
+          await this.getUsers();
+        } catch (error) {
+          console.log(error);
+          this.$q.notify({
+            type: "negative",
+            position: "center",
+            message: "Error Interno, Intente mas Tarde"
+          });
+        }
+      } else {
+        //creo usuario
         try {
           await api.addUser({
             idRol: this.editedItem.idRol,
@@ -257,7 +299,7 @@ export default {
             apellidos: this.editedItem.apellidos
           });
           this.$q.notify({
-            type: "positivo",
+            type: "positive",
             position: "center",
             message: "Usuario Creado Correctamente"
           });
@@ -271,34 +313,7 @@ export default {
             message: "Error Interno, Intente mas Tarde"
           });
         }
-      } else {
-        //edito usuario
-        // try {
-        //   await api.addUser({
-        //     idRol: this.editedItem.idRol,
-        //     nombreCompleto:
-        //       this.editedItem.nombres + " " + this.editedItem.apellidos,
-        //     nombres: this.editedItem.nombres,
-        //     apellidos: this.editedItem.apellidos
-        //   });
-        //   this.$q.notify({
-        //     type: "positivo",
-        //     position: "center",
-        //     message: "Usuario Editado Correctamente"
-        //   });
-        //   this.close();
-        //   this.getUsers();
-        // } catch (error) {
-        //   console.log(error);
-        //   this.$q.notify({
-        //     type: "negative",
-        //     position: "center",
-        //     message: "Error Interno, Intente mas Tarde"
-        //   });
-        // }
       }
-
-      this.$refs.formUser.resetValidation();
     }
   }
 };
