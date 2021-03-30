@@ -23,24 +23,12 @@
         <!-- {{ data.caption }} -->
         {{data.descripcion}}
       </div>
-      <div>
-        <q-rating
-          v-model="data.rating"
-          max="5"
-          size="1.5em"
-          color="yellow"
-          icon="star_border"
-          icon-selected="star"
-          icon-half="star_half" readonly
-          no-dimming
-        />
-      </div>
     </q-card-section>
     <q-card-section>
       <div class="col-12">
         <span class="text-h6">{{ data.precio }}</span>
         <span class="text-h6 float-right">
-          <q-btn label="See Details" rounded color="secondary" outline @click="getDetail(data)"></q-btn>
+          <q-btn label="Ver detalles" rounded color="secondary" outline @click="getDetail(data)"></q-btn>
         </span>
       </div>
     </q-card-section>

@@ -1,4 +1,4 @@
 
 .vs/slnx.sqlite
 .vs/VSWorkspaceState.json
-/package-lock.json
+backend/APISND/appsettings.json
