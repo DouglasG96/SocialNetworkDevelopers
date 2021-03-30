@@ -29,17 +29,6 @@
             round
             dense
             flat
-            color="white"
-            icon="fab fa-github"
-            type="a"
-            href="https://github.com/pratik227/quasar-admin"
-            target="_blank"
-          >
-          </q-btn>
-          <q-btn
-            round
-            dense
-            flat
             icon="fas fa-heart"
             style="color:#9d4182 !important;"
             type="a"
@@ -71,9 +60,20 @@
               <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
             </q-avatar>
           </q-btn>
-          <q-btn round flat v-if="isLoggedIn" @click="logout()">
-            Cerrar Sesión
-          </q-btn>
+          <q-btn
+            round
+            flat
+            dense
+            icon="logout"
+            v-if="isLoggedIn"
+            @click="logout()"
+          />
+          <q-btn
+            flat
+            round
+            @click="$q.dark.toggle()"
+            :icon="this.$q.dark.isActive ? 'nights_stay' : 'wb_sunny'"
+          />
         </div>
       </q-toolbar>
     </q-header>
@@ -93,14 +93,14 @@
             <q-item-label>Product Catalogues</q-item-label>
           </q-item-section>
         </q-item>
-                <q-expansion-item
-          icon="settings"
-          label="Mantenimientos"
-        >
+        <q-expansion-item icon="settings" label="Mantenimientos">
           <q-list class="q-pl-lg">
-            <q-item to="/Mantenimientos/Usuarios" active-class="q-item-no-link-highlighting">
+            <q-item
+              to="/Mantenimientos/Usuarios"
+              active-class="q-item-no-link-highlighting"
+            >
               <q-item-section avatar>
-                <q-icon name="person"/>
+                <q-icon name="person" />
               </q-item-section>
               <q-item-section>
                 <q-item-label>Usuarios</q-item-label>
@@ -341,7 +341,7 @@
       </q-list> -->
     </q-drawer>
 
-    <q-page-container class="bg-grey-2">
+    <q-page-container class="">
       <router-view />
     </q-page-container>
   </q-layout>

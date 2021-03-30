@@ -24,7 +24,7 @@
               <q-form ref="formUser" autocomplete="off">
                 <q-card>
                   <q-card-section>
-                    <div class="text-h6">Nuevo Usuario</div>
+                    <div class="text-h6">{{formTitle}}</div>
                   </q-card-section>
                   <q-card-section>
                     <div class="row">
@@ -65,7 +65,7 @@
                   </q-card-section>
 
                   <q-card-actions align="right">
-                    <q-btn flat color="red" label="Cancelar" v-close-popup />
+                    <q-btn flat color="red" label="Cancelar" @click="close()" />
                     <q-btn
                       flat
                       label="OK"
@@ -194,6 +194,13 @@ export default {
   },
   async mounted() {
     this.getUsers();
+  },
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1
+        ? "Nuevo Usuario"
+        : "Editar Usuario";
+    },
   },
   methods: {
     async getUsers() {

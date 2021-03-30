@@ -1,7 +1,7 @@
 <template>
   <q-card class="">
-    <q-img :src="data.img" height="220px">
-      <q-chip v-if="data.chip" :class="data.chip_class" :color="data.chip_color" :label="data.chip"></q-chip>
+    <q-img src="https://soilhealthinstitute.org/wp-content/uploads/2016/11/thumbnail-default.jpg" height="220px">
+      <!-- <q-chip v-if="data.chip" :class="data.chip_class" :color="data.chip_color" :label="data.chip"></q-chip> -->
     </q-img>
 
     <q-card-section>
@@ -16,10 +16,12 @@
 
     <q-card-section>
       <div class="text-h6">
-        {{ data.title }}
+        <!-- {{ data.title }} -->
+        {{data.titulo}}
       </div>
       <div class="text-subtitle1 text-justify q-mt-sm">
-        {{ data.caption }}
+        <!-- {{ data.caption }} -->
+        {{data.descripcion}}
       </div>
       <div>
         <q-rating
@@ -36,7 +38,7 @@
     </q-card-section>
     <q-card-section>
       <div class="col-12">
-        <span class="text-h6">{{ data.amount }}</span>
+        <span class="text-h6">{{ data.precio }}</span>
         <span class="text-h6 float-right">
           <q-btn label="See Details" rounded color="secondary" outline @click="getDetail(data)"></q-btn>
         </span>

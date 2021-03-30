@@ -9,6 +9,7 @@ namespace APISND.Mapper
         public AutoMapping()
         {
             CreateMap<Usuario, UserDTO>().ReverseMap();
+            CreateMap<Publicacione, PublicationDTO>().ReverseMap();
         }
     }
 }

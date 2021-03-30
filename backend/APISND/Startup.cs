@@ -50,7 +50,7 @@ namespace APISND
 
             services.AddTransient<IAuth, AuthServices>();
             services.AddTransient<IUser, UserServices>();
-
+            services.AddTransient<IPublication, PublicationServices>();
 
 
             //swagger
