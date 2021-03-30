@@ -58,7 +58,7 @@ export default {
   methods: {
      getDetail(data) {
       console.log(data);
-      this.$router.push({path: '/Pricing'}).catch(error => { });
+      this.$router.push({path: '/DetailProduct'}).catch(error => { });
     }
   },
 }
