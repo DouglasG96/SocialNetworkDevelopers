@@ -65,11 +65,11 @@
                   </q-card-section>
 
                   <q-card-actions align="right">
-                    <q-btn flat color="red" label="Cancelar" @click="close()" />
+                    <q-btn flat color="negative" label="Cancelar" @click="close()" />
                     <q-btn
                       flat
                       label="OK"
-                      color="primary"
+                      color="positive"
                       @click="save"
                     ></q-btn>
                   </q-card-actions>

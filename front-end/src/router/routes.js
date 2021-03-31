@@ -26,14 +26,15 @@ const routes = [
       // {path: '/Taskboard', component: () => import('pages/TaskBoard.vue')},
     ]
   },
-  {
-    path: '/Pricing',
-    component: () => import('pages/Pricing.vue'),
-    meta: { requireAuth: true }
-  },
+
   {
     path: '/Login',
     component: () => import('pages/Login-1.vue'),
+    meta: { requireAuth: false }
+  },
+  {
+    path: '/Register',
+    component: () => import('pages/Register.vue'),
     meta: { requireAuth: false }
   },
 

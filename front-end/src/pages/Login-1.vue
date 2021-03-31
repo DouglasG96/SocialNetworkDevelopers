@@ -3,7 +3,7 @@
     <q-page-container>
       <q-page class="flex bg-image flex-center">
         <q-card
-          v-bind:style="$q.screen.lt.sm ? { width: '80%' } : { width: '30%' }"
+          v-bind:style="$q.screen.lt.sm ? { width: '80%' } : { width: '50%' }"
         >
           <q-card-section>
             <q-avatar size="103px" class="absolute-center shadow-10">
@@ -12,12 +12,18 @@
           </q-card-section>
           <q-card-section>
             <div class="text-center q-pt-lg">
-              <div class="col text-h6 ellipsis">Log in</div>
+              <div class="col text-h6 ellipsis">Inicio de Sesión</div>
             </div>
           </q-card-section>
           <q-card-section>
-            <q-form class="q-gutter-md" @submit.prevent="login">
-              <q-input filled v-model="email" label="Username" lazy-rules />
+            <q-form  ref="formLogin" autocomplete="off" class="q-gutter-md" @submit.prevent="login">
+              <q-input
+                filled
+                v-model="email"
+                label="Username"
+                lazy-rules
+                :rules="rules.required"
+              />
 
               <q-input
                 type="password"
@@ -25,10 +31,21 @@
                 v-model="password"
                 label="Password"
                 lazy-rules
+                :rules="rules.required"
               />
 
-              <div>
-                <q-btn label="Login" type="submit" color="primary" />
+              <div class="row">
+                <div class="col-6">
+                  <q-btn label="Acceder" type="submit" color="positive" />
+                </div>
+                <div class="col-6">
+                  <q-btn
+                    label="Registrarse"
+                    to="/Register"
+                    color="secondary"
+                    class="q-ml-sm"
+                  />
+                </div>
               </div>
             </q-form>
           </q-card-section>
@@ -44,7 +61,10 @@ export default {
   data() {
     return {
       email: "",
-      password: ""
+      password: "",
+      rules: {
+        required: [v => !!v || "Campo Requerido."]
+      }
     };
   },
   async mounted() {
@@ -60,22 +80,33 @@ export default {
   methods: {
     ...mapActions("auth", ["loginUser"]),
     async login() {
+            //valido formulario
+      var validate = await this.$refs.formLogin.validate();
+      if (!validate) {
+        return;
+      }
+
       try {
-        const resp = await this.loginUser({
+        this.$q.loading.show();
+        await this.loginUser({
           email: this.email,
           password: this.password
         });
-        this.$router.push({ path: "/Pricing" }).catch(error => {});
+                 this.$q.loading.hide();
+        this.$router.push({ path: "/DetailProduct" }).catch(error => {});
         this.email = "";
         this.password = "";
       } catch (error) {
+                 this.$q.loading.hide();
+
         console.log(error);
         this.$q.notify({
-          type: 'negative',
-          position: 'center',
+          type: "negative",
+          position: "center",
           message: error.data
         });
       }
+
     }
   }
 };
@@ -83,6 +114,7 @@ export default {
 
 <style>
 .bg-image {
-  background-image: linear-gradient(135deg, #7028e4 0%, #e5b2ca 100%);
+  background-image: linear-gradient(135deg, #363da8 0%, #dfdee4 100%);
+
 }
 </style>
