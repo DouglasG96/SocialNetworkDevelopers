@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 namespace SNDAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/v1/[action]")]
+    [Route("api/v1/[controller]/[action]")]
     public class LoginController : ControllerBase
     {
-        private readonly IUser _user;
+        private readonly IAuth _user;
 
-        public LoginController(IUser user)
+        public LoginController(IAuth user)
         {
             _user = user;
         }
@@ -27,7 +27,7 @@ namespace SNDAPI.Controllers
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(401)]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] UserDTO user)
+        public async Task<IActionResult> Login([FromBody] AuthDTO user)
         {
             try
             {
@@ -40,7 +40,7 @@ namespace SNDAPI.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500);
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
     }

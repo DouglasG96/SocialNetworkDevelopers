@@ -1,8 +1,12 @@
+using APISND.Interface;
+using APISND.Mapper;
 using APISND.Models;
+using APISND.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace APISND
 {
@@ -32,15 +37,21 @@ namespace APISND
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            //agregar dependencia automapper
+            services.AddAutoMapper(typeof(AutoMapping).Assembly);
+
             services.AddCors();
             services.AddControllers();
 
             // Registro del Contexto de datos como Servicio Cadena conexion
             services.AddDbContext<SocialNetworkDeveloperContext>(options =>
-               options.UseSqlServer(Configuration.GetConnectionString("AppConnection")).EnableSensitiveDataLogging());
+               options.UseSqlServer(Configuration.GetConnectionString("AppConnection2")).EnableSensitiveDataLogging());
 
+            services.AddTransient<IAuth, AuthServices>();
             services.AddTransient<IUser, UserServices>();
             services.AddTransient<ICategories, CategoriesServices>();
+            services.AddTransient<IPublication, PublicationServices>();
 
 
             //swagger

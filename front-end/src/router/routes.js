@@ -4,6 +4,12 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {path: '', component: () => import('pages/ProductCatalogues.vue')},
+      {
+        path: '/Mantenimientos/Usuarios',
+        component: () => import('pages/mantenimientos/Usuarios/UsersMaintenance.vue'),
+        meta: { requireAuth: false }
+      },
+      { path: '/DetailProduct', component: () => import('pages/DetailProduct.vue'), meta: { requireAuth: true }},
       // { path: '', component: () => import('pages/Dashboard.vue'),},
       // { path: '/Dashboard2', component: () => import('pages/Dashboard2.vue'),},
       // { path: '/Profile', component: () => import('pages/UserProfile.vue'), meta: { requireAuth: true }},
@@ -15,7 +21,6 @@ const routes = [
       // {path: '/Cards', component: () => import('pages/Cards.vue')},
       // {path: '/Tables', component: () => import('pages/Tables.vue')},
       // {path: '/Contact', component: () => import('pages/Contact.vue')},
-      // {path: '/Checkout', component: () => import('pages/Checkout.vue')},
       // {path: '/Calendar', component: () => import('pages/Calendar.vue')},
       // {path: '/Pagination', component: () => import('pages/Pagination.vue')},
       // {path: '/Taskboard', component: () => import('pages/TaskBoard.vue')},
@@ -31,6 +36,7 @@ const routes = [
     component: () => import('pages/Login-1.vue'),
     meta: { requireAuth: false }
   },
+
   // {
   //   path: '/Lock',
   //   component: () => import('pages/LockScreen.vue')

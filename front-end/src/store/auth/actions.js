@@ -1,6 +1,6 @@
 import { store } from "quasar/wrappers"
 import { LocalStorage } from 'quasar'
-import api from "../../api/users"
+import api from "../../api/auth"
 
 export async function loginUser ({ commit }, payload) {
     return  new Promise( async (resolve, reject) => {

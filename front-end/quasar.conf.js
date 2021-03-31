@@ -49,7 +49,7 @@ module.exports = function (ctx) {
       directives: [],
 
       // Quasar plugins
-      plugins: ['AppFullscreen', 'LocalStorage', 'Notify']
+      plugins: ['AppFullscreen', 'LocalStorage', 'Notify', 'Dialog']
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
