@@ -37,7 +37,7 @@ namespace APISND.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
- //               optionsBuilder.UseSqlServer("data source=DESKTOP-5CH839A\\MSSQLSERVER17;initial catalog=SocialNetworkDeveloper;user id=sa;password=123456;");
+                //optionsBuilder.UseSqlServer("data source=PROGRAMACION-3\\NAVDEMO;initial catalog=SocialNetworkDeveloper;user id=sa;password=Fasan1;");
             }
         }
 
@@ -155,6 +155,8 @@ namespace APISND.Models
                 entity.Property(e => e.Departamento1)
                     .HasMaxLength(150)
                     .HasColumnName("departamento");
+
+                entity.Property(e => e.Estado).HasColumnName("estado");
             });
 
             modelBuilder.Entity<EstadoComentario>(entity =>
@@ -195,7 +197,7 @@ namespace APISND.Models
                 entity.Property(e => e.IdDepartamento).HasColumnName("idDepartamento");
 
                 entity.Property(e => e.Municipio1)
-                    .HasMaxLength(100)
+                    .HasMaxLength(255)
                     .HasColumnName("municipio");
 
                 entity.HasOne(d => d.IdDepartamentoNavigation)
@@ -231,9 +233,17 @@ namespace APISND.Models
 
                 entity.Property(e => e.IdTipoPublicacion).HasColumnName("idTipoPublicacion");
 
+                entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
+
                 entity.Property(e => e.Precio)
                     .HasColumnType("decimal(6, 2)")
                     .HasColumnName("precio");
+
+                entity.Property(e => e.Raiting).HasColumnName("raiting");
+
+                entity.Property(e => e.RutaImagen)
+                    .IsUnicode(false)
+                    .HasColumnName("rutaImagen");
 
                 entity.Property(e => e.Titulo)
                     .HasMaxLength(150)
@@ -253,6 +263,11 @@ namespace APISND.Models
                     .WithMany(p => p.Publicaciones)
                     .HasForeignKey(d => d.IdTipoPublicacion)
                     .HasConstraintName("fk_publicaciones_tipo");
+
+                entity.HasOne(d => d.IdUsuarioNavigation)
+                    .WithMany(p => p.Publicaciones)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .HasConstraintName("FK_Publicaciones_Usuarios");
             });
 
             modelBuilder.Entity<Role>(entity =>
@@ -325,9 +340,7 @@ namespace APISND.Models
                     .HasMaxLength(125)
                     .HasColumnName("apellidos");
 
-                entity.Property(e => e.Contrasena)
-                    .HasMaxLength(25)
-                    .HasColumnName("contrasena");
+                entity.Property(e => e.Contrasena).HasMaxLength(25);
 
                 entity.Property(e => e.CorreoElectronico)
                     .HasMaxLength(150)
