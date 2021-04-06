@@ -70,20 +70,11 @@ namespace APISND.Services
         {
             try
             {
-                var model = await _context.Usuarios.FirstOrDefaultAsync(x => x.IdUsuario == user.IdUsuario);
+                var model = await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(x => x.IdUsuario == user.IdUsuario);
                 if(model != null)
                 {
 
-                    model.IdRol = user.IdRol;
-                    model.NombreCompleto = user.NombreCompleto;
-                    model.Apellidos = user.Apellidos;
-                    model.Dui = user.Dui;
-                    model.Nit = user.Nit;
-                    model.TelefonoContacto = user.TelefonoContacto;
-                    model.CorreoElectronico = user.CorreoElectronico;
-                    model.Contrasena = user.Contrasena;
-
-                    _context.Usuarios.Add(model).State = EntityState.Modified;
+                    _context.Usuarios.Add(user).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
 
                     return user;
@@ -92,21 +83,8 @@ namespace APISND.Services
             }
             catch (Exception e)
             {
-                log.ErrorFormat("Error al Crear Actualizar Usuario UpdateUser()  {0} : {1} ", e.Source, e.Message);
+                log.ErrorFormat("Error al  Actualizar Usuario UpdateUser()  {0} : {1} ", e.Source, e.Message);
 
-                throw;
-            }
-        }
-
-        public bool UserExists(int id)
-        {
-            try
-            {
-                return _context.Usuarios.Any(x => x.IdUsuario == id);
-            }
-            catch (Exception e)
-            {
-                log.ErrorFormat("Error al Validar si Existe Usuario UserExists()  {0} : {1} ", e.Source, e.Message);
                 throw;
             }
         }
@@ -126,10 +104,23 @@ namespace APISND.Services
             }
             catch (Exception e)
             {
-                log.ErrorFormat("Error al Crear Validar si Existe Usuario UserExists()  {0} : {1} ", e.Source, e.Message);
+                log.ErrorFormat("Error al Eliminar Usuario DeleteUser()  {0} : {1} ", e.Source, e.Message);
                 throw;
             }
 
         }
+        public bool UserExists(int id)
+        {
+            try
+            {
+                return _context.Usuarios.AsNoTracking().Any(x => x.IdUsuario == id);
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error al Validar si Existe Usuario UserExists()  {0} : {1} ", e.Source, e.Message);
+                throw;
+            }
+        }
+
     }
 }
