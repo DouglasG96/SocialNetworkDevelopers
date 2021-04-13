@@ -13,6 +13,8 @@ namespace APISND.Models
             ChatIdUsuarioEmisorNavigations = new HashSet<Chat>();
             ContactoIdUsuarioContactoNavigations = new HashSet<Contacto>();
             ContactoIdUsuarioNavigations = new HashSet<Contacto>();
+            OrdenesCompras = new HashSet<OrdenesCompra>();
+            OrdenesVenta = new HashSet<OrdenesVenta>();
             Publicaciones = new HashSet<Publicacione>();
             Whislists = new HashSet<Whislist>();
         }
@@ -27,12 +29,17 @@ namespace APISND.Models
         public string TelefonoContacto { get; set; }
         public string CorreoElectronico { get; set; }
         public string Contrasena { get; set; }
+        public string Vendedor { get; set; }
+        public string Comprador { get; set; }
+        public int? EstadoUsuario { get; set; }
 
         public virtual Role IdRolNavigation { get; set; }
         public virtual ICollection<Chat> ChatIdUsuarioDestinatarioNavigations { get; set; }
         public virtual ICollection<Chat> ChatIdUsuarioEmisorNavigations { get; set; }
         public virtual ICollection<Contacto> ContactoIdUsuarioContactoNavigations { get; set; }
         public virtual ICollection<Contacto> ContactoIdUsuarioNavigations { get; set; }
+        public virtual ICollection<OrdenesCompra> OrdenesCompras { get; set; }
+        public virtual ICollection<OrdenesVenta> OrdenesVenta { get; set; }
         public virtual ICollection<Publicacione> Publicaciones { get; set; }
         public virtual ICollection<Whislist> Whislists { get; set; }
     }
