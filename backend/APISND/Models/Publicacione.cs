@@ -16,7 +16,7 @@ namespace APISND.Models
 
         public int IdPublicacion { get; set; }
         public string Titulo { get; set; }
-        public string RutaImagen { get; set; }
+        public byte[] Imagen { get; set; }
         public int? Raiting { get; set; }
         public DateTime? FechaCreacion { get; set; }
         public DateTime? FechaPublicacion { get; set; }

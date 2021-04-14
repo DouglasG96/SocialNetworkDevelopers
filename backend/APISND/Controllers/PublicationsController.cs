@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -59,10 +60,15 @@ namespace APISND.Controllers
         [ProducesResponseType(typeof(UserDTO), 201)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> AddPublication([FromBody] PublicationDTO publicationDTO)
+        public async Task<IActionResult> AddPublication([FromForm] PublicationDTO publicationDTO)
         {
             try
             {
+                using(var ms = new MemoryStream())
+                {
+                    await publicationDTO.file.CopyToAsync(ms);
+                    publicationDTO.Imagen = ms.ToArray();
+                }
                 var publication = _mapper.Map<Publicacione>(publicationDTO);
                 var resp = await _publicationServices.AddPublication(publication);
 
@@ -80,6 +86,7 @@ namespace APISND.Controllers
             }
         }
 
+        [HttpPut]
         public async Task<IActionResult> UpdatePublication(int id, [FromBody] PublicationDTO publicationDTO)
         {
             try

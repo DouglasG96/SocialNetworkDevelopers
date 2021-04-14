@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace APISND.DTO
     {
         public int IdPublicacion { get; set; }
         public string Titulo { get; set; }
-        public string RutaImagen { get; set; }
+        public byte[] Imagen { get; set; }
         public int? Raiting { get; set; }
         public DateTime? FechaCreacion { get; set; }
         public DateTime? FechaPublicacion { get; set; }
@@ -20,5 +21,7 @@ namespace APISND.DTO
         public decimal? Precio { get; set; }
         public int? IdEstadoPublicacion { get; set; }
         public int? IdUsuario { get; set; }
+        public string Delivery { get; set; }
+        public IFormFile file { get; set; }
     }
 }
