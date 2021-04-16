@@ -87,7 +87,7 @@
       content-class="bg-primary text-white"
     >
       <q-list>
-        <q-item to="/'" active-class="q-item-no-link-highlighting">
+        <q-item to="/" active-class="q-item-no-link-highlighting">
           <q-item-section avatar>
             <q-icon name="shopping_cart" />
           </q-item-section>

@@ -24,17 +24,17 @@
                   readonly
                 />
               </div>
-              <div class="text-subtitle2 q-mb-sm">
+              <div class="text-subtitle2 q-mb-sm text-weight-bolder">
                 {{ this.shoppingCart[0].titulo }}
               </div>
               <div class="text-subtitle2  q-mb-xs">
                 {{ this.shoppingCart[0].descripcion }}
               </div>
-              <div class="text-subtitle2  q-mb-xs">
-                {{ this.shoppingCart[0].precio }}
+              <div class="text-subtitle2  q-mb-xs text-weight-bolder">
+                ${{ this.shoppingCart[0].precio }}
               </div>
               <div class="text-subtitle2  q-mb-xs">
-                {{ this.shoppingCart[0].fechaPublicacion }}
+                {{  dateFormat(this.shoppingCart[0].fechaPublicacion) }}
               </div>
             </q-card-section> </q-card-section
           ><q-separator />
@@ -56,7 +56,7 @@
           >
             <q-step
               :name="1"
-              title="Shipping address"
+              title="Mis Datos"
               icon="shopping_cart"
               :done="step > 1"
               :header-nav="step > 1"
@@ -68,8 +68,8 @@
                       dense
                       outlined
                       class="full-width"
-                      v-model="address_detail.first_name"
-                      label="First Name *"
+                      v-model="userInformation.name"
+                      label="Nombre *"
                     />
                   </q-item>
                 </div>
@@ -79,8 +79,8 @@
                       dense
                       outlined
                       class="full-width"
-                      v-model="address_detail.last_name"
-                      label="Last Name *"
+                      v-model="userInformation.phone"
+                      label="Telefono *"
                     />
                   </q-item>
                 </div>
@@ -90,21 +90,9 @@
                       dense
                       autogrow
                       outlined
-                      v-model="address_detail.address_line_1"
+                      v-model="userInformation.address"
                       class="full-width"
-                      label="Address line 1 *"
-                    />
-                  </q-item>
-                </div>
-                <div class="col-12">
-                  <q-item>
-                    <q-input
-                      dense
-                      autogrow
-                      outlined
-                      v-model="address_detail.address_line_2"
-                      class="full-width"
-                      label="Address line 2 *"
+                      label="Dirección *"
                     />
                   </q-item>
                 </div>
@@ -114,7 +102,7 @@
                       dense
                       outlined
                       class="full-width"
-                      v-model="address_detail.city"
+                      v-model="userInformation.name"
                       label="City *"
                     />
                   </q-item>
@@ -125,7 +113,7 @@
                       dense
                       outlined
                       class="full-width"
-                      v-model="address_detail.state"
+                      v-model="userInformation.name"
                       label="State"
                     />
                   </q-item>
@@ -136,7 +124,7 @@
                       dense
                       outlined
                       class="full-width"
-                      v-model="address_detail.zip_code"
+                      v-model="userInformation.name"
                       label="Zip Code"
                     />
                   </q-item>
@@ -147,7 +135,7 @@
                       dense
                       outlined
                       class="full-width"
-                      v-model="address_detail.country"
+                      v-model="userInformation.name"
                       label="Country *"
                     />
                   </q-item>
@@ -158,7 +146,6 @@
                       dense
                       outlined
                       class="full-width"
-                      v-model="address_detail.checkbox"
                       label="Use this address for payment details"
                     />
                   </q-item>
@@ -176,161 +163,29 @@
                   "
                   class="float-right q-mr-md q-mb-md"
                   color="blue"
-                  label="Next"
+                  label="Siguiente"
                 />
               </q-stepper-navigation>
             </q-step>
 
             <q-step
               :name="2"
-              title="Payment details"
+              title="Confirmar Compra"
               icon="shopping_cart"
-              :done="step > 2"
               :header-nav="step > 2"
-            >
-              <div class="row">
-                <div class="col-6">
-                  <q-item>
-                    <q-input
-                      dense
-                      outlined
-                      class="full-width"
-                      v-model="card_detail.name"
-                      label="Name on Card*"
-                    />
-                  </q-item>
-                </div>
-                <div class="col-6">
-                  <q-item>
-                    <q-input
-                      dense
-                      outlined
-                      class="full-width"
-                      v-model="address_detail.card_number"
-                      label="Card Number *"
-                    />
-                  </q-item>
-                </div>
-                <div class="col-6">
-                  <q-item>
-                    <q-input
-                      dense
-                      autogrow
-                      outlined
-                      v-model="address_detail.expiry_date"
-                      class="full-width"
-                      label="Expiry Date *"
-                    />
-                  </q-item>
-                </div>
-                <div class="col-6">
-                  <q-item>
-                    <q-input
-                      dense
-                      autogrow
-                      outlined
-                      v-model="address_detail.cvv"
-                      class="full-width"
-                      label="CVV *"
-                    />
-                  </q-item>
-                </div>
-                <div class="col-6">
-                  <q-item>
-                    <q-checkbox
-                      dense
-                      outlined
-                      class="full-width"
-                      v-model="address_detail.checkbox"
-                      label="Remember credit card details for next time"
-                    />
-                  </q-item>
-                </div>
-              </div>
-
-              <q-stepper-navigation>
-                <q-btn
-                  rounded
-                  @click="
-                    () => {
-                      done2 = true;
-                      step = 3;
-                    }
-                  "
-                  class="float-right q-mr-md q-mb-md"
-                  color="blue"
-                  label="Next"
-                />
-                <q-btn
-                  flat
-                  @click="step = 1"
-                  color="primary"
-                  flat
-                  rounded
-                  label="Back"
-                  class="q-mr-sm float-right"
-                />
-              </q-stepper-navigation>
-            </q-step>
-
-            <q-step
-              :name="3"
-              title="Review your order"
-              icon="shopping_cart"
-              :header-nav="step > 3"
             >
               <div class="row">
                 <div class="col-12">
                   <q-item-label header class="text-h6"
-                    >Order summary</q-item-label
+                    >Resumen de Pedido</q-item-label
                   >
                   <q-item class="full-width">
                     <q-item-section>
-                      <q-item-label lines="1">Product 1</q-item-label>
-                      <q-item-label caption>Caption</q-item-label>
+                      <q-item-label lines="1">{{ this.shoppingCart[0].titulo }}</q-item-label>
+                      <q-item-label caption>Precio</q-item-label>
                     </q-item-section>
                     <q-item-section side>
-                      $10.99
-                    </q-item-section>
-                  </q-item>
-                  <q-separator></q-separator>
-                  <q-item class="full-width">
-                    <q-item-section>
-                      <q-item-label lines="1">Product 2</q-item-label>
-                      <q-item-label caption>Caption Product 2</q-item-label>
-                    </q-item-section>
-                    <q-item-section side>
-                      $19.99
-                    </q-item-section>
-                  </q-item>
-                  <q-separator></q-separator>
-                  <q-item class="full-width">
-                    <q-item-section>
-                      <q-item-label lines="1">Product 3</q-item-label>
-                      <q-item-label caption>Caption Product 3</q-item-label>
-                    </q-item-section>
-                    <q-item-section side>
-                      $78.99
-                    </q-item-section>
-                  </q-item>
-                  <q-separator></q-separator>
-                  <q-item class="full-width">
-                    <q-item-section>
-                      <q-item-label lines="1">Product 4</q-item-label>
-                      <q-item-label caption>Caption Product 4</q-item-label>
-                    </q-item-section>
-                    <q-item-section side>
-                      $178.99
-                    </q-item-section>
-                  </q-item>
-                  <q-separator></q-separator>
-
-                  <q-item class="full-width">
-                    <q-item-section>
-                      <q-item-label lines="1">Shipping</q-item-label>
-                    </q-item-section>
-                    <q-item-section side>
-                      Free
+                      ${{ this.shoppingCart[0].precio }}
                     </q-item-section>
                   </q-item>
                   <q-separator></q-separator>
@@ -341,13 +196,13 @@
                     <q-item-section>
                       <q-item-label lines="1">Total</q-item-label>
                     </q-item-section>
-                    <q-item-section side>
-                      $288.96
+                    <q-item-section class="text-red text-weight-bolder text-h6" side>
+                      ${{ this.shoppingCart[0].precio }}
                     </q-item-section>
                   </q-item>
                 </div>
               </div>
-
+<!-- 
               <q-card class="rounded-borders">
                 <q-card-section horizontal>
                   <q-card-section class="col-5 q-pt-xs">
@@ -371,23 +226,23 @@
                     </div>
                   </q-card-section>
                 </q-card-section>
-              </q-card>
+              </q-card> -->
 
               <q-stepper-navigation>
                 <q-btn
                   rounded
-                  @click="done3 = true"
+                  @click="placeOrder()"
                   class="float-right q-mr-md q-mb-md"
                   color="blue"
-                  label="Place Order"
+                  label="Realizar Pedido"
                 />
                 <q-btn
                   flat
-                  @click="step = 2"
+                  @click="step = 1"
                   color="primary"
                   flat
                   rounded
-                  label="Back"
+                  label="Atras"
                   class="q-mr-sm float-right"
                 />
               </q-stepper-navigation>
@@ -400,13 +255,21 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapState } from "vuex";
+import { date } from 'quasar'
+const { formatDate } = date
 export default {
   name: "DetailProduct",
   data() {
     return {
       step: 1,
-      address_detail: {},
+      userInformation: {
+        name: '',
+        phone: '',
+        email: '',
+        address: ''
+
+      },
       card_detail: {}
     };
   },
@@ -417,7 +280,18 @@ export default {
   mounted() {
     console.log(this.shoppingCart);
     console.log(this.user);
-  }
+    this.userInformation.name = this.user.nameUser;
+    this.userInformation.phone = this.user.phone;
+  },
+
+  methods: {
+    dateFormat(date) {
+      return  formatDate(date, 'DD-MM-YYYY');
+    },
+    placeOrder(){
+      alert("Compra Realizada");
+    }
+  },
 };
 </script>
 
