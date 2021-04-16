@@ -16,7 +16,12 @@
             </div>
           </q-card-section>
           <q-card-section>
-            <q-form  ref="formLogin" autocomplete="off" class="q-gutter-md" @submit.prevent="login">
+            <q-form
+              ref="formLogin"
+              autocomplete="off"
+              class="q-gutter-md"
+              @submit.prevent="login"
+            >
               <q-input
                 filled
                 v-model="email"
@@ -80,7 +85,7 @@ export default {
   methods: {
     ...mapActions("auth", ["loginUser"]),
     async login() {
-            //valido formulario
+      //valido formulario
       var validate = await this.$refs.formLogin.validate();
       if (!validate) {
         return;
@@ -92,21 +97,19 @@ export default {
           email: this.email,
           password: this.password
         });
-                 this.$q.loading.hide();
+        this.$q.loading.hide();
         this.$router.push({ path: "/DetailProduct" }).catch(error => {});
-        this.email = "";
-        this.password = "";
       } catch (error) {
-                 this.$q.loading.hide();
-
+        this.$q.loading.hide();
         console.log(error);
         this.$q.notify({
           type: "negative",
           position: "center",
           message: error.data
         });
+        this.email = "";
+        this.password = "";
       }
-
     }
   }
 };
@@ -115,6 +118,5 @@ export default {
 <style>
 .bg-image {
   background-image: linear-gradient(135deg, #363da8 0%, #dfdee4 100%);
-
 }
 </style>

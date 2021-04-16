@@ -45,59 +45,59 @@ export default {
     return {
       texto: "",
       dataFilterd: [],
-      data: [
-        {
-          title: "Audifonos",
-          caption: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          rating: 2,
-          amount: "$30",
-          img: require("../assets/products/c-d-x-PDX_a_82obo-unsplash.jpg"),
-          chip: "Discount 90%",
-          chip_color: "grey-4",
-          chip_class: "text-blue absolute-top-right"
-        },
-        {
-          title: "Mouse",
-          caption: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          rating: 4,
-          amount: "$15",
-          img: require("../assets/products/frankie-valentine-VghbBAYqUJ0-unsplash.jpg")
-        },
-        {
-          title: "Lentes",
-          caption: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          rating: 1,
-          amount: "$50",
-          img: require("../assets/products/giorgio-trovato-K62u25Jk6vo-unsplash.jpg"),
-          chip: "Sold Out",
-          chip_color: "grey-8",
-          chip_class: "text-white absolute-top-right"
-        },
-        {
-          title: "Our Changing Planet",
-          caption: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          rating: 5,
-          amount: "$70",
-          img: require("../assets/products/jeroen-den-otter-iKmm0okt6Q4-unsplash.jpg"),
-          chip: "Discount 50%",
-          chip_color: "grey-4",
-          chip_class: "text-blue absolute-top-right"
-        },
-        {
-          title: "Our Changing Planet",
-          caption: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          rating: 2,
-          amount: "$50",
-          img: require("../assets/products/john-fornander-m2WpKnlLcEc-unsplash .jpg")
-        },
-        {
-          title: "Our Changing Planet",
-          caption: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          rating: 4,
-          amount: "$30",
-          img: require("../assets/products/marek-szturc-0iIV1goIodE-unsplash.jpg")
-        }
-      ],
+      // data: [
+      //   {
+      //     title: "Audifonos",
+      //     caption: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      //     rating: 2,
+      //     amount: "$30",
+      //     img: require("../assets/products/c-d-x-PDX_a_82obo-unsplash.jpg"),
+      //     chip: "Discount 90%",
+      //     chip_color: "grey-4",
+      //     chip_class: "text-blue absolute-top-right"
+      //   },
+      //   {
+      //     title: "Mouse",
+      //     caption: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      //     rating: 4,
+      //     amount: "$15",
+      //     img: require("../assets/products/frankie-valentine-VghbBAYqUJ0-unsplash.jpg")
+      //   },
+      //   {
+      //     title: "Lentes",
+      //     caption: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      //     rating: 1,
+      //     amount: "$50",
+      //     img: require("../assets/products/giorgio-trovato-K62u25Jk6vo-unsplash.jpg"),
+      //     chip: "Sold Out",
+      //     chip_color: "grey-8",
+      //     chip_class: "text-white absolute-top-right"
+      //   },
+      //   {
+      //     title: "Our Changing Planet",
+      //     caption: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      //     rating: 5,
+      //     amount: "$70",
+      //     img: require("../assets/products/jeroen-den-otter-iKmm0okt6Q4-unsplash.jpg"),
+      //     chip: "Discount 50%",
+      //     chip_color: "grey-4",
+      //     chip_class: "text-blue absolute-top-right"
+      //   },
+      //   {
+      //     title: "Our Changing Planet",
+      //     caption: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      //     rating: 2,
+      //     amount: "$50",
+      //     img: require("../assets/products/john-fornander-m2WpKnlLcEc-unsplash .jpg")
+      //   },
+      //   {
+      //     title: "Our Changing Planet",
+      //     caption: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      //     rating: 4,
+      //     amount: "$30",
+      //     img: require("../assets/products/marek-szturc-0iIV1goIodE-unsplash.jpg")
+      //   }
+      // ],
       dataProduct: [],
     };
   },
@@ -121,7 +121,7 @@ export default {
       set(value) {
         value = value.toLowerCase();
         this.dataFilterd = this.data.filter(
-          x => x.title.toLowerCase().indexOf(value) !== -1
+          x => x.titulo.toLowerCase().indexOf(value) !== -1
         );
         this.texto = value;
       }
