@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import routes from './routes'
+import middlewareAut from 'src/middleware/auth'
 
 Vue.use(VueRouter)
 
@@ -28,16 +29,17 @@ export default function ({ store }) {
   })
 
   Router.beforeEach((to, from, next) => {
-    if (to.meta.requireAuth) {
-      //si existe token
-      if (store.getters['auth/isLoggedIn']) {
-        next()
-        return
-      }
-      next('/Login');
-    } else {
-      next()
-    }
+    middlewareAut.auth(to, from, next, store)
+    // if (to.meta.requireAuth) {
+    //   //si existe token
+    //   if (store.getters['auth/isLoggedIn']) {
+    //     next()
+    //     return
+    //   }
+    //   next('/Login');
+    // } else {
+    //   next()
+    // }
 
   });
 

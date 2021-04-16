@@ -28,6 +28,7 @@
                 label="Username"
                 lazy-rules
                 :rules="rules.required"
+                class="text-lowercase"
               />
 
               <q-input
@@ -37,6 +38,7 @@
                 label="Password"
                 lazy-rules
                 :rules="rules.required"
+                class="text-lowercase"
               />
 
               <div class="row">
@@ -94,18 +96,19 @@ export default {
       try {
         this.$q.loading.show();
         await this.loginUser({
-          email: this.email,
-          password: this.password
+          email: this.email.trim(),
+          password: this.password.trim()
         });
         this.$q.loading.hide();
-        this.$router.push({ path: "/DetailProduct" }).catch(error => {});
+        this.$router.push({ path: "/" }).catch(error => {console.log(error);});
       } catch (error) {
         this.$q.loading.hide();
         console.log(error);
         this.$q.notify({
           type: "negative",
           position: "center",
-          message: error.data
+          message: error.data,
+          actions: [{ icon: 'close', color: 'white' }]
         });
         this.email = "";
         this.password = "";

@@ -37,6 +37,7 @@
 
 <script>
 import api from "src/api/publication";
+import { mapState } from "vuex";
 
 export default {
   name: "ProductCatalogues",
@@ -102,18 +103,18 @@ export default {
     };
   },
   async mounted() {
+    console.log(this.user);
     try {
       this.dataProduct = await api.getPublications();
-      console.log(this.dataProduct);
     } catch (error) {
       console.log(error);
     }
     this.dataFilterd = this.dataProduct;
-    console.log(this.dataFilterd);
   },
   created() {},
 
   computed: {
+        ...mapState("auth", ["user"]),
     search: {
       get() {
         return this.texto;

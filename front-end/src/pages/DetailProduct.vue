@@ -41,7 +41,7 @@
         </q-card>
       </div>
       <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
-        
+
         <q-card class="bg-grey-2">
           <q-card-section class="text-center text-h6 text-black ">
             <q-icon name="shopping_cart" class="q-mr-sm" />
@@ -411,10 +411,12 @@ export default {
     };
   },
   computed: {
-    ...mapState("shoppingCart", ["shoppingCart"])
+    ...mapState("shoppingCart", ["shoppingCart"]),
+    ...mapState("auth", ["user"]),
   },
   mounted() {
     console.log(this.shoppingCart);
+    console.log(this.user);
   }
 };
 </script>
