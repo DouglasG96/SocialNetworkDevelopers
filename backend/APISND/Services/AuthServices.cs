@@ -51,7 +51,7 @@ namespace SNDAPI.Services
                 new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                new Claim(ClaimTypes.NameIdentifier,user.IdUsuario.ToString()),
+                new Claim("IdUser",user.IdUsuario.ToString()),
                 new Claim(ClaimTypes.Role,user.IdRol.ToString()),
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
