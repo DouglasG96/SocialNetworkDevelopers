@@ -38,6 +38,7 @@
                 label="Nombres"
                 lazy-rules
                 :rules="rules.required"
+                class="text-lowercase"
               />
               <q-input
                 filled
@@ -45,6 +46,7 @@
                 label="Apellidos"
                 lazy-rules
                 :rules="rules.required"
+                class="text-lowercase"
               />
 
               <q-input
@@ -75,6 +77,7 @@
                 label="correo"
                 lazy-rules
                 :rules="rules.required"
+                class="text-lowercase"
               />
               <q-input
                 type="password"
@@ -83,6 +86,7 @@
                 label="contraseña"
                 lazy-rules
                 :rules="rules.required"
+                class="text-lowercase"
               />
 
               <div class="row">

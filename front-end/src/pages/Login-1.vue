@@ -16,13 +16,19 @@
             </div>
           </q-card-section>
           <q-card-section>
-            <q-form  ref="formLogin" autocomplete="off" class="q-gutter-md" @submit.prevent="login">
+            <q-form
+              ref="formLogin"
+              autocomplete="off"
+              class="q-gutter-md"
+              @submit.prevent="login"
+            >
               <q-input
                 filled
                 v-model="email"
                 label="Username"
                 lazy-rules
                 :rules="rules.required"
+                class="text-lowercase"
               />
 
               <q-input
@@ -32,6 +38,7 @@
                 label="Password"
                 lazy-rules
                 :rules="rules.required"
+                class="text-lowercase"
               />
 
               <div class="row">
@@ -80,7 +87,7 @@ export default {
   methods: {
     ...mapActions("auth", ["loginUser"]),
     async login() {
-            //valido formulario
+      //valido formulario
       var validate = await this.$refs.formLogin.validate();
       if (!validate) {
         return;
@@ -89,24 +96,23 @@ export default {
       try {
         this.$q.loading.show();
         await this.loginUser({
-          email: this.email,
-          password: this.password
+          email: this.email.trim(),
+          password: this.password.trim()
         });
-                 this.$q.loading.hide();
-        this.$router.push({ path: "/DetailProduct" }).catch(error => {});
-        this.email = "";
-        this.password = "";
+        this.$q.loading.hide();
+        this.$router.push({ path: "/" }).catch(error => {console.log(error);});
       } catch (error) {
-                 this.$q.loading.hide();
-
+        this.$q.loading.hide();
         console.log(error);
         this.$q.notify({
           type: "negative",
           position: "center",
-          message: error.data
+          message: error.data,
+          actions: [{ icon: 'close', color: 'white' }]
         });
+        this.email = "";
+        this.password = "";
       }
-
     }
   }
 };
@@ -115,6 +121,5 @@ export default {
 <style>
 .bg-image {
   background-image: linear-gradient(135deg, #363da8 0%, #dfdee4 100%);
-
 }
 </style>

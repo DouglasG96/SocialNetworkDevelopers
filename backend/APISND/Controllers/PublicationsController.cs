@@ -1,10 +1,12 @@
 ﻿using APISND.DTO;
 using APISND.Interface;
+using APISND.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,6 +25,10 @@ namespace APISND.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// obtiene todas las publicaciones(productos)
+        /// </summary>
+        /// <returns></returns>
         [ProducesResponseType(typeof(PublicationDTO), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -37,6 +43,88 @@ namespace APISND.Controllers
                     return NotFound(resp);
 
                 return Ok(resp);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
+        }
+
+        /// <summary>
+        /// Peticion para agregar un usuario
+        /// </summary>
+        /// <param name="userDTO"></param>
+        /// <returns></returns>
+        //[AuthorizeRoles(Rol.Administrator)]
+        [HttpPost]
+        [ProducesResponseType(typeof(UserDTO), 201)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> AddPublication([FromForm] PublicationDTO publicationDTO)
+        {
+            try
+            {
+                using(var ms = new MemoryStream())
+                {
+                    await publicationDTO.file.CopyToAsync(ms);
+                    publicationDTO.Imagen = ms.ToArray();
+                }
+                var publication = _mapper.Map<Publicacione>(publicationDTO);
+                var resp = await _publicationServices.AddPublication(publication);
+
+                if (resp == null)
+                    return StatusCode(StatusCodes.Status404NotFound, resp);
+                //return StatusCode(StatusCodes.Status201Created, user);
+                //return CreatedAtAction(nameof(GetUserByID), new { id = user.IdUsuario }, userDTO);
+                return StatusCode(StatusCodes.Status201Created, publication);
+
+
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdatePublication(int id, [FromBody] PublicationDTO publicationDTO)
+        {
+            try
+            {
+                if (id != publicationDTO.IdPublicacion)
+                    return BadRequest();
+
+                if (!_publicationServices.PublicationExists(id))
+                    return NotFound(new { message = $"Publicacion con Id = {id} no existe" });
+
+                var publication = _mapper.Map<Publicacione>(publicationDTO);
+                await _publicationServices.UpdatePublication(publication);
+
+                return StatusCode(StatusCodes.Status204NoContent, publication);
+
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
+        }
+
+
+        //[AuthorizeRoles(Rol.Administrator)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            try
+            {
+                if (!_publicationServices.PublicationExists(id))
+                    return NotFound(new { message = $"Publicacion con Id = {id} no existe" });
+
+                await _publicationServices.DeletePublication(id);
+
+                return NoContent();
             }
             catch (Exception e)
             {

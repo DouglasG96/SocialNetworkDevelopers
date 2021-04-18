@@ -9,7 +9,5 @@ namespace SNDAPI.Interface
     public interface IAuth
     {
         Task<string> Login(AuthDTO user);
-
-
     }
 }

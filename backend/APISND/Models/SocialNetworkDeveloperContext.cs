@@ -25,6 +25,10 @@ namespace APISND.Models
         public virtual DbSet<EstadoComentario> EstadoComentarios { get; set; }
         public virtual DbSet<EstadoPublicacion> EstadoPublicacions { get; set; }
         public virtual DbSet<Municipio> Municipios { get; set; }
+        public virtual DbSet<OrdenesCompra> OrdenesCompras { get; set; }
+        public virtual DbSet<OrdenesComprasDetalle> OrdenesComprasDetalles { get; set; }
+        public virtual DbSet<OrdenesVenta> OrdenesVentas { get; set; }
+        public virtual DbSet<OrdenesVentasDetalle> OrdenesVentasDetalles { get; set; }
         public virtual DbSet<Publicacione> Publicaciones { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<SubCategoria> SubCategorias { get; set; }
@@ -38,6 +42,7 @@ namespace APISND.Models
             if (!optionsBuilder.IsConfigured)
             {
                 //optionsBuilder.UseSqlServer("data source=PROGRAMACION-3\\NAVDEMO;initial catalog=SocialNetworkDeveloper;user id=sa;password=Fasan1;");
+                //optionsBuilder.UseSqlServer("data source=PROGRAMACION-3;initial catalog=SocialNetworkDeveloper;user id=sa;password=Fasan1;");
             }
         }
 
@@ -78,9 +83,7 @@ namespace APISND.Models
 
                 entity.Property(e => e.IdUsuarioEmisor).HasColumnName("idUsuarioEmisor");
 
-                entity.Property(e => e.Mensaje)
-                    .HasColumnType("text")
-                    .HasColumnName("mensaje");
+                entity.Property(e => e.Mensaje).HasColumnType("text");
 
                 entity.HasOne(d => d.IdUsuarioDestinatarioNavigation)
                     .WithMany(p => p.ChatIdUsuarioDestinatarioNavigations)
@@ -102,7 +105,7 @@ namespace APISND.Models
 
                 entity.Property(e => e.Comentario1)
                     .HasColumnType("text")
-                    .HasColumnName("comentario");
+                    .HasColumnName("Comentario");
 
                 entity.Property(e => e.IdComentarioPrincipal).HasColumnName("idComentarioPrincipal");
 
@@ -154,7 +157,7 @@ namespace APISND.Models
 
                 entity.Property(e => e.Departamento1)
                     .HasMaxLength(150)
-                    .HasColumnName("departamento");
+                    .HasColumnName("Departamento");
 
                 entity.Property(e => e.Estado).HasColumnName("estado");
             });
@@ -198,12 +201,144 @@ namespace APISND.Models
 
                 entity.Property(e => e.Municipio1)
                     .HasMaxLength(255)
-                    .HasColumnName("municipio");
+                    .HasColumnName("Municipio");
 
                 entity.HasOne(d => d.IdDepartamentoNavigation)
                     .WithMany(p => p.Municipios)
                     .HasForeignKey(d => d.IdDepartamento)
                     .HasConstraintName("fk_municipios_departamentos");
+            });
+
+            modelBuilder.Entity<OrdenesCompra>(entity =>
+            {
+                entity.HasKey(e => e.IdOrdenCompra);
+
+                entity.Property(e => e.IdOrdenCompra).HasColumnName("idOrdenCompra");
+
+                entity.Property(e => e.EstadoOrdenCompra)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .HasColumnName("estadoOrdenCompra")
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.FechaHoraOrdenCompra)
+                    .HasColumnType("datetime")
+                    .HasColumnName("fechaHoraOrdenCompra");
+
+                entity.Property(e => e.IdPublicacion).HasColumnName("idPublicacion");
+
+                entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
+
+                entity.Property(e => e.TotalCompraConIva)
+                    .HasColumnType("decimal(10, 4)")
+                    .HasColumnName("totalCompraConIva");
+
+                entity.Property(e => e.TotalCompraSinIva)
+                    .HasColumnType("decimal(10, 0)")
+                    .HasColumnName("totalCompraSinIva");
+
+                entity.HasOne(d => d.IdPublicacionNavigation)
+                    .WithMany(p => p.OrdenesCompras)
+                    .HasForeignKey(d => d.IdPublicacion)
+                    .HasConstraintName("FK_OrdenesCompras_Publicaciones");
+
+                entity.HasOne(d => d.IdUsuarioNavigation)
+                    .WithMany(p => p.OrdenesCompras)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .HasConstraintName("FK_OrdenesCompras_Usuarios");
+            });
+
+            modelBuilder.Entity<OrdenesComprasDetalle>(entity =>
+            {
+                entity.HasKey(e => e.IdOrdenCompraDetalle);
+
+                entity.Property(e => e.IdOrdenCompraDetalle).HasColumnName("idOrdenCompraDetalle");
+
+                entity.Property(e => e.Cantidad).HasColumnType("decimal(10, 4)");
+
+                entity.Property(e => e.EstadoOrdenCompraDetalle).HasColumnName("estadoOrdenCompraDetalle");
+
+                entity.Property(e => e.IdOrdenCompra).HasColumnName("idOrdenCompra");
+
+                entity.Property(e => e.MontoConIva)
+                    .HasColumnType("decimal(10, 4)")
+                    .HasColumnName("montoConIva");
+
+                entity.Property(e => e.MontoSinIva)
+                    .HasColumnType("decimal(10, 4)")
+                    .HasColumnName("montoSinIva");
+
+                entity.HasOne(d => d.IdOrdenCompraNavigation)
+                    .WithMany(p => p.OrdenesComprasDetalles)
+                    .HasForeignKey(d => d.IdOrdenCompra)
+                    .HasConstraintName("FK_OrdenesComprasDetalles_OrdenesCompras");
+            });
+
+            modelBuilder.Entity<OrdenesVenta>(entity =>
+            {
+                entity.HasKey(e => e.IdOrdenVenta)
+                    .HasName("PK_OrdenesNegocios");
+
+                entity.Property(e => e.IdOrdenVenta).HasColumnName("idOrdenVenta");
+
+                entity.Property(e => e.EstadoOrdenVenta)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .HasColumnName("estadoOrdenVenta")
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.FechaHoraOrdenVenta)
+                    .HasColumnType("datetime")
+                    .HasColumnName("fechaHoraOrdenVenta");
+
+                entity.Property(e => e.IdPublicacion).HasColumnName("idPublicacion");
+
+                entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
+
+                entity.Property(e => e.TotalVentaConIva)
+                    .HasColumnType("decimal(10, 4)")
+                    .HasColumnName("totalVentaConIva");
+
+                entity.Property(e => e.TotalVentaSinIva)
+                    .HasColumnType("decimal(10, 0)")
+                    .HasColumnName("totalVentaSinIva");
+
+                entity.HasOne(d => d.IdPublicacionNavigation)
+                    .WithMany(p => p.OrdenesVenta)
+                    .HasForeignKey(d => d.IdPublicacion)
+                    .HasConstraintName("FK_OrdenesNegocios_Publicaciones");
+
+                entity.HasOne(d => d.IdUsuarioNavigation)
+                    .WithMany(p => p.OrdenesVenta)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .HasConstraintName("FK_OrdenesNegocios_Usuarios");
+            });
+
+            modelBuilder.Entity<OrdenesVentasDetalle>(entity =>
+            {
+                entity.HasKey(e => e.IdOrdenVentaDetalle)
+                    .HasName("PK_OrdenesNegociosDetalles");
+
+                entity.Property(e => e.IdOrdenVentaDetalle).HasColumnName("idOrdenVentaDetalle");
+
+                entity.Property(e => e.Cantidad).HasColumnType("decimal(10, 4)");
+
+                entity.Property(e => e.EstadoOrdenNegocioDetalle).HasColumnName("estadoOrdenNegocioDetalle");
+
+                entity.Property(e => e.IdOrdenVenta).HasColumnName("idOrdenVenta");
+
+                entity.Property(e => e.MontoConIva)
+                    .HasColumnType("decimal(10, 4)")
+                    .HasColumnName("montoConIva");
+
+                entity.Property(e => e.MontoSinIva)
+                    .HasColumnType("decimal(10, 4)")
+                    .HasColumnName("montoSinIva");
+
+                entity.HasOne(d => d.IdOrdenVentaNavigation)
+                    .WithMany(p => p.OrdenesVentasDetalles)
+                    .HasForeignKey(d => d.IdOrdenVenta)
+                    .HasConstraintName("FK_OrdenesNegociosDetalles_OrdenesNegocios");
             });
 
             modelBuilder.Entity<Publicacione>(entity =>
@@ -213,9 +348,12 @@ namespace APISND.Models
 
                 entity.Property(e => e.IdPublicacion).HasColumnName("idPublicacion");
 
-                entity.Property(e => e.Descripcion)
-                    .HasMaxLength(250)
-                    .HasColumnName("descripcion");
+                entity.Property(e => e.Delivery)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.Descripcion).HasMaxLength(250);
 
                 entity.Property(e => e.FechaCreacion)
                     .HasColumnType("datetime")
@@ -235,19 +373,11 @@ namespace APISND.Models
 
                 entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
 
-                entity.Property(e => e.Precio)
-                    .HasColumnType("decimal(6, 2)")
-                    .HasColumnName("precio");
+                entity.Property(e => e.Imagen).HasColumnType("image");
 
-                entity.Property(e => e.Raiting).HasColumnName("raiting");
+                entity.Property(e => e.Precio).HasColumnType("decimal(6, 2)");
 
-                entity.Property(e => e.RutaImagen)
-                    .IsUnicode(false)
-                    .HasColumnName("rutaImagen");
-
-                entity.Property(e => e.Titulo)
-                    .HasMaxLength(150)
-                    .HasColumnName("titulo");
+                entity.Property(e => e.Titulo).HasMaxLength(150);
 
                 entity.HasOne(d => d.IdEstadoPublicacionNavigation)
                     .WithMany(p => p.Publicaciones)
@@ -277,9 +407,7 @@ namespace APISND.Models
 
                 entity.Property(e => e.IdRol).HasColumnName("idRol");
 
-                entity.Property(e => e.Rol)
-                    .HasMaxLength(25)
-                    .HasColumnName("rol");
+                entity.Property(e => e.Rol).HasMaxLength(25);
             });
 
             modelBuilder.Entity<SubCategoria>(entity =>
@@ -336,9 +464,13 @@ namespace APISND.Models
 
                 entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
 
-                entity.Property(e => e.Apellidos)
-                    .HasMaxLength(125)
-                    .HasColumnName("apellidos");
+                entity.Property(e => e.Apellidos).HasMaxLength(125);
+
+                entity.Property(e => e.Comprador)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('N')")
+                    .IsFixedLength(true);
 
                 entity.Property(e => e.Contrasena).HasMaxLength(25);
 
@@ -350,6 +482,8 @@ namespace APISND.Models
                     .HasMaxLength(10)
                     .HasColumnName("dui");
 
+                entity.Property(e => e.EstadoUsuario).HasColumnName("estadoUsuario");
+
                 entity.Property(e => e.IdRol).HasColumnName("idRol");
 
                 entity.Property(e => e.Nit)
@@ -360,13 +494,17 @@ namespace APISND.Models
                     .HasMaxLength(250)
                     .HasColumnName("nombreCompleto");
 
-                entity.Property(e => e.Nombres)
-                    .HasMaxLength(125)
-                    .HasColumnName("nombres");
+                entity.Property(e => e.Nombres).HasMaxLength(125);
 
                 entity.Property(e => e.TelefonoContacto)
                     .HasMaxLength(15)
                     .HasColumnName("telefonoContacto");
+
+                entity.Property(e => e.Vendedor)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('Y')")
+                    .IsFixedLength(true);
 
                 entity.HasOne(d => d.IdRolNavigation)
                     .WithMany(p => p.Usuarios)

@@ -7,7 +7,8 @@ export async function loginUser ({ commit }, payload) {
         try {
             const resp = await api.Login(payload);
             LocalStorage.set('token', JSON.stringify(resp))
-            commit('auth_success', resp);
+            commit('auth_success', resp)
+            // commit('getUser', resp);
             resolve(resp);
         } catch (error) {
             reject(error.response)

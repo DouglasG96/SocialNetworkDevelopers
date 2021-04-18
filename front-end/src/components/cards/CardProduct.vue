@@ -1,6 +1,6 @@
 <template>
   <q-card class="">
-    <q-img src="https://soilhealthinstitute.org/wp-content/uploads/2016/11/thumbnail-default.jpg" height="220px">
+    <q-img :src="'data:image/jpeg;base64,'+ data.imagen" height="150px">
       <!-- <q-chip v-if="data.chip" :class="data.chip_class" :color="data.chip_color" :label="data.chip"></q-chip> -->
     </q-img>
 
@@ -25,10 +25,10 @@
       </div>
     </q-card-section>
     <q-card-section>
-      <div class="col-12">
-        <span class="text-h6">{{ data.precio }}</span>
-        <span class="text-h6 float-right">
-          <q-btn label="Ver detalles" rounded color="secondary" outline @click="getDetail(data)"></q-btn>
+      <div class="col-12 ">
+        <span class="text-h6">${{ data.precio }}</span>
+        <span class="text-h5 float-right">
+          <q-btn label="Ver Detalle" rounded color="secondary" outline @click="getDetail(data)"></q-btn>
         </span>
       </div>
     </q-card-section>
@@ -36,6 +36,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "CardProduct",
   props: ['data'],
@@ -44,9 +46,11 @@ export default {
     }
   },
   methods: {
+    ...mapActions("shoppingCart", ["addShoppingCart","cleanShoppingCart"]),
      getDetail(data) {
-      console.log(data);
-      this.$router.push({path: '/DetailProduct'}).catch(error => { });
+       this.cleanShoppingCart();
+       this.addShoppingCart(data);
+      this.$router.push({path: '/DetailProduct'}).catch(error => {console.log(error); });
     }
   },
 }

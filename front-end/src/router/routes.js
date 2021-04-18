@@ -3,10 +3,10 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      {path: '', component: () => import('pages/ProductCatalogues.vue')},
+      { path: '/', component: () => import('pages/ProductCatalogues.vue'), meta: { requireAuth: true }},
       {
         path: '/Mantenimientos/Usuarios',
-        component: () => import('pages/mantenimientos/Usuarios/UsersMaintenance.vue'),
+        component: () => import('pages/mantenimientos/usuarios/UsersMaintenance.vue'),
         meta: { requireAuth: false }
       },
       { path: '/DetailProduct', component: () => import('pages/DetailProduct.vue'), meta: { requireAuth: true }},
