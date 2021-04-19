@@ -13,10 +13,12 @@ namespace APISND.DTO
         public byte[] Imagen { get; set; }
         public int? Raiting { get; set; }
         public DateTime? FechaCreacion { get; set; }
+        public int? IdCategoria { get; set; }
         public DateTime? FechaPublicacion { get; set; }
         public int? IdSubCategoria { get; set; }
         public int? IdTipoPublicacion { get; set; }
-        public int? IdMinicipio { get; set; }
+        public int? IdDepartamento { get; set; }
+        public int? IdMunicipio { get; set; }
         public string Descripcion { get; set; }
         public decimal? Precio { get; set; }
         public int? IdEstadoPublicacion { get; set; }

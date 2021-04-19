@@ -95,14 +95,6 @@
             <q-item-label>Catalogo de productos</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item to="/catalogo_servicios" active-class="q-item-no-link-highlighting">
-          <q-item-section avatar>
-            <q-icon name="home_repair_service" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Catalogo de servicios</q-item-label>
-          </q-item-section>
-        </q-item>
         <q-expansion-item icon="settings" label="Mantenimientos">
           <q-list class="q-pl-lg">
             <q-item

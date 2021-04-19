@@ -29,10 +29,15 @@ namespace APISND.Models
         public string TelefonoContacto { get; set; }
         public string CorreoElectronico { get; set; }
         public string Contrasena { get; set; }
+        public int? IdDepartamento { get; set; }
+        public int? IdMunicipio { get; set; }
+        public string Direccion { get; set; }
         public string Vendedor { get; set; }
         public string Comprador { get; set; }
         public int? EstadoUsuario { get; set; }
 
+        public virtual Departamento IdDepartamentoNavigation { get; set; }
+        public virtual Municipio IdMunicipioNavigation { get; set; }
         public virtual Role IdRolNavigation { get; set; }
         public virtual ICollection<Chat> ChatIdUsuarioDestinatarioNavigations { get; set; }
         public virtual ICollection<Chat> ChatIdUsuarioEmisorNavigations { get; set; }

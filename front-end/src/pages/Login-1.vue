@@ -41,7 +41,7 @@
                 class="text-lowercase"
               />
 
-              <div class="row">
+              <div class="row text-center">
                 <div class="col-6">
                   <q-btn label="Acceder" type="submit" color="positive" />
                 </div>

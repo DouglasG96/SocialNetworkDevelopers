@@ -1,21 +1,34 @@
 <template>
-  <q-page class="q-pa-sm bg-white">
+  <q-page class="q-pa-sm">
     <div class="row q-col-gutter-sm">
-      <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-        <q-card class="bg-grey-2">
-          <q-card-section class="text-center text-h6 text-black ">
-            <q-icon name="description" class="q-mr-sm" />
-            Detalle del Producto
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <q-card class>
+          <q-card-section class="text-center text-h6">
+            <q-icon name="description" class="q-mr-sm" />Detalle del Producto
           </q-card-section>
           <q-card-section horizontal>
             <q-card-section class="col-5 flex flex-center">
-              <q-img
-                height="80px"
-                class="rounded-borders"
-                :src="'data:image/jpeg;base64,' + this.shoppingCart[0].imagen"
-              />
+              <figure style="float: left; width: 50%">
+                <q-zoom background-color="black">
+                  <img
+                    :src="'data:image/jpeg;base64,' + this.shoppingCart[0].imagen"
+                    height="250px"
+                    alt="QZoom with portrait image"
+                    class="my-image-portrait"
+                  />
+                </q-zoom>
+                <figcaption></figcaption>
+              </figure>
+              <!-- <q-img
+                          :src="'data:image/jpeg;base64,' + this.shoppingCart[0].imagen"
+          height="150px"
+        >
+          <div class="absolute-bottom text-subtitle1 text-center">
+            {{ this.shoppingCart[0].titulo }}
+          </div>
+              </q-img>-->
             </q-card-section>
-            <q-card-section class="">
+            <q-card-section class>
               <div class="text-subtitle2 q-mt-sm">
                 <q-rating
                   v-model="this.shoppingCart[0].raiting"
@@ -24,36 +37,27 @@
                   readonly
                 />
               </div>
-              <div class="text-subtitle2 q-mb-sm text-weight-bolder">
+                            <div class="text-subtitle2 q-mb-sm text-weight-bolder">
                 {{ this.shoppingCart[0].titulo }}
               </div>
-              <div class="text-subtitle2  q-mb-xs">
-                {{ this.shoppingCart[0].descripcion }}
-              </div>
-              <div class="text-subtitle2  q-mb-xs text-weight-bolder">
-                ${{ this.shoppingCart[0].precio }}
-              </div>
-              <div class="text-subtitle2  q-mb-xs">
-                {{  dateFormat(this.shoppingCart[0].fechaPublicacion) }}
-              </div>
-            </q-card-section> </q-card-section
-          ><q-separator />
+              <div class="text-subtitle2 q-mb-xs">{{ this.shoppingCart[0].descripcion }}</div>
+              <div
+                class="text-subtitle2 q-mb-xs text-weight-bolder"
+              >${{ this.shoppingCart[0].precio }}</div>
+              <div
+                class="text-subtitle2 q-mb-xs"
+              >{{ dateFormat(this.shoppingCart[0].fechaPublicacion) }}</div>
+            </q-card-section>
+          </q-card-section>
+          <q-separator />
         </q-card>
       </div>
-      <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
-
-        <q-card class="bg-grey-2">
-          <q-card-section class="text-center text-h6 text-black ">
-            <q-icon name="shopping_cart" class="q-mr-sm" />
-            Comprar Producto
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <q-card class>
+          <q-card-section class="text-center text-h6">
+            <q-icon name="shopping_cart" class="q-mr-sm" />Comprar Producto
           </q-card-section>
-          <q-stepper
-            v-model="step"
-            header-nav
-            ref="stepper"
-            color="primary"
-            animated
-          >
+          <q-stepper v-model="step" header-nav ref="stepper" color="primary" animated>
             <q-step
               :name="1"
               title="Mis Datos"
@@ -68,7 +72,7 @@
                       dense
                       outlined
                       class="full-width"
-                      v-model="userInformation.name"
+                      v-model="this.user.nameUser"
                       label="Nombre *"
                     />
                   </q-item>
@@ -79,7 +83,7 @@
                       dense
                       outlined
                       class="full-width"
-                      v-model="userInformation.phone"
+                      v-model="this.user.phone"
                       label="Telefono *"
                     />
                   </q-item>
@@ -90,7 +94,7 @@
                       dense
                       autogrow
                       outlined
-                      v-model="userInformation.address"
+                      v-model="this.user.nameUser"
                       class="full-width"
                       label="Dirección *"
                     />
@@ -102,7 +106,7 @@
                       dense
                       outlined
                       class="full-width"
-                      v-model="userInformation.name"
+                      v-model="this.user.nameUser"
                       label="City *"
                     />
                   </q-item>
@@ -113,7 +117,7 @@
                       dense
                       outlined
                       class="full-width"
-                      v-model="userInformation.name"
+                      v-model="this.user.nameUser"
                       label="State"
                     />
                   </q-item>
@@ -124,7 +128,7 @@
                       dense
                       outlined
                       class="full-width"
-                      v-model="userInformation.name"
+                      v-model="this.user.nameUser"
                       label="Zip Code"
                     />
                   </q-item>
@@ -135,18 +139,8 @@
                       dense
                       outlined
                       class="full-width"
-                      v-model="userInformation.name"
+                      v-model="this.user.nameUser"
                       label="Country *"
-                    />
-                  </q-item>
-                </div>
-                <div class="col-6">
-                  <q-item>
-                    <q-checkbox
-                      dense
-                      outlined
-                      class="full-width"
-                      label="Use this address for payment details"
                     />
                   </q-item>
                 </div>
@@ -168,41 +162,30 @@
               </q-stepper-navigation>
             </q-step>
 
-            <q-step
-              :name="2"
-              title="Confirmar Compra"
-              icon="shopping_cart"
-              :header-nav="step > 2"
-            >
+            <q-step :name="2" title="Confirmar Compra" icon="shopping_cart" :header-nav="step > 2">
               <div class="row">
                 <div class="col-12">
-                  <q-item-label header class="text-h6"
-                    >Resumen de Pedido</q-item-label
-                  >
+                  <q-item-label header class="text-h6">Resumen de Pedido</q-item-label>
                   <q-item class="full-width">
                     <q-item-section>
                       <q-item-label lines="1">{{ this.shoppingCart[0].titulo }}</q-item-label>
                       <q-item-label caption>Precio</q-item-label>
                     </q-item-section>
-                    <q-item-section side>
-                      ${{ this.shoppingCart[0].precio }}
-                    </q-item-section>
+                    <q-item-section side>${{ this.shoppingCart[0].precio }}</q-item-section>
                   </q-item>
                   <q-separator></q-separator>
-                  <q-item
-                    class="full-width"
-                    style="border-top: 3px dotted blue"
-                  >
+                  <q-item class="full-width" style="border-top: 3px dotted blue">
                     <q-item-section>
                       <q-item-label lines="1">Total</q-item-label>
                     </q-item-section>
-                    <q-item-section class="text-red text-weight-bolder text-h6" side>
-                      ${{ this.shoppingCart[0].precio }}
-                    </q-item-section>
+                    <q-item-section
+                      class="text-red text-weight-bolder text-h6"
+                      side
+                    >${{ this.shoppingCart[0].precio }}</q-item-section>
                   </q-item>
                 </div>
               </div>
-<!-- 
+              <!-- 
               <q-card class="rounded-borders">
                 <q-card-section horizontal>
                   <q-card-section class="col-5 q-pt-xs">
@@ -226,7 +209,7 @@
                     </div>
                   </q-card-section>
                 </q-card-section>
-              </q-card> -->
+              </q-card>-->
 
               <q-stepper-navigation>
                 <q-btn
@@ -240,7 +223,6 @@
                   flat
                   @click="step = 1"
                   color="primary"
-                  flat
                   rounded
                   label="Atras"
                   class="q-mr-sm float-right"
@@ -256,43 +238,50 @@
 
 <script>
 import { mapState } from "vuex";
-import { date } from 'quasar'
-const { formatDate } = date
+import { date } from "quasar";
+const { formatDate } = date;
 export default {
   name: "DetailProduct",
   data() {
     return {
       step: 1,
       userInformation: {
-        name: '',
-        phone: '',
-        email: '',
-        address: ''
-
+        name: "",
+        phone: "",
+        email: "",
+        address: ""
       },
       card_detail: {}
     };
   },
   computed: {
     ...mapState("shoppingCart", ["shoppingCart"]),
-    ...mapState("auth", ["user"]),
+    ...mapState("auth", ["user"])
   },
   mounted() {
     console.log(this.shoppingCart);
     console.log(this.user);
-    this.userInformation.name = this.user.nameUser;
-    this.userInformation.phone = this.user.phone;
+    // this.userInformation.name = this.user.nameUser;
+    // this.userInformation.phone = this.user.phone;
   },
 
   methods: {
     dateFormat(date) {
-      return  formatDate(date, 'DD-MM-YYYY');
+      return formatDate(date, "DD-MM-YYYY");
     },
-    placeOrder(){
+    placeOrder() {
       alert("Compra Realizada");
     }
-  },
+  }
 };
 </script>
 
-<style scoped></style>
+<style scoped type="scss">
+.my-image-portrait {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+}
+</style>
