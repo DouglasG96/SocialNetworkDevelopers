@@ -22,17 +22,29 @@ namespace APISND.Services
             mapper = _mapper;
         }
 
-        public List<Publicacione> GetPublications()
+        public async Task<List<Publicacione>> GetPublications()
         {
             try
             {
-                return _context.Publicaciones.ToList();
+                return  await _context.Publicaciones.ToListAsync();
             }
             catch (Exception e)
             {
                 log.ErrorFormat("Error al obtener datos de Publicaciones GetPublications()  {0} : {1} ", e.Source, e.Message);
                 throw;
 
+            }
+        }
+        public async Task<Publicacione> GetPublicationById(int id)
+        {
+            try
+            {
+                return await _context.Publicaciones.FirstOrDefaultAsync(x => x.IdPublicacion == id);
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error al obtener datos de Publicacion GetPublicationById()  {0} : {1} ", e.Source, e.Message);
+                throw;
             }
         }
         public async Task<Publicacione> AddPublication(Publicacione publication)
@@ -105,5 +117,7 @@ namespace APISND.Services
                 throw;
             }
         }
+
+
     }
 }

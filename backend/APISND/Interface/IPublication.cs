@@ -8,7 +8,8 @@ namespace APISND.Interface
 {
     public interface IPublication
     {
-        List<Publicacione> GetPublications();
+        Task<List<Publicacione>> GetPublications();
+        Task<Publicacione> GetPublicationById(int id);
         Task<Publicacione> AddPublication(Publicacione publication);
         Task<Publicacione> UpdatePublication(Publicacione publication);
         Task<Publicacione> DeletePublication(int id);

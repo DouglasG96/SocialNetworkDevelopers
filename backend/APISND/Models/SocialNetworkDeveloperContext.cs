@@ -41,7 +41,7 @@ namespace APISND.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                //optionsBuilder.UseSqlServer("data source=DESKTOP-9PP1SJM\\SQLEXPRESS;initial catalog=SocialNetworkDeveloper;user id=sa;password=alice2015;");
+                optionsBuilder.UseSqlServer("data source=DESKTOP-9PP1SJM\\SQLEXPRESS;initial catalog=SocialNetworkDeveloper;user id=sa;password=alice2015;");
             }
         }
 
