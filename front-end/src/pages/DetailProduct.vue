@@ -37,9 +37,9 @@
                   readonly
                 />
               </div>
-                            <div class="text-subtitle2 q-mb-sm text-weight-bolder">
-                {{ this.shoppingCart[0].titulo }}
-              </div>
+              <div
+                class="text-subtitle2 q-mb-sm text-weight-bolder"
+              >{{ this.shoppingCart[0].titulo }}</div>
               <div class="text-subtitle2 q-mb-xs">{{ this.shoppingCart[0].descripcion }}</div>
               <div
                 class="text-subtitle2 q-mb-xs text-weight-bolder"
@@ -74,6 +74,7 @@
                       class="full-width"
                       v-model="this.user.nameUser"
                       label="Nombre *"
+                      readonly
                     />
                   </q-item>
                 </div>
@@ -85,6 +86,18 @@
                       class="full-width"
                       v-model="this.user.phone"
                       label="Telefono *"
+                      readonly
+                    />
+                  </q-item>
+                </div>
+                <div class="col-12">
+                  <q-item>
+                    <q-input
+                      filled
+                      v-model.number="cantidad"
+                      type="number"
+                      class="full-width"
+                      label="Cantidad"
                     />
                   </q-item>
                 </div>
@@ -94,53 +107,22 @@
                       dense
                       autogrow
                       outlined
-                      v-model="this.user.nameUser"
+                      v-model="direccionEntrega"
                       class="full-width"
-                      label="Dirección *"
+                      label="Dirección de Entrega"
                     />
                   </q-item>
                 </div>
-                <div class="col-6">
+                <div class="col-12">
                   <q-item>
                     <q-input
                       dense
                       outlined
+                      type="textarea"
                       class="full-width"
-                      v-model="this.user.nameUser"
-                      label="City *"
-                    />
-                  </q-item>
-                </div>
-                <div class="col-6">
-                  <q-item>
-                    <q-input
-                      dense
-                      outlined
-                      class="full-width"
-                      v-model="this.user.nameUser"
-                      label="State"
-                    />
-                  </q-item>
-                </div>
-                <div class="col-6">
-                  <q-item>
-                    <q-input
-                      dense
-                      outlined
-                      class="full-width"
-                      v-model="this.user.nameUser"
-                      label="Zip Code"
-                    />
-                  </q-item>
-                </div>
-                <div class="col-6">
-                  <q-item>
-                    <q-input
-                      dense
-                      outlined
-                      class="full-width"
-                      v-model="this.user.nameUser"
-                      label="Country *"
+                      v-model="comentario"
+                      label="comentarios / telefono adicional"
+                      maxlength="100"
                     />
                   </q-item>
                 </div>
@@ -240,17 +222,16 @@
 import { mapState } from "vuex";
 import { date } from "quasar";
 const { formatDate } = date;
+import api from "src/api/saleOrder";
 export default {
   name: "DetailProduct",
   data() {
     return {
       step: 1,
-      userInformation: {
-        name: "",
-        phone: "",
-        email: "",
-        address: ""
-      },
+      cantidad: 1,
+      direccionEntrega: "",
+      comentario: "",
+
       card_detail: {}
     };
   },
@@ -269,8 +250,34 @@ export default {
     dateFormat(date) {
       return formatDate(date, "DD-MM-YYYY");
     },
-    placeOrder() {
-      alert("Compra Realizada");
+    async placeOrder() {
+      try {
+        this.$q.loading.show();
+
+        await api.addSale({
+          idPublicacion: parseInt(this.shoppingCart[0].idPublicacion),
+          idUsuario: parseInt(this.shoppingCart[0].idUsuario),
+          estadoOrdenVenta: "1",
+          cantidad: parseInt(this.cantidad),
+          idComprador: parseInt(this.user.idUser),
+          direccionEntrega: this.direccionEntrega,
+          comentario: this.comentario
+        });
+        this.$q.notify({
+          type: "positive",
+          position: "center",
+          message: "Compra Realizada, Puede darle seguimiento en su Historial"
+        });
+      } catch (error) {
+        console.log(error);
+        this.$q.notify({
+          type: "negative",
+          position: "center",
+          message: "Error Interno, Intente mas Tarde"
+        });
+      } finally {
+        this.$q.loading.hide();
+      }
     }
   }
 };

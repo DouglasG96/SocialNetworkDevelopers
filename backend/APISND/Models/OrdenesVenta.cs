@@ -19,6 +19,7 @@ namespace APISND.Models
         public DateTime? FechaHoraOrdenVenta { get; set; }
         public decimal? TotalVentaConIva { get; set; }
         public decimal? TotalVentaSinIva { get; set; }
+        public int? Cantidad { get; set; }
 
         public virtual Publicacione IdPublicacionNavigation { get; set; }
         public virtual Usuario IdUsuarioNavigation { get; set; }

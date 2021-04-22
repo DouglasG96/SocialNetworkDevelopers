@@ -36,39 +36,49 @@ namespace APISND.Services
                 {
                     try
                     {
-                        var saleOrder = _mapper.Map<OrdenesVenta>(saleOrderDTO);
-                        saleOrder.FechaHoraOrdenVenta = DateTime.Now;
-                        db.OrdenesVentas.Add(saleOrder);
-                        await db.SaveChangesAsync();
-                        OrdenesVentasDetalle o = new OrdenesVentasDetalle()
-                        {
-                            IdOrdenVenta = saleOrder.IdOrdenVenta,
-                            Cantidad = saleOrderDTO.Cantidad,
-                            EstadoOrdenNegocioDetalle = 1,
-                            MontoSinIva = saleOrderDTO.TotalVentaSinIva,
-                            MontoConIva = saleOrderDTO.TotalVentaConIva,
-                        };
-                        db.OrdenesVentasDetalles.Add(o);
-                        await db.SaveChangesAsync();
 
                         var seller = await _userServices.GetUserByID((int)saleOrderDTO.IdUsuario);
                         var buyer = await _userServices.GetUserByID((int)saleOrderDTO.IdComprador);
                         var publication = await _publicationServices.GetPublicationById((int)saleOrderDTO.IdPublicacion);
+
+                        var saleOrder = _mapper.Map<OrdenesVenta>(saleOrderDTO);
+                        saleOrder.FechaHoraOrdenVenta = DateTime.Now;
+                        saleOrder.TotalVentaConIva = saleOrderDTO.Cantidad * (publication.Precio + (publication.Precio * 0.13m));
+                        saleOrder.TotalVentaSinIva = saleOrderDTO.Cantidad * publication.Precio;
+                        db.OrdenesVentas.Add(saleOrder);
+                        await db.SaveChangesAsync();
+                    //    OrdenesVentasDetalle o = new OrdenesVentasDetalle()
+                    //    {
+                    //        IdOrdenVenta = saleOrder.IdOrdenVenta,
+                    //        Cantidad = saleOrderDTO.Cantidad,
+                    //        EstadoOrdenNegocioDetalle = 1,
+                    //        MontoSinIva = saleOrderDTO.Cantidad * publication.Precio,
+                    //        MontoConIva = saleOrderDTO.Cantidad * (publication.Precio + (publication.Precio * 0.13m)),
+                    //};
+                    //    db.OrdenesVentasDetalles.Add(o);
+                    //    await db.SaveChangesAsync();
+
                         EmailDTO emailDTO = new EmailDTO()
                         {
                             EmailBuyer = buyer.CorreoElectronico,
                             EmailSeller = seller.CorreoElectronico,
-                            Title = string.Format("Se Realizo una venta de la Publicaicon {0}", publication.Descripcion),
+                            Title = string.Format("Se Realizo una venta de la Publicaicon {0}", publication.Titulo),
                             Messages = string.Format(@"Estimado/a <b>{0}</b> se ha realizado una venta a travez de nuestra aplicación, 
                                                     <br/> 
                                                     Detalle De la Venta 
                                                     <br/>
-                                                    Producto: <b>{1}</b>
+                                                    Publicación: <b>{1}</b>
                                                     <br/>
                                                     Cantidad: <b>{2}</b>
                                                      <br/>
-                                                    Cliente: <b>{3}</b>"
-                                                    , seller.NombreCompleto, publication.Descripcion, saleOrderDTO.Cantidad, buyer.NombreCompleto),
+                                                    Cliente: <b>{3}</b>
+                                                    <br/> 
+                                                    Telefono: <b>{4}</b>
+                                                    <br/> 
+                                                    Dirección Entrega: <b>{5}</b>
+                                                    <br/> 
+                                                    Comentario: <b>{6}</b>"
+                                                    , seller.NombreCompleto, publication.Titulo, saleOrderDTO.Cantidad, buyer.NombreCompleto, buyer.TelefonoContacto, saleOrderDTO.DireccionEntrega, saleOrderDTO.Comentario),
                         };
                         //si falla envio correo no registrar la venta
                         var email = await _emailServices.SendEmailBuy(emailDTO);
