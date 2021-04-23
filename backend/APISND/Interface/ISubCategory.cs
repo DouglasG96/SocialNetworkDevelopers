@@ -1,14 +1,13 @@
 ﻿using APISND.Models;
-using SNDAPI.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SNDAPI.Interface
+namespace APISND.Interface
 {
-    public interface ICategories
+    public interface ISubCategory
     {
-        List<Categoria> GetCategories();
+        List<SubCategoria> GetSubCategoryByCategory(int id);
     }
 }

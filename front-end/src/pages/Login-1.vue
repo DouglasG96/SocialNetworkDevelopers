@@ -81,7 +81,7 @@ export default {
     }
   },
   computed: {
-    ...mapState("auth", ["user"])
+    ...mapState("auth", ["user"]),
   },
 
   methods: {
@@ -100,7 +100,13 @@ export default {
           password: this.password.trim()
         });
         this.$q.loading.hide();
-        this.$router.push({ path: "/" }).catch(error => {console.log(error);});
+        if(this.user.idRole === '1')
+          alert("admin");
+        if(this.user.idRole === '2')
+            this.$router.push({ path: "/Publications" }).catch(error => {console.log(error);});
+        if(this.user.idRole === '3')
+            this.$router.push({ path: "/" }).catch(error => {console.log(error);});
+        
       } catch (error) {
         this.$q.loading.hide();
         console.log(error);

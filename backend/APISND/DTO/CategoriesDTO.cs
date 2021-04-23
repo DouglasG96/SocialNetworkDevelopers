@@ -7,8 +7,8 @@ namespace SNDAPI.DTO
 {
     public class CategoriesDTO
     {
-        public int idCategoria { get; set; }
-        public string nombreCategoria { get; set; }
-        public int estadoCategoria { get; set; }
+        public int IdCategoria { get; set; }
+        public string NombreCategoria { get; set; }
+        public int? EstadoCategoria { get; set; }
     }
 }

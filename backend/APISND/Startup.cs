@@ -53,6 +53,9 @@ namespace APISND
             services.AddTransient<IPublication, PublicationServices>();
             services.AddTransient<IEmail, EmailServices>();
             services.AddTransient<ISaleOrder, SaleOrderServices>();
+            services.AddTransient <ICategories, CategoriesServices>();
+            services.AddTransient<ISubCategory, SubCategoryServices>();
+
 
             //swagger
             services.AddSwaggerGen(c =>

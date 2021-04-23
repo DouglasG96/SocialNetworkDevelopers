@@ -1,42 +1,39 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using APISND.DTO;
+using APISND.Interface;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SNDAPI.DTO;
-using SNDAPI.Exceptions;
-using SNDAPI.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SNDAPI.Services;
-using AutoMapper;
 
-namespace SNDAPI.Controllers
+namespace APISND.Controllers
 {
+    [Route("api/v1/[controller]/[action]")]
+
     [ApiController]
-    [Route("api/[controller]/v1/[action]")]
-    public class CategoriesController : ControllerBase
+    public class SubCategoryController : ControllerBase
     {
-        
-        private readonly ICategories _categoryServices;
+        private readonly ISubCategory _subCategoryServices;
         private readonly IMapper _mapper;
-
-        public CategoriesController(ICategories category, IMapper mapper)
+        public SubCategoryController(ISubCategory subCategory, IMapper mapper)
         {
-            _categoryServices = category;
+            _subCategoryServices = subCategory;
             _mapper = mapper;
-        } 
-
+        }
 
         [HttpGet]
-        [ProducesResponseType(typeof(CategoriesDTO), 200)]
+        [ProducesResponseType(typeof(SubCategoryDTO), 200)]
         [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
         [AllowAnonymous]
-        public IActionResult GetCategories()
+        public IActionResult GetCategories(int id)
         {
             try
             {
-                var resp = _mapper.Map<List<CategoriesDTO>>(_categoryServices.GetCategories());
+                var resp = _mapper.Map<List<SubCategoryDTO>>(_subCategoryServices.GetSubCategoryByCategory(id));
 
                 if (resp == null)
                     return NotFound(resp);
