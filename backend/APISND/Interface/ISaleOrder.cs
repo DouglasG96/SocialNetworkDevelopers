@@ -10,6 +10,6 @@ namespace APISND.Interface
     public interface ISaleOrder
     {
         Task<bool> AddSale(SaleOrderDTO saleOrderDTO);
-        List<OrdenesVenta> GetHistorySalesByIdSeller(int id);
+        List<SaleOrderDTO> GetHistorySalesByIdSeller(int id);
     }
 }
