@@ -15,9 +15,9 @@ const routes = [
       {
         path: '/Mantenimientos/Usuarios',
         component: () => import('pages/mantenimientos/usuarios/UsersMaintenance.vue'),
-        meta: { requireAuth: false }
+        meta: {requireAuth: false}
       },
-
+      {path: '/HistorialCompras', component: () => import('pages/buyer/HistoryBuyer.vue'), meta: {requireAuth: true}},
 
       // { path: '', component: () => import('pages/Dashboard.vue'),},
       // { path: '/Dashboard2', component: () => import('pages/Dashboard2.vue'),},
@@ -39,18 +39,13 @@ const routes = [
   {
     path: '/Login',
     component: () => import('pages/Login-1.vue'),
-    meta: { requireAuth: false }
+    meta: {requireAuth: false}
   },
   {
     path: '/Register',
     component: () => import('pages/Register.vue'),
-    meta: { requireAuth: false }
+    meta: {requireAuth: false}
   },
-
-  // {
-  //   path: '/Lock',
-  //   component: () => import('pages/LockScreen.vue')
-  // },
   // {
   //   path: '/Maintenance',
   //   component: () => import('pages/Maintenance.vue')
