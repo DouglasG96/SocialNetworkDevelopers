@@ -23,18 +23,51 @@ namespace APISND.Services
             _mapper = mapper;
         }
 
-        public List<OrdenesCompra> GetHistoryBuysByIdBuyer(int idBuyer)
+        public  List<BuyOrderDTO> GetHistoryBuysByIdBuyer(int id)
         {
             try
             {
-                var data = _context.OrdenesCompras.Where(x => x.IdUsuario == idBuyer).ToList();
-                return data;
+                var list = (from s in _context.OrdenesCompras
+                            join p in _context.Publicaciones
+                            on s.IdPublicacion equals p.IdPublicacion
+                            where s.IdUsuario == id
+                            orderby s.FechaHoraOrdenCompra descending
+                            select new BuyOrderDTO
+                            {
+                                IdOrdenCompra = s.IdOrdenCompra,
+                                IdPublicacion = s.IdPublicacion,
+                                IdUsuario = s.IdUsuario,
+                                EstadoOrdenCompra = statusBuyer(s.EstadoOrdenCompra),
+                                FechaHoraOrdenVenta = Convert.ToDateTime(s.FechaHoraOrdenCompra).ToString("dd/MM/yyyy HH:mm:ss"),
+                                TotalCompraConIva = s.TotalCompraConIva,
+                                TotalCompraSinIva = s.TotalCompraSinIva,
+                                Cantidad = (int)s.Cantidad,
+                                TituloPublicacion = p.Titulo
+
+                            }).ToList();
+
+                return list;
+
             }
             catch (Exception e)
             {
-                log.ErrorFormat("Error al obtener datos de Usuario GetHistoryOrder()  {0} : {1} ", e.Source, e.Message);
+                log.ErrorFormat("Error al obtener datos de Ordenes de Compra GetHistoryBuysByIdBuyer()  {0} : {1} ", e.Source, e.Message);
+
                 throw;
             }
         }
+
+        private static string statusBuyer(string status)
+        {
+            if (status == "1")
+                return "Pendiente";
+            if (status == "2")
+                return "Aprobada";
+            if (status == "3")
+                return "Cancelada";
+
+            return "";
+        }
+
     }
 }

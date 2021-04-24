@@ -114,11 +114,8 @@
             </div>
 
             <div class="row">
-              <div class="col-6 text-center">
-                <q-btn label="Publicar" type="submit" color="positive" />
-              </div>
               <div class="col-6">
-                <q-btn label="Limpiar" color="secondary" class="q-ml-sm" />
+                <q-btn label="Publicar" type="submit" color="positive" />
               </div>
             </div>
           </q-form>

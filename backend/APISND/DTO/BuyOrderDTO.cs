@@ -11,10 +11,13 @@ namespace APISND.DTO
         public int IdOrdenCompra { get; set; }
         public int? IdPublicacion { get; set; }
         public int? IdUsuario { get; set; }
-        public string Cantidad { get; set; }
-        public string FechaHoraOrdenCompra { get; set; }
-        public string TotalCompraConIva { get; set; }
-        public string TotalCompraSinIva { get; set; }
+        public string FechaHoraOrdenVenta { get; set; }
+
+        public decimal? TotalCompraConIva { get; set; }
+        public decimal? TotalCompraSinIva { get; set; }
         public string EstadoOrdenCompra { get; set; }
+        public int? Cantidad { get; set; }
+        public string TituloPublicacion { get; set; }
+
     }
 }

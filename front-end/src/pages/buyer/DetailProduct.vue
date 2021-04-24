@@ -266,8 +266,13 @@ export default {
         this.$q.notify({
           type: "positive",
           position: "center",
-          message: "Compra Realizada, Puede darle seguimiento en su Historial"
+          message: "Solicitud deCompra Realizada, Puede darle seguimiento en su Historial"
         });
+        setTimeout(() => {
+          this.$router.push({ path: "/HistorialCompras" }).catch(error => {
+            console.log(error);
+          });
+        }, 4000);
       } catch (error) {
         console.log(error);
         this.$q.notify({

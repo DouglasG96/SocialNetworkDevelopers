@@ -123,7 +123,7 @@ export default {
         },
         {
           name: "tituloPublicacion",
-          label: "Titulo",
+          label: "Publicación",
           field: "tituloPublicacion"
         },
         {

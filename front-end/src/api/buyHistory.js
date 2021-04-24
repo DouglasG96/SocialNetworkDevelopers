@@ -3,11 +3,12 @@ import enpoint from './endpoint'
 
 const url = enpoint;
 
-async function getBuyHistory(idUser) {
-  var resp = await axios.get(`${url}/BuyOrders/GetHistoryBuysByIdBuyer`, idUser);
+async function GetHistoryBuysByIdBuyer(idBuyer) {
+  var resp = await axios.get(`${url}/BuyOrders/GetHistoryBuysByIdBuyer?idBuyer=${encodeURIComponent(idBuyer)}`);
+
   return resp.data;
 }
 
 export default {
-  getBuyHistory
+  GetHistoryBuysByIdBuyer
 }
