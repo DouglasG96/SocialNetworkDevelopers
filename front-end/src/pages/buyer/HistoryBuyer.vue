@@ -137,7 +137,6 @@
   </div>
 </template>
 <script>
-import api from "src/api/user";
 import buyHistory from "src/api/buyHistory";
 import {mapState} from "vuex";
 export default {
