@@ -66,7 +66,7 @@
                   />
                 </q-item>
               </div>
-              <!-- <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                 <div class="q-gutter-sm">
                   <q-checkbox
                     v-model="delivery"
@@ -80,7 +80,7 @@
                 <div class="q-px-sm">
                   <strong>{{ delivery }}</strong>
                 </div>
-              </div> -->
+              </div>
               <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                 <q-item>
                   <q-select
@@ -129,6 +129,8 @@
 </template>
 <script>
 import api from "src/api/publication";
+import { mapState } from "vuex";
+
 export default {
   data() {
     return {
@@ -158,6 +160,10 @@ export default {
       console.log(error);
     }
   },
+  computed: {
+    ...mapState("auth", ["user"])
+
+  },
   methods: {
     changeCategory() {
       this.getSubcategory();
@@ -168,7 +174,6 @@ export default {
         this.optionsSubCategory = await api.getSubCategoryByCategory(
           this.category.idCategoria
         );
-        this.subCategory = this.optionsSubCategory[0].nombreSubCategoria;
       } catch (error) {
         console.log(error);
       }
@@ -184,6 +189,15 @@ export default {
         var myFormData = new FormData();
         myFormData.set("titulo", this.title);
         myFormData.set("file", this.fileImage);
+        myFormData.set("idCategoria", parseInt(this.category.idCategoria));
+        myFormData.set("idSubCategoria", parseInt(this.subCategory.idSubCategoria));
+        myFormData.set("idTipoPublicacion", parseInt(1));
+        myFormData.set("descripcion", this.description);
+        myFormData.set("precio", parseFloat(this.price));
+        myFormData.set("idEstadoPublicacion", parseInt(1));
+        myFormData.set("idUsuario", parseInt(this.user.idUser));
+        myFormData.set("delivery", this.delivery.charAt(0));
+
         console.log(myFormData);
         //myFormData.append("avatar", this.selectedFile, this.selectedFile.name);
         this.$q.loading.show();
@@ -193,6 +207,12 @@ export default {
           position: "center",
           message: "Publicacion Agregada Correctamente."
         });
+        setTimeout(() => {
+          this.$router.push({ path: "/HistorialVentas" }).catch(error => {
+            console.log(error);
+          });
+        }, 4000);
+
       } catch (error) {
           console.log(error);
       }finally{
@@ -200,8 +220,7 @@ export default {
 
       }
     },
-    file(){
-    }
+
   }
 };
 </script>

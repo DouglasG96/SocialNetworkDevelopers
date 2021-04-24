@@ -163,7 +163,7 @@
                     <q-item-section
                       class="text-red text-weight-bolder text-h6"
                       side
-                    >${{ this.shoppingCart[0].precio }}</q-item-section>
+                    >${{ this.cantidad * this.shoppingCart[0].precio }}</q-item-section>
                   </q-item>
                 </div>
               </div>

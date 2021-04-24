@@ -91,6 +91,8 @@ namespace APISND.Controllers
                     await publicationDTO.file.CopyToAsync(ms);
                     publicationDTO.Imagen = ms.ToArray();
                 }
+                publicationDTO.FechaCreacion = DateTime.Now;
+                publicationDTO.FechaPublicacion = DateTime.Now;
                 var publication = _mapper.Map<Publicacione>(publicationDTO);
                 var resp = await _publicationServices.AddPublication(publication);
 
