@@ -18,6 +18,7 @@ namespace APISND.DTO
         public int IdComprador { get; set; }
         public string DireccionEntrega { get; set; }
         public string Comentario { get; set; }
+        public string TituloPublicacion { get; set; }
 
 
     }

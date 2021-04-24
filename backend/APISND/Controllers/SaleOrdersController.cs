@@ -34,7 +34,7 @@ namespace APISND.Controllers
         {
             try
             {
-                var resp = _mapper.Map<List<SaleOrderDTO>>(_saleOrderServices.GetHistorySalesByIdSeller(idSeller));
+                var resp =  _saleOrderServices.GetHistorySalesByIdSeller(idSeller);
 
                 if (resp == null)
                     return NotFound(resp);

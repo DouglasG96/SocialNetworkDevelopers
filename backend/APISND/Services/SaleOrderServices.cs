@@ -103,12 +103,30 @@ namespace APISND.Services
             }
         }
 
-        public List<OrdenesVenta> GetHistorySalesByIdSeller(int id)
+        public  List<SaleOrderDTO> GetHistorySalesByIdSeller(int id)
         {
             try
             {
-                var data =  _context.OrdenesVentas.Where(x => x.IdUsuario == id).ToList();
-                return data;
+                var list =  (from s in _context.OrdenesVentas
+                            join p in _context.Publicaciones
+                            on s.IdPublicacion equals p.IdPublicacion
+                            where s.IdUsuario == id
+                            select new SaleOrderDTO
+                            {
+                                IdOrdenVenta = s.IdOrdenVenta,
+                                IdPublicacion = s.IdPublicacion,
+                                IdUsuario = s.IdUsuario,
+                                EstadoOrdenVenta = s.EstadoOrdenVenta,
+                                FechaHoraOrdenVenta = s.FechaHoraOrdenVenta,
+                                TotalVentaConIva = s.TotalVentaConIva,
+                                TotalVentaSinIva = s.TotalVentaSinIva,
+                                Cantidad = (int)s.Cantidad,
+                                TituloPublicacion = p.Titulo
+
+                            }).ToList();
+                //var saleOrder =  _context.OrdenesVentas.Where(x => x.IdUsuario == id).ToList();
+
+                return list;
 
             }
             catch (Exception e)
