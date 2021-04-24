@@ -29,11 +29,11 @@ namespace APISND.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [AllowAnonymous]
-        public IActionResult GetCategories(int id)
+        public IActionResult GetCategories(int idCategory)
         {
             try
             {
-                var resp = _mapper.Map<List<SubCategoryDTO>>(_subCategoryServices.GetSubCategoryByCategory(id));
+                var resp = _mapper.Map<List<SubCategoryDTO>>(_subCategoryServices.GetSubCategoryByCategory(idCategory));
 
                 if (resp == null)
                     return NotFound(resp);

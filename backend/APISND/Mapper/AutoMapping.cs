@@ -1,7 +1,6 @@
 ﻿using APISND.DTO;
 using APISND.Models;
 using AutoMapper;
-using SNDAPI.DTO;
 
 namespace APISND.Mapper
 {
@@ -13,6 +12,8 @@ namespace APISND.Mapper
             CreateMap<Publicacione, PublicationDTO>().ReverseMap();
             CreateMap<OrdenesVenta, SaleOrderDTO>().ReverseMap();
             CreateMap <Categoria, CategoriesDTO>().ReverseMap();
+            CreateMap<SubCategoria, SubCategoryDTO>().ReverseMap();
+
         }
     }
 }

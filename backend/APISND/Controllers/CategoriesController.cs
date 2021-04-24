@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SNDAPI.DTO;
-using SNDAPI.Exceptions;
 using SNDAPI.Interface;
 using System;
 using System.Collections.Generic;
@@ -11,10 +9,11 @@ using System.Threading.Tasks;
 using SNDAPI.Services;
 using AutoMapper;
 
-namespace SNDAPI.Controllers
+namespace APISND.DTO
 {
     [ApiController]
-    [Route("api/[controller]/v1/[action]")]
+    [Route("api/v1/[controller]/[action]")]
+
     public class CategoriesController : ControllerBase
     {
         

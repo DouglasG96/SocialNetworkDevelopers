@@ -1,122 +1,147 @@
 <template>
-    <div class="row q-col-gutter-sm">
-      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <q-card class>
-          <q-card-section class="text-center text-h6">
-            <q-icon name="shopping_cart" class="q-mr-sm" />Nueva Publicación
-          </q-card-section>
-          <q-card-section>
-            <q-form
-              ref="formPublication"
-              autocomplete="off"
-              class="q-pa-md"
-              @submit.prevent="publication"
-            >
-              <q-select
-                filled
-                v-model="title"
-                :options="options"
-                label="Tipo de Usuario"
-                :rules="rules.required"
-              />
-              <q-input
-                filled
-                v-model="name"
-                label="Nombres"
-                lazy-rules
-                :rules="rules.required"
-                class="text-lowercase"
-              />
-              <q-input
-                filled
-                v-model="lastName"
-                label="Apellidos"
-                lazy-rules
-                :rules="rules.required"
-                class="text-lowercase"
-              />
+  <div class="row q-col-gutter-sm">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <q-card class>
+        <q-card-section class="text-center text-h6">
+          <q-icon name="shopping_cart" class="q-mr-sm" />Nueva Publicación
+        </q-card-section>
+        <q-card-section>
+          <q-form
+            ref="formPublication"
+            id="formPublication"
+            autocomplete="off"
+            class="q-pa-md"
+            @submit.prevent="addPublication()"
+          >
+            <div class="row">
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <q-item>
+                  <q-input
+                    filled
+                    class="full-width"
+                    v-model="title"
+                    label="Titulo"
+                    :rules="rules.required"
+                    lazy-rules
+                  />
+                </q-item>
+              </div>
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <q-item>
+                  <q-input
+                    dense
+                    outlined
+                    type="textarea"
+                    class="full-width"
+                    v-model="description"
+                    label="Descripción / maximo 100 caracteres"
+                    maxlength="100"
+                  />
+                </q-item>
+              </div>
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <q-item>
+                  <q-file filled bottom-slots v-model="fileImage" label="Subir Imagen" counter >
+                    <template v-slot:prepend>
+                      <q-icon name="cloud_upload" @click.stop />
+                    </template>
+                    <template v-slot:append>
+                      <q-icon name="close" @click.stop="fileImage = null" class="cursor-pointer" />
+                    </template>
 
-              <q-input
-                filled
-                v-model="dui"
-                label="dui"
-                lazy-rules
-                :rules="rules.required"
-              />
-              <q-input
-                filled
-                v-model="nit"
-                label="nit"
-                lazy-rules
-                :rules="rules.required"
-              />
-              <q-input
-                filled
-                v-model="phone"
-                label="telefono"
-                lazy-rules
-                :rules="rules.required"
-              />
-              <q-input
-                filled
-                type="email"
-                v-model="email"
-                label="correo"
-                lazy-rules
-                :rules="rules.required"
-                class="text-lowercase"
-              />
-              <q-input
-                type="password"
-                filled
-                v-model="password"
-                label="contraseña"
-                lazy-rules
-                :rules="rules.required"
-                class="text-lowercase"
-              />
-
-              <div class="row">
-                <div class="col-6">
-                  <q-btn label="Registrarse" type="submit" color="positive" />
-                </div>
-                <div class="col-6">
-                  <q-btn
-                    label="Login"
-                    to="/Login"
-                    color="secondary"
-                    class="q-ml-sm"
+                    <template v-slot:hint>tamaño</template>
+                  </q-file>
+                </q-item>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <q-item>
+                  <q-input
+                    filled
+                    type="number"
+                    class="full-width"
+                    v-model.number="price"
+                    label="Precio"
+                    :rules="rules.required"
+                    lazy-rules
+                  />
+                </q-item>
+              </div>
+              <!-- <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="q-gutter-sm">
+                  <q-checkbox
+                    v-model="delivery"
+                    color="primary"
+                    label="Servicio a Domicilio"
+                    true-value="si"
+                    false-value="no"
                   />
                 </div>
+
+                <div class="q-px-sm">
+                  <strong>{{ delivery }}</strong>
+                </div>
+              </div> -->
+              <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <q-item>
+                  <q-select
+                    filled
+                    v-model="category"
+                    :options="optionsCategory"
+                    option-value="idCategoria"
+                    option-label="nombreCategoria"
+                    label="Categoria"
+                    :rules="rules.required"
+                    style="width: 300px"
+                    @input="changeCategory()"
+                  />
+                </q-item>
               </div>
-            </q-form>
-          </q-card-section>
-        </q-card>
-      </div>
+              <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <q-item>
+                  <q-select
+                    filled
+                    v-model="subCategory"
+                    :options="optionsSubCategory"
+                    option-value="idSubCategoria"
+                    option-label="nombreSubCategoria"
+                    label="Sub-Categoria"
+                    :rules="rules.required"
+                    style="width: 300px"
+                    @input="changeCategory()"
+                  />
+                </q-item>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-6 text-center">
+                <q-btn label="Publicar" type="submit" color="positive" />
+              </div>
+              <div class="col-6">
+                <q-btn label="Limpiar" color="secondary" class="q-ml-sm" />
+              </div>
+            </div>
+          </q-form>
+        </q-card-section>
+      </q-card>
     </div>
+  </div>
 </template>
 <script>
+import api from "src/api/publication";
 export default {
-      data() {
+  data() {
     return {
-      rol: null,
-      options: [
-        {
-          label: "Usuario",
-          value: "1"
-        },
-        {
-          label: "Vendedor",
-          value: "2"
-        }
-      ],
-      name: "",
-      lastName: "",
-      email: "",
-      password: "",
-      dui: "",
-      nit: "",
-      phone: "",
+      optionsCategory: [],
+      optionsSubCategory: [],
+
+      title: "",
+      category: "",
+      subCategory: "",
+      description: "",
+      price: "",
+      delivery: "no",
+      fileImage: null,
       rules: {
         required: [v => !!v || "Campo Requerido."],
         requiredNumber: [
@@ -126,5 +151,57 @@ export default {
       }
     };
   },
-}
+  async mounted() {
+    try {
+      this.optionsCategory = await api.getCategory();
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  methods: {
+    changeCategory() {
+      this.getSubcategory();
+      console.log(this.category.idCategoria);
+    },
+    async getSubcategory() {
+      try {
+        this.optionsSubCategory = await api.getSubCategoryByCategory(
+          this.category.idCategoria
+        );
+        this.subCategory = this.optionsSubCategory[0].nombreSubCategoria;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async addPublication() {
+      //valido formulario
+      var validate = await this.$refs.formPublication.validate();
+      if (!validate) {
+        return;
+      }
+
+      try {
+        var myFormData = new FormData();
+        myFormData.set("titulo", this.title);
+        myFormData.set("file", this.fileImage);
+        console.log(myFormData);
+        //myFormData.append("avatar", this.selectedFile, this.selectedFile.name);
+        this.$q.loading.show();
+        await api.addPublication(myFormData);
+        this.$q.notify({
+          type: "positive",
+          position: "center",
+          message: "Publicacion Agregada Correctamente."
+        });
+      } catch (error) {
+          console.log(error);
+      }finally{
+        this.$q.loading.hide();
+
+      }
+    },
+    file(){
+    }
+  }
+};
 </script>

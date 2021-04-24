@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using SNDAPI.DTO;
 using SNDAPI.Exceptions;
 using SNDAPI.Interface;
 using System;

@@ -90,7 +90,7 @@
               />
 
               <div class="row">
-                <div class="col-6">
+                <div class="col-6 text-center">
                   <q-btn label="Registrarse" type="submit" color="positive" />
                 </div>
                 <div class="col-6">

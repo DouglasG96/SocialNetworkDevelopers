@@ -1,10 +1,11 @@
-﻿using SNDAPI.DTO;
+﻿
+using APISND.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SNDAPI.Interface
+namespace APISND.Interface
 {
     public interface IAuth
     {

@@ -101,7 +101,7 @@ export default {
         });
         this.$q.loading.hide();
         if(this.user.idRole === '1')
-          alert("admin");
+            this.$router.push({ path: "/Mantenimientos/Usuarios" }).catch(error => {console.log(error);});
         if(this.user.idRole === '2')
             this.$router.push({ path: "/Publications" }).catch(error => {console.log(error);});
         if(this.user.idRole === '3')

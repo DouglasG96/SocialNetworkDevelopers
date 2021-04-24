@@ -26,11 +26,11 @@ namespace APISND.Services
                 var mailMessage = new MailMessage
                 {
                     From = new MailAddress("sndutec@gmail.com", "Cristian Torres"),
-                    Subject = string.Format("Nueva Venta atravez de SND {0}", emailDTO.Title),
+                    Subject = string.Format("Nueva Solicitud de Venta a traves de SNB&S {0}", emailDTO.Title),
                     Body = emailDTO.Messages,
                     IsBodyHtml = true,
                 };
-                mailMessage.To.Add("cristiantorresalfaro91@gmail.com");
+                mailMessage.To.Add(emailDTO.EmailSeller);
                 await smtpClient.SendMailAsync(mailMessage);
 
                 return true;
