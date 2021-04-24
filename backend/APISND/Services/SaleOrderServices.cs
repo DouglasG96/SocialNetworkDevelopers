@@ -111,13 +111,14 @@ namespace APISND.Services
                             join p in _context.Publicaciones
                             on s.IdPublicacion equals p.IdPublicacion
                             where s.IdUsuario == id
+                            orderby s.FechaHoraOrdenVenta descending
                             select new SaleOrderDTO
                             {
                                 IdOrdenVenta = s.IdOrdenVenta,
                                 IdPublicacion = s.IdPublicacion,
                                 IdUsuario = s.IdUsuario,
-                                EstadoOrdenVenta = s.EstadoOrdenVenta,
-                                FechaHoraOrdenVenta = s.FechaHoraOrdenVenta,
+                                EstadoOrdenVenta = statusSales(s.EstadoOrdenVenta),
+                                FechaHoraOrdenVenta = Convert.ToDateTime(s.FechaHoraOrdenVenta).ToString("dd/MM/yyyy HH:mm:ss"),
                                 TotalVentaConIva = s.TotalVentaConIva,
                                 TotalVentaSinIva = s.TotalVentaSinIva,
                                 Cantidad = (int)s.Cantidad,
@@ -136,6 +137,18 @@ namespace APISND.Services
                 throw;
             }
 
+        }
+
+        private static string statusSales(string status)
+        {
+            if (status == "1")
+                return "Pendiente";
+            if (status == "2")
+                return "Aprobada";
+            if (status == "3")
+                return "Cancelada";
+
+            return "";
         }
     }
 }

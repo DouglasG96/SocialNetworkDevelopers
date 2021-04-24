@@ -11,7 +11,7 @@ namespace APISND.DTO
         public int? IdPublicacion { get; set; }
         public int? IdUsuario { get; set; }
         public string EstadoOrdenVenta { get; set; }
-        public DateTime? FechaHoraOrdenVenta { get; set; }
+        public string FechaHoraOrdenVenta { get; set; }
         public decimal? TotalVentaConIva { get; set; }
         public decimal? TotalVentaSinIva { get; set; }
         public int Cantidad { get; set; }

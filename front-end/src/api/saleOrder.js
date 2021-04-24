@@ -8,6 +8,12 @@ async function addSale(saleOrder) {
     return resp.data;
 }
 
+async function GetHistorySalesByIdSeller (idSeller) {
+    var resp = await axios.get(`${url}/SaleOrders/GetHistorySalesByIdSeller?idSeller=${encodeURIComponent(idSeller)}`);
+    return resp.data;
+}
+
 export default {
-    addSale
+    addSale,
+    GetHistorySalesByIdSeller
 }
