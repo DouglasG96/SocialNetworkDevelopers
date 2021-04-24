@@ -2,6 +2,7 @@
 using APISND.Interface;
 using APISND.Models;
 using AutoMapper;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace APISND.Services
 {
     public class SaleOrderServices : ISaleOrder
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(SaleOrderServices));
+
         private readonly SocialNetworkDeveloperContext _context;
 
         private readonly IMapper _mapper;
@@ -98,6 +101,23 @@ namespace APISND.Services
                     }
                 }
             }
+        }
+
+        public List<OrdenesVenta> GetHistorySalesByIdSeller(int id)
+        {
+            try
+            {
+                var data =  _context.OrdenesVentas.Where(x => x.IdUsuario == id).ToList();
+                return data;
+
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error al obtener datos de Ordenes de Ventas GetHistorySalesByIdSeller()  {0} : {1} ", e.Source, e.Message);
+
+                throw;
+            }
+
         }
     }
 }

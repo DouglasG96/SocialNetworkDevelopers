@@ -68,7 +68,7 @@ export default {
       },
       set(value) {
         value = value.toLowerCase();
-        this.dataFilterd = this.data.filter(
+        this.dataFilterd = this.dataProduct.filter(
           x => x.titulo.toLowerCase().indexOf(value) !== -1
         );
         this.texto = value;
