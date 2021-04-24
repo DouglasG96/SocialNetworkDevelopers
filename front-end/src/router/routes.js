@@ -4,13 +4,20 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '/', component: () => import('pages/buyer/ProductCatalogues.vue'), meta: { requireAuth: true }},
+
+      { path: '/DetailProduct', component: () => import('pages/buyer/DetailProduct.vue'), meta: { requireAuth: true }},
+      { path: '/Publications', component: () => import('pages/seller/Publications.vue'), meta: { requireAuth: true } },
+      {
+        path: '/HistorialVentas',
+        component: () => import('pages/seller/HistorySales.vue'),
+        meta: { requireAuth: true }
+      },
       {
         path: '/Mantenimientos/Usuarios',
         component: () => import('pages/mantenimientos/usuarios/UsersMaintenance.vue'),
         meta: { requireAuth: false }
       },
-      { path: '/DetailProduct', component: () => import('pages/buyer/DetailProduct.vue'), meta: { requireAuth: true }},
-      { path: '/Publications', component: () => import('pages/seller/Publications.vue'), meta: { requireAuth: true } },
+
 
       // { path: '', component: () => import('pages/Dashboard.vue'),},
       // { path: '/Dashboard2', component: () => import('pages/Dashboard2.vue'),},
