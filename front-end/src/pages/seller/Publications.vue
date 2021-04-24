@@ -205,10 +205,10 @@ export default {
         this.$q.notify({
           type: "positive",
           position: "center",
-          message: "Publicacion Agregada Correctamente."
+          message: "Publicación Agregada Correctamente."
         });
         setTimeout(() => {
-          this.$router.push({ path: "/HistorialVentas" }).catch(error => {
+          this.$router.push({ path: "/MisPublicaciones" }).catch(error => {
             console.log(error);
           });
         }, 4000);

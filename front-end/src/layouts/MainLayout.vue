@@ -90,6 +90,14 @@
                 <q-item-label>Publicar</q-item-label>
               </q-item-section>
             </q-item>
+            <q-item to="/MisPublicaciones" active-class="q-item-no-link-highlighting">
+              <q-item-section avatar>
+                <q-icon name="list_alt" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Mis Publicaciones</q-item-label>
+              </q-item-section>
+            </q-item>
             <q-item to="/HistorialVentas" active-class="q-item-no-link-highlighting">
               <q-item-section avatar>
                 <q-icon name="history" />

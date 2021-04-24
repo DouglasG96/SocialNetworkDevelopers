@@ -50,6 +50,11 @@ namespace APISND.Controllers
             }
         }
 
+        /// <summary>
+        /// Petición para obtener datos de una publicacion por Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         //[AuthorizeRoles(Rol.Administrator)]
         [ProducesResponseType(typeof(PublicationDTO), 200)]
         [ProducesResponseType(404)]
@@ -73,6 +78,33 @@ namespace APISND.Controllers
         }
 
         /// <summary>
+        /// Publicacion para obtener las publicaciones de un usuario
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+
+        //[AuthorizeRoles(Rol.Administrator)]
+        [ProducesResponseType(typeof(PublicationDTO), 200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        [HttpGet]
+        public async Task<IActionResult> GetPublicationByIdUser(int idUser)
+        {
+            try
+            {
+                var resp = await _publicationServices.GetPublicationByIdUser(idUser);
+
+                if (resp == null)
+                    return NotFound(new { message = $"Usuario con Id = {idUser} no encontrado" });
+
+                return Ok(resp);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
+        }
+        /// <summary>
         /// Peticion para agregar un usuario
         /// <returns></returns>
         /// </summary>
@@ -91,8 +123,8 @@ namespace APISND.Controllers
                     await publicationDTO.file.CopyToAsync(ms);
                     publicationDTO.Imagen = ms.ToArray();
                 }
-                publicationDTO.FechaCreacion = DateTime.Now;
-                publicationDTO.FechaPublicacion = DateTime.Now;
+                //publicationDTO.FechaCreacion = DateTime.Now;
+                //publicationDTO.FechaPublicacion = DateTime.Now;
                 var publication = _mapper.Map<Publicacione>(publicationDTO);
                 var resp = await _publicationServices.AddPublication(publication);
 

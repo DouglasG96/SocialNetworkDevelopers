@@ -11,7 +11,9 @@ namespace APISND.DTO
         public string EmailSeller { get; set; }
 
         public string Title { get; set; }
-        public string Messages { get; set; }
+        public string MessagesSeller { get; set; }
+        public string MessagesBuyer { get; set; }
+
 
     }
 }

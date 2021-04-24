@@ -1,4 +1,5 @@
-﻿using APISND.Interface;
+﻿using APISND.DTO;
+using APISND.Interface;
 using APISND.Models;
 using AutoMapper;
 using log4net;
@@ -51,6 +52,8 @@ namespace APISND.Services
         {
             try
             {
+                publication.FechaCreacion = DateTime.Now;
+                publication.FechaPublicacion = DateTime.Now;
                 _context.Publicaciones.Add(publication);
                 await _context.SaveChangesAsync();
                 return publication;
@@ -118,6 +121,27 @@ namespace APISND.Services
             }
         }
 
-
+        public async Task<List<PublicationDTO>> GetPublicationByIdUser(int idUser)
+        {
+            try
+            {
+                var data = await  (from p in _context.Publicaciones
+                            where p.IdUsuario == idUser
+                            orderby p.FechaPublicacion descending
+                            select new PublicationDTO
+                            {
+                                IdPublicacion = p.IdPublicacion,
+                                Titulo = p.Titulo,
+                                FechaPublicacion = Convert.ToDateTime(p.FechaPublicacion).ToString("dd/MM/yyyy HH:mm:ss"),
+                                Delivery = p.Delivery
+                            }).ToListAsync();
+                return data;
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error al obtener datos de Publicacion GetPublicationByIdUser()  {0} : {1} ", e.Source, e.Message);
+                throw;
+            }
+        }
     }
 }

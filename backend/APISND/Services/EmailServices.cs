@@ -23,15 +23,27 @@ namespace APISND.Services
                     EnableSsl = true,
                 };
 
-                var mailMessage = new MailMessage
+                //mensaje vendedor
+                var mailMessageSeller = new MailMessage
                 {
                     From = new MailAddress("sndutec@gmail.com", "Cristian Torres"),
-                    Subject = string.Format("Nueva Solicitud de Venta a traves de SNB&S {0}", emailDTO.Title),
-                    Body = emailDTO.Messages,
+                    Subject =  emailDTO.Title,
+                    Body = emailDTO.MessagesSeller,
                     IsBodyHtml = true,
                 };
-                mailMessage.To.Add(emailDTO.EmailSeller);
-                await smtpClient.SendMailAsync(mailMessage);
+                mailMessageSeller.To.Add(emailDTO.EmailSeller);
+                await smtpClient.SendMailAsync(mailMessageSeller);
+
+                //mensaje comprador
+                var mailMessageBuyer = new MailMessage
+                {
+                    From = new MailAddress("sndutec@gmail.com", "Cristian Torres"),
+                    Subject = emailDTO.Title,
+                    Body = emailDTO.MessagesBuyer,
+                    IsBodyHtml = true,
+                };
+                mailMessageBuyer.To.Add(emailDTO.EmailBuyer);
+                await smtpClient.SendMailAsync(mailMessageBuyer);
 
                 return true;
             }

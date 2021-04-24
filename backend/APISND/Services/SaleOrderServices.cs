@@ -70,8 +70,8 @@ namespace APISND.Services
                         {
                             EmailBuyer = buyer.CorreoElectronico,
                             EmailSeller = seller.CorreoElectronico,
-                            Title = string.Format("Se Realizo una venta de la Publicaicon {0}", publication.Titulo),
-                            Messages = string.Format(@"Estimado/a <b>{0}</b> se ha realizado una venta a travez de nuestra aplicación, 
+                            Title = string.Format("Se Realizo una solicitud de compra/venta de la Publicaicon {0}", publication.Titulo),
+                            MessagesSeller = string.Format(@"Estimado/a <b>{0}</b> se ha realizado una solicitud de venta a travez de nuestra aplicación, 
                                                     <br/> 
                                                     Detalle De la Venta 
                                                     <br/>
@@ -87,6 +87,16 @@ namespace APISND.Services
                                                     <br/> 
                                                     Comentario: <b>{6}</b>"
                                                     , seller.NombreCompleto, publication.Titulo, saleOrderDTO.Cantidad, buyer.NombreCompleto, buyer.TelefonoContacto, saleOrderDTO.DireccionEntrega, saleOrderDTO.Comentario),
+
+                            MessagesBuyer = string.Format(@"Estimado/a <b>{0}</b> se ha realizado una solicitud de compra a travez de nuestra aplicación, 
+                                                    <br/> 
+                                                    Detalle De la Compra 
+                                                    <br/>
+                                                    Publicación: <b>{1}</b>
+                                                    <br/>
+                                                    Cantidad: <b>{2}</b>"
+                                                     
+                                                    , buyer.NombreCompleto, publication.Titulo, saleOrderDTO.Cantidad),
                         };
                         //si falla envio correo no registrar la venta
                         var email = await _emailServices.SendEmailBuy(emailDTO);

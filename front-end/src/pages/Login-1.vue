@@ -103,7 +103,7 @@ export default {
         if(this.user.idRole === '1')
             this.$router.push({ path: "/Mantenimientos/Usuarios" }).catch(error => {console.log(error);});
         if(this.user.idRole === '2')
-            this.$router.push({ path: "/Publications" }).catch(error => {console.log(error);});
+            this.$router.push({ path: "/MisPublicaciones" }).catch(error => {console.log(error);});
         if(this.user.idRole === '3')
             this.$router.push({ path: "/" }).catch(error => {console.log(error);});
         

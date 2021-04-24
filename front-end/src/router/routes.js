@@ -13,6 +13,11 @@ const routes = [
         meta: { requireAuth: true }
       },
       {
+        path: '/MisPublicaciones',
+        component: () => import('pages/seller/MyPublications.vue'),
+        meta: { requireAuth: true }
+      },
+      {
         path: '/Mantenimientos/Usuarios',
         component: () => import('pages/mantenimientos/usuarios/UsersMaintenance.vue'),
         meta: {requireAuth: false}

@@ -14,7 +14,7 @@ namespace APISND.DTO
         public int? Raiting { get; set; }
         public DateTime? FechaCreacion { get; set; }
         public int? IdCategoria { get; set; }
-        public DateTime? FechaPublicacion { get; set; }
+        public string FechaPublicacion { get; set; }
         public int? IdSubCategoria { get; set; }
         public int? IdTipoPublicacion { get; set; }
         public int? IdDepartamento { get; set; }
