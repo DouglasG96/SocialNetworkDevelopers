@@ -50,16 +50,21 @@ namespace APISND.Services
                         saleOrder.TotalVentaSinIva = saleOrderDTO.Cantidad * publication.Precio;
                         db.OrdenesVentas.Add(saleOrder);
                         await db.SaveChangesAsync();
-                    //    OrdenesVentasDetalle o = new OrdenesVentasDetalle()
-                    //    {
-                    //        IdOrdenVenta = saleOrder.IdOrdenVenta,
-                    //        Cantidad = saleOrderDTO.Cantidad,
-                    //        EstadoOrdenNegocioDetalle = 1,
-                    //        MontoSinIva = saleOrderDTO.Cantidad * publication.Precio,
-                    //        MontoConIva = saleOrderDTO.Cantidad * (publication.Precio + (publication.Precio * 0.13m)),
-                    //};
-                    //    db.OrdenesVentasDetalles.Add(o);
-                    //    await db.SaveChangesAsync();
+
+                        //Creacion de orden de compra
+                        OrdenesCompra objCompra = new OrdenesCompra()
+                        {
+                            IdOrdenCompra = 0,
+                            IdPublicacion = publication.IdPublicacion,
+                            IdUsuario = buyer.IdUsuario,
+                            FechaHoraOrdenCompra = DateTime.Now,
+                            TotalCompraConIva = saleOrderDTO.Cantidad * (publication.Precio + (publication.Precio * 0.13m)),
+                            TotalCompraSinIva = saleOrderDTO.Cantidad * publication.Precio,
+                            EstadoOrdenCompra = "1",
+                            Cantidad = saleOrderDTO.Cantidad
+                        };
+                        db.OrdenesCompras.Add(objCompra);
+                        await db.SaveChangesAsync();
 
                         EmailDTO emailDTO = new EmailDTO()
                         {
@@ -151,4 +156,11 @@ namespace APISND.Services
             return "";
         }
     }
+
+/*    
+    public bool addBuyOrder()
+    {
+
+    }
+*/
 }

@@ -11,7 +11,7 @@
           aria-label="Menu"
         />
         <q-toolbar-title>SNB&S</q-toolbar-title>
-        <q-space />
+        <q-space/>
         <div class="q-gutter-sm row items-center no-wrap">
           <q-btn
             round
@@ -56,10 +56,10 @@
           -->
           <q-btn round flat>
             <q-avatar size="26px">
-              <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+              <img src="https://cdn.quasar.dev/img/boy-avatar.png"/>
             </q-avatar>
           </q-btn>
-          <q-btn round flat dense icon="logout" v-if="isLoggedIn" @click="logout()" />
+          <q-btn round flat dense icon="logout" v-if="isLoggedIn" @click="logout()"/>
           <q-btn
             flat
             round
@@ -84,7 +84,7 @@
           <q-list class="q-pl-lg">
             <q-item to="/Publications" active-class="q-item-no-link-highlighting">
               <q-item-section avatar>
-                <q-icon name="shopping_bag" />
+                <q-icon name="shopping_bag"/>
               </q-item-section>
               <q-item-section>
                 <q-item-label>Publicar</q-item-label>
@@ -104,10 +104,18 @@
           <q-list class="q-pl-lg">
             <q-item to="/" active-class="q-item-no-link-highlighting">
               <q-item-section avatar>
-                <q-icon name="shopping_bag" />
+                <q-icon name="shopping_bag"/>
               </q-item-section>
               <q-item-section>
                 <q-item-label>Comprar</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item to="/HistorialCompras" active-class="q-item-no-link-highlighting">
+              <q-item-section avatar>
+                <q-icon name="history"/>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Historial de compras</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -116,7 +124,7 @@
           <q-list class="q-pl-lg">
             <q-item to="/Mantenimientos/Usuarios" active-class="q-item-no-link-highlighting">
               <q-item-section avatar>
-                <q-icon name="person" />
+                <q-icon name="person"/>
               </q-item-section>
               <q-item-section>
                 <q-item-label>Usuarios</q-item-label>
@@ -323,7 +331,7 @@
     </q-drawer>
 
     <q-page-container class>
-      <router-view />
+      <router-view/>
     </q-page-container>
   </q-layout>
 </template>
@@ -331,7 +339,7 @@
 <script>
 import EssentialLink from "components/EssentialLink";
 //import Messages from "./Messages";
-import { mapState, mapActions } from "vuex";
+import {mapState, mapActions} from "vuex";
 
 export default {
   name: "MainLayout",
@@ -349,7 +357,7 @@ export default {
   computed: {
     ...mapState("auth", ["user"]),
 
-    isLoggedIn: function() {
+    isLoggedIn: function () {
       return this.$store.getters["auth/isLoggedIn"];
     }
   },
@@ -360,7 +368,8 @@ export default {
         console.log("logout");
         const resp = await this.logoutUsers();
         console.log(resp);
-        await this.$router.push({ path: "/Login" }).catch(error => {});
+        await this.$router.push({path: "/Login"}).catch(error => {
+        });
       } catch (error) {
         console.log(error);
       }
