@@ -116,8 +116,6 @@ export default {
           message: error.data,
           actions: [{ icon: 'close', color: 'white' }]
         });
-        this.email = "";
-        this.password = "";
       }
     }
   }

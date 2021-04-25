@@ -52,14 +52,16 @@
               <q-input
                 filled
                 v-model="dui"
-                label="dui"
+                type="number"
+                label="dui / sin guión"
                 lazy-rules
                 :rules="rules.required"
               />
               <q-input
                 filled
                 v-model="nit"
-                label="nit"
+                type="number"
+                label="nit / sin guiones"
                 lazy-rules
                 :rules="rules.required"
               />
