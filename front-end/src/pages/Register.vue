@@ -119,12 +119,12 @@ export default {
       rol: null,
       options: [
         {
-          label: "Usuario",
-          value: "1"
-        },
-        {
           label: "Vendedor",
           value: "2"
+        },
+        {
+          label: "Comprador",
+          value: "3"
         }
       ],
       name: "",
