@@ -124,6 +124,10 @@ export default {
 
 <style>
 .bg-image {
-  background-image: linear-gradient(135deg, #363da8 0%, #dfdee4 100%);
+  background: url('../assets/portada.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+
 }
 </style>

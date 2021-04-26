@@ -98,6 +98,8 @@
                       type="number"
                       class="full-width"
                       label="Cantidad"
+                      lazy-rules
+                      :rules="rules.requiredNumber"
                     />
                   </q-item>
                 </div>
@@ -231,8 +233,14 @@ export default {
       cantidad: 1,
       direccionEntrega: "",
       comentario: "",
+      rules: {
+        required: [v => !!v || "Campo Requerido."],
+        requiredNumber: [
+          val => (val !== null && val !== "") || "Ingrese Cantidad",
+          val => (val > 0 && val < 20) || "Ingrese Cantidad Real"
+        ]
 
-      card_detail: {}
+      }
     };
   },
   computed: {
