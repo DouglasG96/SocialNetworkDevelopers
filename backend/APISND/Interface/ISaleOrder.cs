@@ -11,5 +11,7 @@ namespace APISND.Interface
     {
         Task<bool> AddSale(SaleOrderDTO saleOrderDTO);
         List<SaleOrderDTO> GetHistorySalesByIdSeller(int id);
+
+        Task<bool> AprovveSale(int id);
     }
 }

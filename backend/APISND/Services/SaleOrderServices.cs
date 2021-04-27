@@ -3,6 +3,7 @@ using APISND.Interface;
 using APISND.Models;
 using AutoMapper;
 using log4net;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,7 +55,7 @@ namespace APISND.Services
                         //Creacion de orden de compra
                         OrdenesCompra objCompra = new OrdenesCompra()
                         {
-                            IdOrdenCompra = 0,
+                            //IdOrdenCompra = 0,
                             IdPublicacion = publication.IdPublicacion,
                             IdUsuario = buyer.IdUsuario,
                             FechaHoraOrdenCompra = DateTime.Now,
@@ -165,12 +166,39 @@ namespace APISND.Services
 
             return "";
         }
-    }
 
-/*    
-    public bool addBuyOrder()
-    {
+        public async Task<bool> AprovveSale(int id)
+        {
+            using (var db = new SocialNetworkDeveloperContext())
+            {
+                using (var transaction = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var saleOrder =  _context.OrdenesVentas.FirstOrDefault(x => x.IdOrdenVenta == id);
 
+                        if(saleOrder != null)
+                        {
+                            saleOrder.EstadoOrdenVenta = "2"; //aprobada
+                        }
+                        db.OrdenesVentas.Add(saleOrder).State = EntityState.Modified;
+                        await _context.SaveChangesAsync();
+
+                        //actualizacion orden de venta
+   
+
+                        await transaction.CommitAsync();
+
+                        return true;
+                    }
+                    catch (Exception)
+                    {
+
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+            }
+        }
     }
-*/
 }
