@@ -16,9 +16,11 @@ namespace APISND.DTO
         public decimal? TotalVentaSinIva { get; set; }
         public int Cantidad { get; set; }
         public int IdComprador { get; set; }
+        public int IdOrdenCompra { get; set; }
         public string DireccionEntrega { get; set; }
         public string Comentario { get; set; }
         public string TituloPublicacion { get; set; }
+        public string Comprador { get; set; }
 
 
     }

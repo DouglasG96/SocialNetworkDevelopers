@@ -56,6 +56,8 @@ namespace APISND
             services.AddTransient <ICategories, CategoriesServices>();
             services.AddTransient<ISubCategory, SubCategoryServices>();
             services.AddTransient<IBuyOrder, BuyOrderServices>();
+            services.AddTransient<IAdress, AdressServices>();
+
 
 
             //swagger

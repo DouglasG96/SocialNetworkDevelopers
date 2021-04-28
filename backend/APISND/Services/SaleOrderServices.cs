@@ -126,6 +126,10 @@ namespace APISND.Services
                 var list =  (from s in _context.OrdenesVentas
                             join p in _context.Publicaciones
                             on s.IdPublicacion equals p.IdPublicacion
+                            join c in _context.OrdenesCompras
+                            on p.IdPublicacion equals c.IdPublicacion
+                            join u in _context.Usuarios
+                            on c.IdUsuario equals u.IdUsuario 
                             where s.IdUsuario == id
                             orderby s.FechaHoraOrdenVenta descending
                             select new SaleOrderDTO
@@ -138,7 +142,9 @@ namespace APISND.Services
                                 TotalVentaConIva = s.TotalVentaConIva,
                                 TotalVentaSinIva = s.TotalVentaSinIva,
                                 Cantidad = (int)s.Cantidad,
-                                TituloPublicacion = p.Titulo
+                                TituloPublicacion = p.Titulo,
+                                Comprador = u.NombreCompleto,
+                                IdOrdenCompra = c.IdOrdenCompra
 
                             }).ToList();
                 //var saleOrder =  _context.OrdenesVentas.Where(x => x.IdUsuario == id).ToList();
@@ -167,7 +173,7 @@ namespace APISND.Services
             return "";
         }
 
-        public async Task<bool> AprovveSale(int id)
+        public async Task<bool> AprovveSale(int idSaleOrder, int ididBuyOrder)
         {
             using (var db = new SocialNetworkDeveloperContext())
             {
@@ -175,7 +181,8 @@ namespace APISND.Services
                 {
                     try
                     {
-                        var saleOrder =  _context.OrdenesVentas.FirstOrDefault(x => x.IdOrdenVenta == id);
+                        //actualizo orden de venta
+                        var saleOrder =  await _context.OrdenesVentas.FirstOrDefaultAsync(x => x.IdOrdenVenta == idSaleOrder);
 
                         if(saleOrder != null)
                         {
@@ -184,17 +191,26 @@ namespace APISND.Services
                         db.OrdenesVentas.Add(saleOrder).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
 
-                        //actualizacion orden de venta
-   
+                        //actualizacion orden de compra
+                        var buyOrder = await _context.OrdenesCompras.FirstOrDefaultAsync(x => x.IdOrdenCompra == ididBuyOrder);
+                        if (buyOrder != null)
+                        {
+                            buyOrder.EstadoOrdenCompra = "2"; //aprobada
+                        }
+                        db.OrdenesCompras.Add(buyOrder).State = EntityState.Modified;
+                        await _context.SaveChangesAsync();
+
 
                         await transaction.CommitAsync();
 
                         return true;
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
 
                         transaction.Rollback();
+                        log.ErrorFormat("Error al ejecutar transaccion para aprobar venta AprovveSale()  {0} : {1} ", e.Source, e.Message);
+
                         return false;
                     }
                 }
