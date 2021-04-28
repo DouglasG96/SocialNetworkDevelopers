@@ -13,6 +13,17 @@
         :pagination.sync="pagination"
         :filter="filter"
       >
+          <!-- <ButtonExportExcel
+            :myName="nameExcel"
+            :myWorksheet="'Dispositivos'"
+            :myData="dataHistory"
+            :myExportFields="{
+              Dispositivo: 'device',
+              'Marca/Modelo': 'marca',
+              Numero: 'numero',
+              App: 'versionApp',
+            }"
+          ></ButtonExportExcel> -->
         <template v-slot:top>
           <q-space />
           <q-input borderless dense debounce="300" color="primary" v-model="filter">
@@ -28,11 +39,15 @@
 </template>
 <script>
 import api from "src/api/buyHistory";
+import ButtonExportExcel from "src/components/ButtonExportExcel.vue";
 import { mapState } from "vuex";
 export default {
+  components: { ButtonExportExcel },
+
   data() {
     return {
       dataHistory: [],
+      nameExcel: "Exportar",
       columns: [
         {
           name: "idOrdenCompra",
