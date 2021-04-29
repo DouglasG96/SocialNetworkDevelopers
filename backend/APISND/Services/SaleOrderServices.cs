@@ -216,5 +216,49 @@ namespace APISND.Services
                 }
             }
         }
+
+        public async Task<bool> RejectSale(int idSaleOrder, int ididBuyOrder)
+        {
+            using (var db = new SocialNetworkDeveloperContext())
+            {
+                using (var transaction = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        //actualizo orden de venta
+                        var saleOrder = await _context.OrdenesVentas.FirstOrDefaultAsync(x => x.IdOrdenVenta == idSaleOrder);
+
+                        if (saleOrder != null)
+                        {
+                            saleOrder.EstadoOrdenVenta = "3"; //rechazado
+                        }
+                        db.OrdenesVentas.Add(saleOrder).State = EntityState.Modified;
+                        await _context.SaveChangesAsync();
+
+                        //actualizacion orden de compra
+                        var buyOrder = await _context.OrdenesCompras.FirstOrDefaultAsync(x => x.IdOrdenCompra == ididBuyOrder);
+                        if (buyOrder != null)
+                        {
+                            buyOrder.EstadoOrdenCompra = "3"; //rechazada
+                        }
+                        db.OrdenesCompras.Add(buyOrder).State = EntityState.Modified;
+                        await _context.SaveChangesAsync();
+
+
+                        await transaction.CommitAsync();
+
+                        return true;
+                    }
+                    catch (Exception e)
+                    {
+
+                        transaction.Rollback();
+                        log.ErrorFormat("Error al ejecutar transaccion para rechazar venta RejectSale()  {0} : {1} ", e.Source, e.Message);
+
+                        return false;
+                    }
+                }
+            }
+        }
     }
 }
