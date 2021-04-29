@@ -13,5 +13,7 @@ namespace APISND.Interface
         List<SaleOrderDTO> GetHistorySalesByIdSeller(int id);
 
         Task<bool> AprovveSale(int idSaleOrder, int ididBuyOrder);
+        Task<bool> RejectSale(int idSaleOrder, int ididBuyOrder);
+
     }
 }
