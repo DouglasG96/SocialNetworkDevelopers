@@ -5,7 +5,17 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
-  name: 'App'
+  name: 'App',
+
+created () {
+  this.readToken();
+},
+  methods: {
+    ...mapActions("auth", ["readToken"]),
+    
+  }
 }
 </script>

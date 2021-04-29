@@ -10,6 +10,10 @@ namespace APISND.Mapper
         {
             CreateMap<Usuario, UserDTO>().ReverseMap();
             CreateMap<Publicacione, PublicationDTO>().ReverseMap();
+            CreateMap<OrdenesVenta, SaleOrderDTO>().ReverseMap();
+            CreateMap <Categoria, CategoriesDTO>().ReverseMap();
+            CreateMap<SubCategoria, SubCategoryDTO>().ReverseMap();
+            CreateMap<OrdenesCompra, BuyOrderDTO>().ReverseMap();
         }
     }
 }

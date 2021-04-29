@@ -10,6 +10,8 @@ namespace APISND.Models
         public Departamento()
         {
             Municipios = new HashSet<Municipio>();
+            Publicaciones = new HashSet<Publicacione>();
+            Usuarios = new HashSet<Usuario>();
         }
 
         public int IdDepartamento { get; set; }
@@ -17,5 +19,7 @@ namespace APISND.Models
         public int? Estado { get; set; }
 
         public virtual ICollection<Municipio> Municipios { get; set; }
+        public virtual ICollection<Publicacione> Publicaciones { get; set; }
+        public virtual ICollection<Usuario> Usuarios { get; set; }
     }
 }

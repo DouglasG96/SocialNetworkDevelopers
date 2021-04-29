@@ -26,3 +26,14 @@ export async function logoutUsers ({ commit }) {
         }
     })
 }
+
+export async function readToken({commit}){
+    const token = LocalStorage.getItem('token');
+    if(token){
+        commit('auth_success', token)
+    }
+    else{
+        commit('auth_success', '')
+
+    }
+}

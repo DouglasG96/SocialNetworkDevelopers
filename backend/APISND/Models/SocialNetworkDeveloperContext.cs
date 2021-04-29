@@ -41,8 +41,8 @@ namespace APISND.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                //optionsBuilder.UseSqlServer("data source=PROGRAMACION-3\\NAVDEMO;initial catalog=SocialNetworkDeveloper;user id=sa;password=Fasan1;");
-                //optionsBuilder.UseSqlServer("data source=PROGRAMACION-3;initial catalog=SocialNetworkDeveloper;user id=sa;password=Fasan1;");
+                optionsBuilder.UseSqlServer("data source=PROGRAMACION-3;initial catalog=SocialNetworkDeveloper;user id=sa;password=Fasan1;");
+                //optionsBuilder.UseSqlServer("data source=DOUGLAS;initial catalog=SocialNetworkDeveloper;Integrated Security = True;");
             }
         }
 
@@ -363,9 +363,13 @@ namespace APISND.Models
                     .HasColumnType("datetime")
                     .HasColumnName("fechaPublicacion");
 
+                entity.Property(e => e.IdCategoria).HasColumnName("idCategoria");
+
+                entity.Property(e => e.IdDepartamento).HasColumnName("idDepartamento");
+
                 entity.Property(e => e.IdEstadoPublicacion).HasColumnName("idEstadoPublicacion");
 
-                entity.Property(e => e.IdMinicipio).HasColumnName("idMinicipio");
+                entity.Property(e => e.IdMunicipio).HasColumnName("idMunicipio");
 
                 entity.Property(e => e.IdSubCategoria).HasColumnName("idSubCategoria");
 
@@ -379,10 +383,20 @@ namespace APISND.Models
 
                 entity.Property(e => e.Titulo).HasMaxLength(150);
 
+                entity.HasOne(d => d.IdDepartamentoNavigation)
+                    .WithMany(p => p.Publicaciones)
+                    .HasForeignKey(d => d.IdDepartamento)
+                    .HasConstraintName("FK_Publicaciones_Departamentos");
+
                 entity.HasOne(d => d.IdEstadoPublicacionNavigation)
                     .WithMany(p => p.Publicaciones)
                     .HasForeignKey(d => d.IdEstadoPublicacion)
                     .HasConstraintName("fk_publicaciones_estado");
+
+                entity.HasOne(d => d.IdMunicipioNavigation)
+                    .WithMany(p => p.Publicaciones)
+                    .HasForeignKey(d => d.IdMunicipio)
+                    .HasConstraintName("FK_Publicaciones_Municipios");
 
                 entity.HasOne(d => d.IdSubCategoriaNavigation)
                     .WithMany(p => p.Publicaciones)
@@ -478,17 +492,19 @@ namespace APISND.Models
                     .HasMaxLength(150)
                     .HasColumnName("correoElectronico");
 
-                entity.Property(e => e.Dui)
-                    .HasMaxLength(10)
-                    .HasColumnName("dui");
+                entity.Property(e => e.Direccion).HasMaxLength(300);
+
+                entity.Property(e => e.Dui).HasMaxLength(10);
 
                 entity.Property(e => e.EstadoUsuario).HasColumnName("estadoUsuario");
 
+                entity.Property(e => e.IdDepartamento).HasColumnName("idDepartamento");
+
+                entity.Property(e => e.IdMunicipio).HasColumnName("idMunicipio");
+
                 entity.Property(e => e.IdRol).HasColumnName("idRol");
 
-                entity.Property(e => e.Nit)
-                    .HasMaxLength(16)
-                    .HasColumnName("nit");
+                entity.Property(e => e.Nit).HasMaxLength(16);
 
                 entity.Property(e => e.NombreCompleto)
                     .HasMaxLength(250)
@@ -505,6 +521,16 @@ namespace APISND.Models
                     .IsUnicode(false)
                     .HasDefaultValueSql("('Y')")
                     .IsFixedLength(true);
+
+                entity.HasOne(d => d.IdDepartamentoNavigation)
+                    .WithMany(p => p.Usuarios)
+                    .HasForeignKey(d => d.IdDepartamento)
+                    .HasConstraintName("FK_Usuarios_Departamentos");
+
+                entity.HasOne(d => d.IdMunicipioNavigation)
+                    .WithMany(p => p.Usuarios)
+                    .HasForeignKey(d => d.IdMunicipio)
+                    .HasConstraintName("FK_Usuarios_Municipios");
 
                 entity.HasOne(d => d.IdRolNavigation)
                     .WithMany(p => p.Usuarios)

@@ -1067,6 +1067,13 @@
   dependencies:
     "@quasar/quasar-ui-qcalendar" "^3.3.4"
 
+"@quasar/quasar-app-extension-qzoom@^1.0.0-alpha.7":
+  version "1.0.0-alpha.7"
+  resolved "https://registry.yarnpkg.com/@quasar/quasar-app-extension-qzoom/-/quasar-app-extension-qzoom-1.0.0-alpha.7.tgz#cf94cc588ab4d73471841fd5d1fee91521b4b330"
+  integrity sha512-pBcY/bTWY1go9wGwBmJAjGURrPHzyMPULrTQmwp8sSRK0joWmeUMC6+Fm3niXuk6IHurvByWGcqEbKn+pJNH2w==
+  dependencies:
+    q-colorize-mixin "^1.0.6"
+
 "@quasar/quasar-ui-qcalendar@^3.3.4":
   version "3.3.5"
   resolved "https://registry.yarnpkg.com/@quasar/quasar-ui-qcalendar/-/quasar-ui-qcalendar-3.3.5.tgz#4fed965045a98fb5da6294acf1d1285dc9af8dc6"
@@ -1624,9 +1631,9 @@ anymatch@~3.1.1:
     picomatch "^2.0.4"
 
 apexcharts@^3.25.0:
-  version "3.26.0"
-  resolved "https://registry.yarnpkg.com/apexcharts/-/apexcharts-3.26.0.tgz#a78abc108b2e1b3086a738f0ec7c98e292f4a14b"
-  integrity sha512-zdYHs3k3tgmCn1BpYLj7rhGEndBYF33Pq1+g0ora37xAr+3act5CJrpdXM2jx2boVUyXgavoSp6sa8WpK7RkSA==
+  version "3.26.1"
+  resolved "https://registry.yarnpkg.com/apexcharts/-/apexcharts-3.26.1.tgz#2094ec0cfd00ed8129d93e73e75018716d55ef5b"
+  integrity sha512-Z/pfGTsL4YUm1tHd6a0d0G2hX4XUmhEI0b/5BxVK69dEB/XXvVMX9hKCkcIx+kPyVqVFCuo91ZjCdqjMcmSVBA==
   dependencies:
     svg.draggable.js "^2.2.2"
     svg.easing.js "^2.0.0"
@@ -3285,6 +3292,11 @@ dot-prop@5.3.0, dot-prop@^5.2.0:
   integrity sha512-QM8q3zDe58hqUqjraQOmzZ1LIH9SWQJTlEKCH4kJ2oQvLZk7RbQXvtDM2XEq3fwkV9CCvvH4LA0AV+ogFsBM2Q==
   dependencies:
     is-obj "^2.0.0"
+
+downloadjs@^1.4.7:
+  version "1.4.7"
+  resolved "https://registry.yarnpkg.com/downloadjs/-/downloadjs-1.4.7.tgz#f69f96f940e0d0553dac291139865a3cd0101e3c"
+  integrity sha1-9p+W+UDg0FU9rCkROYZaPNAQHjw=
 
 duplexer3@^0.1.4:
   version "0.1.4"
@@ -6821,6 +6833,11 @@ punycode@^2.1.0:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
+q-colorize-mixin@^1.0.6:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/q-colorize-mixin/-/q-colorize-mixin-1.0.10.tgz#f0fbfa2826cbfdaffc5c6851e9949aff311da48a"
+  integrity sha512-pqMSb3mxTps0pfKh2zV/7ukgVvrzQT8+Ic2c3PaTkMI5yGPBbBK+t0SgF1ktBJ0PCYFE1bpK1unK20Z2OlTzlg==
+
 q@^1.1.2:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
@@ -8536,6 +8553,13 @@ vue-i18n@^8.0.0:
   version "8.24.0"
   resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-8.24.0.tgz#f4a4fe553738f101a672f4da06a14942d1e64fc4"
   integrity sha512-tRVmPN36Dv+fLeZW5AzoNsZwjV2y2+UdHROaTewUgSG2YLjOj4dFmai4T5PPZtIdRnDnUdwbAwdufCG6fPSegA==
+
+vue-json-excel@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/vue-json-excel/-/vue-json-excel-0.3.0.tgz#72cbe4a004720259edc65555a3f072198cf79146"
+  integrity sha512-FrSh0tVUpw4K+ilLO8g0Qp52eFJw/hkk3rZPTEKo9qVkJgVfQtZwzj3UWc5ACYxA3jLk9HtjK+f9xKHCN4Kgag==
+  dependencies:
+    downloadjs "^1.4.7"
 
 vue-loader@15.9.5:
   version "15.9.5"

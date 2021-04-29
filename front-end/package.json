@@ -19,12 +19,14 @@
     "vue-apexcharts": "^1.5.2",
     "vue-echarts-v3": "^2.0.1",
     "vue-i18n": "^8.0.0",
+    "vue-json-excel": "^0.3.0",
     "vuedraggable": "^2.23.2",
     "webpack": "^2.5.1"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",
     "@quasar/quasar-app-extension-qcalendar": "^3.3.1",
+    "@quasar/quasar-app-extension-qzoom": "^1.0.0-alpha.7",
     "quasar-app-extension-qhierarchy": "^0.0.5"
   },
   "engines": {

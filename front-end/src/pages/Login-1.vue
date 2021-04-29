@@ -41,7 +41,7 @@
                 class="text-lowercase"
               />
 
-              <div class="row">
+              <div class="row text-center">
                 <div class="col-6">
                   <q-btn label="Acceder" type="submit" color="positive" />
                 </div>
@@ -81,7 +81,7 @@ export default {
     }
   },
   computed: {
-    ...mapState("auth", ["user"])
+    ...mapState("auth", ["user"]),
   },
 
   methods: {
@@ -100,7 +100,13 @@ export default {
           password: this.password.trim()
         });
         this.$q.loading.hide();
-        this.$router.push({ path: "/" }).catch(error => {console.log(error);});
+        if(this.user.idRole === '1')
+            this.$router.push({ path: "/Mantenimientos/Usuarios" }).catch(error => {console.log(error);});
+        if(this.user.idRole === '2')
+            this.$router.push({ path: "/MisPublicaciones" }).catch(error => {console.log(error);});
+        if(this.user.idRole === '3')
+            this.$router.push({ path: "/" }).catch(error => {console.log(error);});
+        
       } catch (error) {
         this.$q.loading.hide();
         console.log(error);
@@ -110,8 +116,6 @@ export default {
           message: error.data,
           actions: [{ icon: 'close', color: 'white' }]
         });
-        this.email = "";
-        this.password = "";
       }
     }
   }
@@ -120,6 +124,10 @@ export default {
 
 <style>
 .bg-image {
-  background-image: linear-gradient(135deg, #363da8 0%, #dfdee4 100%);
+  background: url('../assets/portada.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+
 }
 </style>

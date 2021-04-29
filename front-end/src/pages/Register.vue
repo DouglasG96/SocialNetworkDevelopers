@@ -52,14 +52,16 @@
               <q-input
                 filled
                 v-model="dui"
-                label="dui"
+                type="number"
+                label="dui / sin guión"
                 lazy-rules
                 :rules="rules.required"
               />
               <q-input
                 filled
                 v-model="nit"
-                label="nit"
+                type="number"
+                label="nit / sin guiones"
                 lazy-rules
                 :rules="rules.required"
               />
@@ -90,7 +92,7 @@
               />
 
               <div class="row">
-                <div class="col-6">
+                <div class="col-6 text-center">
                   <q-btn label="Registrarse" type="submit" color="positive" />
                 </div>
                 <div class="col-6">
@@ -119,12 +121,12 @@ export default {
       rol: null,
       options: [
         {
-          label: "Usuario",
-          value: "1"
-        },
-        {
           label: "Vendedor",
           value: "2"
+        },
+        {
+          label: "Comprador",
+          value: "3"
         }
       ],
       name: "",

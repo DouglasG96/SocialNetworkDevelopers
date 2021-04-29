@@ -1,10 +1,10 @@
-﻿using APISND.Models;
+﻿using APISND.DTO;
+using APISND.Interface;
+using APISND.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using SNDAPI.DTO;
 using SNDAPI.Exceptions;
-using SNDAPI.Interface;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;

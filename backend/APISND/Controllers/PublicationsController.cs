@@ -33,11 +33,11 @@ namespace APISND.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         [HttpGet]
-        public IActionResult GetPublications()
+        public async Task<IActionResult> GetPublications()
         {
             try
             {
-                var resp = _mapper.Map<List<PublicationDTO>>(_publicationServices.GetPublications());
+                var resp = _mapper.Map<List<PublicationDTO>>(await _publicationServices.GetPublications());
 
                 if (resp == null)
                     return NotFound(resp);
@@ -51,13 +51,67 @@ namespace APISND.Controllers
         }
 
         /// <summary>
-        /// Peticion para agregar un usuario
+        /// Petición para obtener datos de una publicacion por Id
         /// </summary>
-        /// <param name="userDTO"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         //[AuthorizeRoles(Rol.Administrator)]
+        [ProducesResponseType(typeof(PublicationDTO), 200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPublicationById(int id)
+        {
+            try
+            {
+                var resp = _mapper.Map<PublicationDTO>(await _publicationServices.GetPublicationById(id));
+
+                if (resp == null)
+                    return NotFound(new { message = $"Publicacion con Id = {id} no encontrado" });
+
+                return Ok(resp);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
+        }
+
+        /// <summary>
+        /// Publicacion para obtener las publicaciones de un usuario
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+
+        //[AuthorizeRoles(Rol.Administrator)]
+        [ProducesResponseType(typeof(PublicationDTO), 200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        [HttpGet]
+        public async Task<IActionResult> GetPublicationByIdUser(int idUser)
+        {
+            try
+            {
+                var resp = await _publicationServices.GetPublicationByIdUser(idUser);
+
+                if (resp == null)
+                    return NotFound(new { message = $"Usuario con Id = {idUser} no encontrado" });
+
+                return Ok(resp);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
+        }
+        /// <summary>
+        /// Peticion para agregar un usuario
+        /// <returns></returns>
+        /// </summary>
+        /// <param name="userDTO"></param>
+        //[AuthorizeRoles(Rol.Administrator)]
         [HttpPost]
-        [ProducesResponseType(typeof(UserDTO), 201)]
+        [ProducesResponseType(typeof(PublicationDTO), 201)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public async Task<IActionResult> AddPublication([FromForm] PublicationDTO publicationDTO)
@@ -69,6 +123,8 @@ namespace APISND.Controllers
                     await publicationDTO.file.CopyToAsync(ms);
                     publicationDTO.Imagen = ms.ToArray();
                 }
+                //publicationDTO.FechaCreacion = DateTime.Now;
+                //publicationDTO.FechaPublicacion = DateTime.Now;
                 var publication = _mapper.Map<Publicacione>(publicationDTO);
                 var resp = await _publicationServices.AddPublication(publication);
 

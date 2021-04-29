@@ -10,10 +10,8 @@
           icon="menu"
           aria-label="Menu"
         />
-        <q-toolbar-title>
-          SND
-        </q-toolbar-title>
-        <q-space />
+        <q-toolbar-title>SNB&S</q-toolbar-title>
+        <q-space/>
         <div class="q-gutter-sm row items-center no-wrap">
           <q-btn
             round
@@ -23,9 +21,8 @@
             :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
             @click="$q.fullscreen.toggle()"
             v-if="$q.screen.gt.sm"
-          >
-          </q-btn>
-            <!--
+          ></q-btn>
+          <!--
           <q-btn
             round
             dense
@@ -56,20 +53,13 @@
               </q-list>
             </q-menu>
           </q-btn>
-            -->
+          -->
           <q-btn round flat>
             <q-avatar size="26px">
-              <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+              <img src="https://cdn.quasar.dev/img/boy-avatar.png"/>
             </q-avatar>
           </q-btn>
-          <q-btn
-            round
-            flat
-            dense
-            icon="logout"
-            v-if="isLoggedIn"
-            @click="logout()"
-          />
+          <q-btn round flat dense icon="logout" v-if="isLoggedIn" @click="logout()"/>
           <q-btn
             flat
             round
@@ -80,55 +70,72 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-      content-class="bg-primary text-white"
-    >
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered content-class="bg-primary text-white">
       <q-list>
-        <q-item to="/" active-class="q-item-no-link-highlighting">
+        <!-- <q-item to="/" active-class="q-item-no-link-highlighting" v-if="this.user.idRole === '3'">
           <q-item-section avatar>
             <q-icon name="shopping_cart" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Catalogo de productos</q-item-label>
           </q-item-section>
-        </q-item>
-        <q-item to="/catalogo_servicios" active-class="q-item-no-link-highlighting">
-          <q-item-section avatar>
-            <q-icon name="home_repair_service" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Catalogo de servicios</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-expansion-item icon="settings" label="Mantenimientos">
+        </q-item> -->
+        <q-expansion-item icon="person" label="Vendedor" v-if="this.user.idRole === '2'">
           <q-list class="q-pl-lg">
-            <q-item
-              to="/Mantenimientos/Usuarios"
-              active-class="q-item-no-link-highlighting"
-            >
+            <q-item to="/Publications" active-class="q-item-no-link-highlighting">
               <q-item-section avatar>
-                <q-icon name="person" />
+                <q-icon name="shopping_bag"/>
               </q-item-section>
               <q-item-section>
-                <q-item-label>Usuarios</q-item-label>
+                <q-item-label>Publicar</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item to="/MisPublicaciones" active-class="q-item-no-link-highlighting">
+              <q-item-section avatar>
+                <q-icon name="list_alt" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Mis Publicaciones</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item to="/HistorialVentas" active-class="q-item-no-link-highlighting">
+              <q-item-section avatar>
+                <q-icon name="history" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Historial de Ventas</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
         </q-expansion-item>
-        <q-expansion-item icon="person" label="Vendedor">
+        <q-expansion-item icon="person" label="Comprador" v-if="this.user.idRole === '3'">
           <q-list class="q-pl-lg">
-            <q-item
-              to="/Mantenimientos/Usuarios"
-              active-class="q-item-no-link-highlighting"
-            >
+            <q-item to="/" active-class="q-item-no-link-highlighting">
               <q-item-section avatar>
-                <q-icon name="shopping_bag" />
+                <q-icon name="shopping_bag"/>
               </q-item-section>
               <q-item-section>
-                <q-item-label>Publicar</q-item-label>
+                <q-item-label>Comprar</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item to="/HistorialCompras" active-class="q-item-no-link-highlighting">
+              <q-item-section avatar>
+                <q-icon name="history"/>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Historial de compras</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-expansion-item>
+        <q-expansion-item icon="settings" label="Mantenimientos" v-if="this.user.idRole === '1'">
+          <q-list class="q-pl-lg">
+            <q-item to="/Mantenimientos/Usuarios" active-class="q-item-no-link-highlighting">
+              <q-item-section avatar>
+                <q-icon name="person"/>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Usuarios</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -329,45 +336,10 @@
           </q-item-section>
         </q-item>
       -->
-        <q-expansion-item
-          icon="menu_open"
-          label="Menu Levels"
-        >
-          <q-item class="q-ml-xl" active-class="q-item-no-link-highlighting">
-            <q-item-section>
-              <q-item-label>Level 1</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-expansion-item
-            :header-inset-level="0.85"
-            label="Level 2"
-          >
-            <q-item class="q-ml-xl" style="margin-left: 55px  !important;" active-class="q-item-no-link-highlighting">
-              <q-item-section>
-                <q-item-label>Level 2.1</q-item-label>
-              </q-item-section>
-            </q-item>
-            <q-expansion-item
-              :header-inset-level="1"
-              label="Level 2.2"
-            >
-              <q-item style="margin-left: 65px  !important;" active-class="q-item-no-link-highlighting">
-                <q-item-section>
-                  <q-item-label>Level 2.2.1</q-item-label>
-                </q-item-section>
-              </q-item>
-              <q-item style="margin-left: 65px  !important;" active-class="q-item-no-link-highlighting">
-                <q-item-section>
-                  <q-item-label>Level 2.2.2</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-expansion-item>
-          </q-expansion-item>
-        </q-expansion-item>
     </q-drawer>
 
-    <q-page-container class="">
-      <router-view />
+    <q-page-container class>
+      <router-view/>
     </q-page-container>
   </q-layout>
 </template>
@@ -375,7 +347,7 @@
 <script>
 import EssentialLink from "components/EssentialLink";
 //import Messages from "./Messages";
-import { mapActions } from "vuex";
+import {mapState, mapActions} from "vuex";
 
 export default {
   name: "MainLayout",
@@ -391,7 +363,9 @@ export default {
     };
   },
   computed: {
-    isLoggedIn: function() {
+    ...mapState("auth", ["user"]),
+
+    isLoggedIn: function () {
       return this.$store.getters["auth/isLoggedIn"];
     }
   },
@@ -402,7 +376,8 @@ export default {
         console.log("logout");
         const resp = await this.logoutUsers();
         console.log(resp);
-        await this.$router.push({ path: "/Login" }).catch(error => {});
+        await this.$router.push({path: "/Login"}).catch(error => {
+        });
       } catch (error) {
         console.log(error);
       }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SNDAPI.DTO
+namespace APISND.DTO
 {
     public class AuthDTO
     {

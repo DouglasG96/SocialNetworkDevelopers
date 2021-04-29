@@ -1,4 +1,5 @@
-﻿using APISND.Interface;
+﻿using APISND.DTO;
+using APISND.Interface;
 using APISND.Models;
 using AutoMapper;
 using log4net;
@@ -22,11 +23,11 @@ namespace APISND.Services
             mapper = _mapper;
         }
 
-        public List<Publicacione> GetPublications()
+        public async Task<List<Publicacione>> GetPublications()
         {
             try
             {
-                return _context.Publicaciones.ToList();
+                return  await _context.Publicaciones.ToListAsync();
             }
             catch (Exception e)
             {
@@ -35,10 +36,24 @@ namespace APISND.Services
 
             }
         }
+        public async Task<Publicacione> GetPublicationById(int id)
+        {
+            try
+            {
+                return await _context.Publicaciones.FirstOrDefaultAsync(x => x.IdPublicacion == id);
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error al obtener datos de Publicacion GetPublicationById()  {0} : {1} ", e.Source, e.Message);
+                throw;
+            }
+        }
         public async Task<Publicacione> AddPublication(Publicacione publication)
         {
             try
             {
+                publication.FechaCreacion = DateTime.Now;
+                publication.FechaPublicacion = DateTime.Now;
                 _context.Publicaciones.Add(publication);
                 await _context.SaveChangesAsync();
                 return publication;
@@ -102,6 +117,29 @@ namespace APISND.Services
             catch (Exception e)
             {
                 log.ErrorFormat("Error al Validar si Existe Publicacion PublicationExists()  {0} : {1} ", e.Source, e.Message);
+                throw;
+            }
+        }
+
+        public async Task<List<PublicationDTO>> GetPublicationByIdUser(int idUser)
+        {
+            try
+            {
+                var data = await  (from p in _context.Publicaciones
+                            where p.IdUsuario == idUser
+                            orderby p.FechaPublicacion descending
+                            select new PublicationDTO
+                            {
+                                IdPublicacion = p.IdPublicacion,
+                                Titulo = p.Titulo,
+                                FechaPublicacion = Convert.ToDateTime(p.FechaPublicacion).ToString("dd/MM/yyyy HH:mm:ss"),
+                                Delivery = p.Delivery
+                            }).ToListAsync();
+                return data;
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error al obtener datos de Publicacion GetPublicationByIdUser()  {0} : {1} ", e.Source, e.Message);
                 throw;
             }
         }
