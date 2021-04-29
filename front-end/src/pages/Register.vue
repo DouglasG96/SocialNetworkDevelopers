@@ -1,7 +1,7 @@
 <template>
   <q-layout>
     <q-page-container>
-      <q-page class="flex bg-image flex-center ">
+      <q-page class="flex bg-image flex-center">
         <q-card
           v-bind:style="$q.screen.lt.sm ? { width: '85%' } : { width: '75%' }"
           class="q-mt-md q-mb-md"
@@ -65,20 +65,14 @@
                 lazy-rules
                 :rules="rules.required"
               />
-              <q-input
-                filled
-                v-model="phone"
-                label="telefono"
-                lazy-rules
-                :rules="rules.required"
-              />
+              <q-input filled v-model="phone" label="telefono" lazy-rules :rules="rules.required" />
               <q-input
                 filled
                 type="email"
                 v-model="email"
                 label="correo"
                 lazy-rules
-                :rules="rules.required"
+                :rules="[val => !!val || 'Email invalido', isValidEmail]"
                 class="text-lowercase"
               />
               <q-input
@@ -96,12 +90,7 @@
                   <q-btn label="Registrarse" type="submit" color="positive" />
                 </div>
                 <div class="col-6">
-                  <q-btn
-                    label="Login"
-                    to="/Login"
-                    color="secondary"
-                    class="q-ml-sm"
-                  />
+                  <q-btn label="Login" to="/Login" color="secondary" class="q-ml-sm" />
                 </div>
               </div>
             </q-form>
@@ -141,6 +130,14 @@ export default {
         requiredNumber: [
           val => (val !== null && val !== "") || "Please type your age",
           val => (val > 0 && val < 100) || "Please type a real age"
+        ],
+        emailRules: [
+          v =>
+            !val ||
+            /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/.test(
+              v
+            ) ||
+            "Email invalido"
         ]
       }
     };
@@ -158,6 +155,17 @@ export default {
 
       try {
         this.$q.loading.show();
+
+        var existEmail = await api.userExistsEmail(this.email);
+        if (existEmail) {
+          this.$q.notify({
+            type: "warning",
+            position: "center",
+            message: "Correo electronico ingresado, ya esta registrado..."
+          });
+          return;
+        }
+
         await api.addUser({
           idRol: this.rol.value,
           nombreCompleto: this.name + " " + this.lastName,
@@ -174,7 +182,7 @@ export default {
           position: "center",
           message: "Gracias por Registrarte, Por Favor Inicia Sesión..."
         });
-        this.$q.loading.hide();
+        //this.$q.loading.hide();
 
         setTimeout(() => {
           this.$router.push({ path: "/Login" }).catch(error => {
@@ -182,14 +190,21 @@ export default {
           });
         }, 4000);
       } catch (error) {
-        this.$q.loading.hide();
+        //this.$q.loading.hide();
+
         console.log(error);
         this.$q.notify({
           type: "negative",
           position: "center",
           message: "Error Interno, Intente mas Tarde"
         });
+      } finally {
+        this.$q.loading.hide();
       }
+    },
+    isValidEmail(val) {
+      const emailPattern = /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
+      return emailPattern.test(val) || "Email invalido";
     }
   }
 };
@@ -197,6 +212,9 @@ export default {
 
 <style>
 .bg-image {
-  background-image: linear-gradient(135deg, #dfdee4 0%, #363da8 100%);
+  background: url("../assets/portada.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 </style>

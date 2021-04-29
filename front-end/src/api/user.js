@@ -7,6 +7,10 @@ async function getUsers () {
     var resp = await axios.get(`${url}/Users/GetUsers`);
     return resp.data;
 }
+async function userExistsEmail () {
+    var resp = await axios.get(`${url}/Users/GetUsers`);
+    return resp.data;
+}
 async function addUser (user) {
     var resp = await axios.post(`${url}/Users/AddUser`, user);
     return resp.data;
@@ -27,5 +31,6 @@ export default
     getUsers, 
     addUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    userExistsEmail
 }

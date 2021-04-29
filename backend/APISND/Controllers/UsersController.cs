@@ -159,5 +159,31 @@ namespace APISND.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
             }
         }
+
+        /// <summary>
+        /// Petición para validar si existe un usuario por medio del email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(typeof(bool), 200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> UserExistsEmail(string email)
+        {
+            try
+            {
+                var resp = await _user.UserExistsEmail(email);
+                if (resp)
+                    return Ok(resp);
+                else
+                    return Ok(resp);
+
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
     }
 }

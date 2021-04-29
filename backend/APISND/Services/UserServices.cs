@@ -73,7 +73,6 @@ namespace APISND.Services
                 var model = await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(x => x.IdUsuario == user.IdUsuario);
                 if(model != null)
                 {
-
                     _context.Usuarios.Add(user).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
 
@@ -122,5 +121,17 @@ namespace APISND.Services
             }
         }
 
+        public async Task<bool> UserExistsEmail(string email)
+        {
+            try
+            {
+                return await _context.Usuarios.AsNoTracking().AnyAsync(x => x.CorreoElectronico == email);
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error al Validar si Existe Usuario por medio de email UserExistsEmail()  {0} : {1} ", e.Source, e.Message);
+                throw;
+            }
+        }
     }
 }
