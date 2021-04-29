@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SNDAPI.Services;
 using AutoMapper;
+using APISND.Helpers;
 
 namespace APISND.DTO
 {
@@ -28,6 +29,7 @@ namespace APISND.DTO
 
 
         [HttpGet]
+        [AuthorizeRoles(Rol.Administrator, Rol.Buyer, Rol.Seller)]
         [ProducesResponseType(typeof(CategoriesDTO), 200)]
         [ProducesResponseType(401)]
         [AllowAnonymous]

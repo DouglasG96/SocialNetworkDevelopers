@@ -1,4 +1,5 @@
 ﻿using APISND.DTO;
+using APISND.Helpers;
 using APISND.Interface;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -25,6 +26,12 @@ namespace APISND.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Petición para obterner historico de ventas por vendedor
+        /// </summary>
+        /// <param name="idSeller"></param>
+        /// <returns></returns>
+        [AuthorizeRoles(Rol.Seller)]
         [HttpGet]
         [ProducesResponseType(typeof(SaleOrderDTO), 200)]
         [ProducesResponseType(401)]
@@ -48,9 +55,10 @@ namespace APISND.Controllers
         }
 
         /// <summary>
-        /// Peticion para crear una orden de compra
+        /// Peticion para crear una orden de compra / comprar una publicación
         /// </summary>
         /// <returns></returns>
+        [AuthorizeRoles(Rol.Buyer)]
         [HttpPost]
         [ProducesResponseType( 200)]
         [ProducesResponseType(401)]

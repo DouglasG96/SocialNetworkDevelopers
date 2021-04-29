@@ -3,6 +3,7 @@ using APISND.Helpers;
 using APISND.Interface;
 using APISND.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -31,7 +32,7 @@ namespace APISND.Controllers
         /// Peticion para obtener todos los Usuarios
         /// </summary>
         /// <returns></returns>
-        //[AuthorizeRoles(Rol.Administrator)]
+        [AuthorizeRoles(Rol.Administrator)]
         [ProducesResponseType(typeof(UserDTO), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -58,7 +59,7 @@ namespace APISND.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [AuthorizeRoles(Rol.Administrator)]
+        [AuthorizeRoles(Rol.Administrator, Rol.Buyer, Rol.Seller)]
         [ProducesResponseType(typeof(UserDTO), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -90,6 +91,8 @@ namespace APISND.Controllers
         [ProducesResponseType(typeof(UserDTO), 201)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
+        [AllowAnonymous]
+
         public async Task<IActionResult> AddUser([FromBody] UserDTO userDTO)
         {
             try
@@ -109,7 +112,7 @@ namespace APISND.Controllers
             }
         }
 
-        //[AuthorizeRoles(Rol.Administrator)]
+        [AuthorizeRoles(Rol.Administrator, Rol.Buyer, Rol.Seller)]
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(UserDTO), 204)]
         [ProducesResponseType(400)]
@@ -138,7 +141,7 @@ namespace APISND.Controllers
         }
 
 
-        //[AuthorizeRoles(Rol.Administrator)]
+        [AuthorizeRoles(Rol.Administrator)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -169,6 +172,7 @@ namespace APISND.Controllers
         [ProducesResponseType(typeof(bool), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
+        [AllowAnonymous]
         public async Task<IActionResult> UserExistsEmail(string email)
         {
             try

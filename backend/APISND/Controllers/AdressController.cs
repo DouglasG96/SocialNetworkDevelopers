@@ -1,4 +1,5 @@
 ﻿using APISND.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -28,6 +29,8 @@ namespace APISND.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
+        [AllowAnonymous]
+
         [HttpGet]
         public IActionResult GetDepartments()
         {
@@ -54,6 +57,8 @@ namespace APISND.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
+        [AllowAnonymous]
+
         [HttpGet]
         public IActionResult GetMunicipalitys(int idDepartment)
         {

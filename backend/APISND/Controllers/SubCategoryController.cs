@@ -1,4 +1,5 @@
 ﻿using APISND.DTO;
+using APISND.Helpers;
 using APISND.Interface;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -24,6 +25,12 @@ namespace APISND.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Petición para obtener sub-categorias
+        /// </summary>
+        /// <param name="idCategory"></param>
+        /// <returns></returns>
+        [AuthorizeRoles(Rol.Seller, Rol.Buyer)]
         [HttpGet]
         [ProducesResponseType(typeof(SubCategoryDTO), 200)]
         [ProducesResponseType(401)]

@@ -34,6 +34,7 @@ namespace APISND.Controllers
         /// <param name="idBuyer"></param>
         /// <returns></returns>
         [HttpGet]
+        [AuthorizeRoles(Rol.Buyer)]
         [ProducesResponseType(typeof(BuyOrderDTO), 200)]
         [AllowAnonymous]
         [ProducesResponseType(404)]
