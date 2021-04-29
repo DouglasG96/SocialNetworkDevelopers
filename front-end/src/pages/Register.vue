@@ -72,7 +72,7 @@
                 v-model="email"
                 label="correo"
                 lazy-rules
-                :rules="[val => !!val || 'Email invalido', isValidEmail]"
+                :rules="rules.requiredEmail"
                 class="text-lowercase"
               />
               <q-input
@@ -131,13 +131,11 @@ export default {
           val => (val !== null && val !== "") || "Please type your age",
           val => (val > 0 && val < 100) || "Please type a real age"
         ],
-        emailRules: [
-          v =>
-            !val ||
-            /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/.test(
-              v
-            ) ||
-            "Email invalido"
+        requiredEmail: [
+          value => {
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return pattern.test(value) || "Email requerido";
+          }
         ]
       }
     };
