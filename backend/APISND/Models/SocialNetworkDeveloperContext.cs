@@ -41,8 +41,9 @@ namespace APISND.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("data source=PROGRAMACION-3;initial catalog=SocialNetworkDeveloper;user id=sa;password=Fasan1;");
-                //optionsBuilder.UseSqlServer("data source=DOUGLAS;initial catalog=SocialNetworkDeveloper;Integrated Security = True;");
+                //optionsBuilder.UseSqlServer("data source=PROGRAMACION-3;initial catalog=SocialNetworkDeveloper;user id=sa;password=Fasan1;");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("data source=DOUGLAS;initial catalog=SocialNetworkDeveloper; Integrated Security = True;");
             }
         }
 
@@ -546,6 +547,8 @@ namespace APISND.Models
                 entity.ToTable("Whislist");
 
                 entity.Property(e => e.IdWhislist).HasColumnName("idWhislist");
+
+                entity.Property(e => e.EstadoWishlist).HasColumnName("estadoWishlist");
 
                 entity.Property(e => e.FechaCreacion)
                     .HasColumnType("datetime")

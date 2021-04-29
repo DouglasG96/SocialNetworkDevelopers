@@ -23,7 +23,7 @@
         </q-card-section>
       </q-card>
     </div>
-    <div class="row q-col-gutter-sm ">
+    <div class="row q-col-gutter-sm">
       <div
         class="col-md-4 col-lg-4 col-sm-12 col-xs-12"
         v-for="(item, item_index) in dataFilterd"

@@ -1,7 +1,7 @@
 import axios from "axios";
-import enpoint from './endpoint'
+import endpoint from './endpoint'
 
-const url = enpoint;
+const url = endpoint;
 
 async function getUsers () {
     var resp = await axios.get(`${url}/Users/GetUsers`);
@@ -24,7 +24,7 @@ async function deleteUser (id) {
 
 export default
 {
-    getUsers, 
+    getUsers,
     addUser,
     updateUser,
     deleteUser
