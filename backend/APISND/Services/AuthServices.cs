@@ -51,6 +51,7 @@ namespace SNDAPI.Services
                 new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                 //new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                new Claim(ClaimTypes.Role,user.IdRol.ToString()),
                 new Claim("idUser",user.IdUsuario.ToString()),
                 new Claim("idRole",user.IdRol.ToString()),
                 new Claim("nameUser",user.NombreCompleto.ToString()),
@@ -63,7 +64,7 @@ namespace SNDAPI.Services
 
             var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], _configuration["Jwt:Audience"], claims, expires: DateTime.Now.AddHours(24), signingCredentials: signIn);
+            var token = new JwtSecurityToken(issuer: "SNDAuthenticationServer", audience: "SND", claims, expires: DateTime.Now.AddHours(24), signingCredentials: signIn);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }

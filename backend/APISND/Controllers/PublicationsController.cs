@@ -85,7 +85,7 @@ namespace APISND.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
 
-        [AuthorizeRoles(Rol.Buyer, Rol.Seller)]
+        //[AuthorizeRoles(Rol.Buyer, Rol.Seller)]
         [ProducesResponseType(typeof(PublicationDTO), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
