@@ -32,7 +32,6 @@ namespace APISND.DTO
         [AuthorizeRoles(Rol.Administrator, Rol.Buyer, Rol.Seller)]
         [ProducesResponseType(typeof(CategoriesDTO), 200)]
         [ProducesResponseType(401)]
-        [AllowAnonymous]
         public IActionResult GetCategories()
         {
             try

@@ -45,8 +45,34 @@ namespace SNDAPI.Services
 
         private string GenerateJwt(Usuario user)
         {
+
+            //var key = _configuration.GetValue<string>("jwt-signing-key");
+            //var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            //var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+            //var tokenOptions = new JwtSecurityToken(
+            //    issuer: "SNDAuthenticationServer",
+            //    audience: "SND",
+            //    claims: new List<Claim>
+            //    {
+            //        new Claim(ClaimTypes.NameIdentifier,user.IdUsuario.ToString()),
+            //        new Claim(ClaimTypes.Role,user.IdRol.ToString()),
+            //        new Claim("idUser",user.IdUsuario.ToString()),
+            //        new Claim("idRole",user.IdRol.ToString()),
+            //        new Claim("nameUser",user.NombreCompleto.ToString()),
+            //        new Claim("dui",user.Dui.ToString()),
+            //        new Claim("nit",user.Nit.ToString()),
+            //        new Claim("phone",user.TelefonoContacto.ToString()),
+            //        new Claim("email",user.CorreoElectronico.ToString()),
+            //    },
+            //    expires: DateTime.Now.AddHours(24),
+            //    signingCredentials: signinCredentials
+            //);
+
+            //return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+
+
             //creo token y clain
-            var claims = new[] 
+            var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                 //new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),

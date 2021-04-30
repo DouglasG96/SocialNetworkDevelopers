@@ -3,15 +3,9 @@ using APISND.Helpers;
 using APISND.Interface;
 using APISND.Models;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace APISND.Controllers
@@ -36,7 +30,6 @@ namespace APISND.Controllers
         [HttpGet]
         [AuthorizeRoles(Rol.Buyer)]
         [ProducesResponseType(typeof(BuyOrderDTO), 200)]
-        [AllowAnonymous]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public IActionResult GetHistoryBuysByIdBuyer(int idBuyer)

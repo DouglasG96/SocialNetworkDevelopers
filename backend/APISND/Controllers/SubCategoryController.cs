@@ -35,7 +35,6 @@ namespace APISND.Controllers
         [ProducesResponseType(typeof(SubCategoryDTO), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        [AllowAnonymous]
         public IActionResult GetCategories(int idCategory)
         {
             try

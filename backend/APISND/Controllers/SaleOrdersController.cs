@@ -36,7 +36,6 @@ namespace APISND.Controllers
         [ProducesResponseType(typeof(SaleOrderDTO), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        [AllowAnonymous]
         public IActionResult GetHistorySalesByIdSeller(int idSeller)
         {
             try
