@@ -22,6 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using APISND.Hubs;
 
 namespace APISND
 {
@@ -46,7 +47,7 @@ namespace APISND
 
             // Registro del Contexto de datos como Servicio Cadena conexion
             services.AddDbContext<SocialNetworkDeveloperContext>(options =>
-               options.UseSqlServer(Configuration.GetConnectionString("AppConnection")).EnableSensitiveDataLogging());
+               options.UseSqlServer(Configuration.GetConnectionString("AppConnection2")).EnableSensitiveDataLogging());
 
             services.AddTransient<IAuth, AuthServices>();
             services.AddTransient<IUser, UserServices>();
@@ -58,6 +59,7 @@ namespace APISND
             services.AddTransient<IBuyOrder, BuyOrderServices>();
             services.AddTransient<IAdress, AdressServices>();
 
+            services.AddSignalR();//Añadimos servicio para SignalR
 
 
             //swagger
@@ -147,7 +149,8 @@ namespace APISND
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            //agregar punto de acceso disponible al hub signalR
+            app.UseEndpoints(endpoints => endpoints.MapHub<PublicationHub>("/publication-hub"));
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

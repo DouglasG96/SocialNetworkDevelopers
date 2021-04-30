@@ -1,10 +1,12 @@
 ﻿using APISND.DTO;
 using APISND.Helpers;
+using APISND.Hubs;
 using APISND.Interface;
 using APISND.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,11 +21,15 @@ namespace APISND.Controllers
     {
         private readonly IPublication _publicationServices;
         private readonly IMapper _mapper;
+        private readonly IHubContext<PublicationHub> _hubContext;
 
-        public PublicationsController(IPublication publication, IMapper mapper)
+
+
+        public PublicationsController(IPublication publication, IMapper mapper, IHubContext<PublicationHub> hubContext)
         {
             _publicationServices = publication;
             _mapper = mapper;
+            _hubContext = hubContext;
         }
 
         /// <summary>
@@ -134,6 +140,8 @@ namespace APISND.Controllers
                     return StatusCode(StatusCodes.Status404NotFound, resp);
                 //return StatusCode(StatusCodes.Status201Created, user);
                 //return CreatedAtAction(nameof(GetUserByID), new { id = user.IdUsuario }, userDTO);
+                await _hubContext.Clients.All.SendAsync("NewPublication", publication);
+
                 return StatusCode(StatusCodes.Status201Created, publication);
 
 

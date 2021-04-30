@@ -1,13 +1,15 @@
 import { store } from "quasar/wrappers"
+import { api } from 'boot/axios'
 import { LocalStorage } from 'quasar'
-import api from "../../api/auth"
+import apiEndpoints  from "../../api/auth"
 
 export async function loginUser ({ commit }, payload) {
     return  new Promise( async (resolve, reject) => {
         try {
-            const resp = await api.Login(payload);
-            LocalStorage.set('token', JSON.stringify(resp))
+            const resp = await apiEndpoints.Login(payload);
+            LocalStorage.set('token', resp)
             commit('auth_success', resp)
+            api.defaults.headers.common['Authorization'] = 'Bearer ' + resp //configuro token para axios
             // commit('getUser', resp);
             resolve(resp);
         } catch (error) {
