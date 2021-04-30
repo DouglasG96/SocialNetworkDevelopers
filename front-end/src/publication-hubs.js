@@ -31,8 +31,8 @@ export default {
     // cualquier componente podrá accerder a esta instancia mediante la variable this.$dashboardhub
         Vue.prototype.$apihub = apihub;
 
-        connection.on("NewPublication", (data) => {
-        apihub.$emit("info-publication", { data });
+        connection.on("NewPublication", (publication) => {
+          apihub.$emit("info-publication", { publication });
     });
   },
 };
