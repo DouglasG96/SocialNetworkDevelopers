@@ -4,6 +4,8 @@
 // Vue.prototype.$axios = axios
 import Vue from 'vue'
 import axios from 'axios'
+import { LocalStorage } from 'quasar'
+
 
 Vue.prototype.$axios = axios
 // ^ ^ ^ this will allow you to use this.$axios
@@ -11,7 +13,15 @@ Vue.prototype.$axios = axios
 
 const api = axios.create({ baseURL: 'http://localhost:50886/api/v1' })
 Vue.prototype.$api = api
-// ^ ^ ^ this will allow you to use this.$api
-//       so you can easily perform requests against your app's API
+
+axios.interceptors.response.use(response => {
+    return response;
+}, error => {
+    if (error.response.status === 401) {
+        // router.push("/login");
+        LocalStorage.remove('token');
+        window.location = '/Login'
+    }
+});
 
 export { axios, api }

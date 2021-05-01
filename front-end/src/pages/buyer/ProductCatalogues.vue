@@ -40,14 +40,7 @@ export default {
     };
   },
   async mounted() {
-    console.log(this.user);
-
-    try {
-      this.dataProduct = await api.getPublications();
-    } catch (error) {
-      console.log(error);
-    }
-    this.dataFilterd = this.dataProduct;
+    this.getPublications();
   },
   created() {
     // escuchar eventos signalR
@@ -71,9 +64,23 @@ export default {
   },
 
   methods: {
-    onPublicationChanged(publication) {
-      alert("Se agrego una nueva publicacion");
-      console.log(publication);
+    async onPublicationChanged(publication) {
+      await this.getPublications();
+      this.$q.notify({
+        type: "info",
+        position: "top-right",
+        message: "Se agrego una nueva publicacion " + publication.titulo
+      });
+    },
+    async getPublications() {
+      console.log(this.user);
+
+      try {
+        this.dataProduct = await api.getPublications();
+      } catch (error) {
+        console.log(error);
+      }
+      this.dataFilterd = this.dataProduct;
     }
   },
   beforeDestroy() {

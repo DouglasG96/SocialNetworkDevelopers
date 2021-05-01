@@ -35,7 +35,7 @@ namespace APISND.Controllers
         [ProducesResponseType(typeof(SubCategoryDTO), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        public IActionResult GetCategories(int idCategory)
+        public IActionResult GetSubCategoryByCategory(int idCategory)
         {
             try
             {

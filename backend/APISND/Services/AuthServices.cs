@@ -90,7 +90,7 @@ namespace SNDAPI.Services
 
             var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(issuer: "SNDAuthenticationServer", audience: "SND", claims, expires: DateTime.Now.AddHours(24), signingCredentials: signIn);
+            var token = new JwtSecurityToken(issuer: "SNDAuthenticationServer", audience: "SND", claims, expires: DateTime.Now.AddHours(1), signingCredentials: signIn);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
