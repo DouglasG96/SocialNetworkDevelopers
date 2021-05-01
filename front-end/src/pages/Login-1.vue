@@ -6,9 +6,10 @@
           v-bind:style="$q.screen.lt.sm ? { width: '80%' } : { width: '50%' }"
         >
           <q-card-section>
-            <q-avatar size="103px" class="absolute-center shadow-10">
-              <img src="profile.svg" />
-            </q-avatar>
+             <img src="../assets/logo.png" width="100" height="100"  class="absolute-center shadow-10"/>
+            <!-- <q-avatar size="103px" class="absolute-center shadow-10">
+              <img src="../assets/logo.PNG" />
+            </q-avatar> -->
           </q-card-section>
           <q-card-section>
             <div class="text-center q-pt-lg">

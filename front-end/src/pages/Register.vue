@@ -210,9 +210,10 @@ export default {
 
 <style>
 .bg-image {
-  background: url("../assets/portada.svg");
+  background: url('../assets/portada.svg');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+
 }
 </style>
