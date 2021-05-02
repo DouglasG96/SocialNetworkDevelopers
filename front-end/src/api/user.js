@@ -1,6 +1,7 @@
 // import axios from "axios";
 // import enpoint from './endpoint'
 import { api } from 'boot/axios'
+import validation from './validation'
 
 
 // const url = enpoint;
@@ -34,5 +35,6 @@ export default
     addUser,
     updateUser,
     deleteUser,
-    userExistsEmail
+    userExistsEmail,
+    ...validation
 }

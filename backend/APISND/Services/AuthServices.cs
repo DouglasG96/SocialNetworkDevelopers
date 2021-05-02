@@ -32,7 +32,7 @@ namespace SNDAPI.Services
             {
                 var user = await _context.Usuarios.FirstOrDefaultAsync(x => x.CorreoElectronico == userDTO.Email && x.Contrasena == userDTO.Password);
                 if (user == null)
-                    throw new UserNotFoundException($"Login Credenciales Incorrectas.");
+                    throw new UserNotFoundException($"Credenciales Incorrectas.");
                 var jwt = GenerateJwt(user);
                 return jwt ; 
             }
@@ -90,7 +90,7 @@ namespace SNDAPI.Services
 
             var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(issuer: "SNDAuthenticationServer", audience: "SND", claims, expires: DateTime.Now.AddHours(1), signingCredentials: signIn);
+            var token = new JwtSecurityToken(issuer: "SNDAuthenticationServer", audience: "SND", claims, expires: DateTime.Now.AddDays(5), signingCredentials: signIn);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }

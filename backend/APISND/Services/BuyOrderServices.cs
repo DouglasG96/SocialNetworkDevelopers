@@ -38,7 +38,7 @@ namespace APISND.Services
                                 IdPublicacion = s.IdPublicacion,
                                 IdUsuario = s.IdUsuario,
                                 EstadoOrdenCompra = statusBuyer(s.EstadoOrdenCompra),
-                                FechaHoraOrdenVenta = Convert.ToDateTime(s.FechaHoraOrdenCompra).ToString("dd/MM/yyyy HH:mm:ss"),
+                                FechaHoraOrdenCompra = Convert.ToDateTime(s.FechaHoraOrdenCompra).ToString("dd/MM/yyyy HH:mm:ss"),
                                 TotalCompraConIva = s.TotalCompraConIva,
                                 TotalCompraSinIva = s.TotalCompraSinIva,
                                 Cantidad = (int)s.Cantidad,

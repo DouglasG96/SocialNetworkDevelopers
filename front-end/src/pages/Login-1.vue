@@ -3,6 +3,7 @@
     <q-page-container>
       <q-page class="flex bg-image flex-center">
         <q-card
+        style="opacity: 0.9"
           v-bind:style="$q.screen.lt.sm ? { width: '80%' } : { width: '50%' }"
         >
           <q-card-section>
@@ -26,7 +27,7 @@
               <q-input
                 filled
                 v-model="email"
-                label="Username"
+                label="correo"
                 lazy-rules
                 :rules="rules.required"
                 class="text-lowercase"
@@ -36,7 +37,7 @@
                 type="password"
                 filled
                 v-model="password"
-                label="Password"
+                label="Contraseña"
                 lazy-rules
                 :rules="rules.required"
                 class="text-lowercase"
@@ -125,10 +126,10 @@ export default {
 
 <style>
 .bg-image {
-  background: url('../assets/portada.svg');
+  background: url('../assets/login.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-
+  background-color: black;
 }
 </style>

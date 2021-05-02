@@ -3,14 +3,22 @@
     <q-page-container>
       <q-page class="flex bg-image flex-center">
         <q-card
+          style="opacity:0.9"
           v-bind:style="$q.screen.lt.sm ? { width: '85%' } : { width: '75%' }"
           class="q-mt-md q-mb-md"
         >
           <div class="q-mt-sm">
             <q-card-section>
-              <q-avatar size="80px" class="absolute-center shadow-10">
+              <img
+                src="../assets/logo.png"
+                width="100"
+                height="100"
+                class="absolute-center shadow-10"
+              />
+
+              <!-- <q-avatar size="80px" class="absolute-center shadow-10">
                 <img src="profile.svg" />
-              </q-avatar>
+              </q-avatar>-->
             </q-card-section>
           </div>
           <q-card-section>
@@ -29,7 +37,7 @@
                 filled
                 v-model="rol"
                 :options="options"
-                label="Tipo de Usuario"
+                label="que quieres hacer"
                 :rules="rules.required"
               />
               <q-input
@@ -51,11 +59,12 @@
 
               <q-input
                 filled
+                ref="dui"
                 v-model="dui"
                 type="number"
                 label="dui / sin guión"
                 lazy-rules
-                :rules="rules.required"
+                :rules="rules.requiredDui"
               />
               <q-input
                 filled
@@ -110,11 +119,11 @@ export default {
       rol: null,
       options: [
         {
-          label: "Vendedor",
+          label: "Vender",
           value: "2"
         },
         {
-          label: "Comprador",
+          label: "Comprar",
           value: "3"
         }
       ],
@@ -127,6 +136,11 @@ export default {
       phone: "",
       rules: {
         required: [v => !!v || "Campo Requerido."],
+
+        requiredDui: [
+          v => !!v || "Campo Requerido.",
+          v => (v && v.length == 9) || "Dui debe tener 9 caracteres"
+        ],
         requiredNumber: [
           val => (val !== null && val !== "") || "Please type your age",
           val => (val > 0 && val < 100) || "Please type a real age"
@@ -134,7 +148,7 @@ export default {
         requiredEmail: [
           value => {
             const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return pattern.test(value) || "Email requerido";
+            return pattern.test(value) || "Correo requerido";
           }
         ]
       }
@@ -149,6 +163,17 @@ export default {
       var validate = await this.$refs.formRegister.validate();
       if (!validate) {
         return;
+      }
+
+      var isDui = await api.isDui(this.dui);
+      console.log(!isDui.isValid);
+      if (!isDui.isValid) {
+        this.$q.notify({
+          type: "negative",
+          position: "center",
+          message: "Dui Invalido"
+        });
+        this.$refs.dui.focus();
       }
 
       try {
@@ -210,10 +235,9 @@ export default {
 
 <style>
 .bg-image {
-  background: url('../assets/portada.svg');
+  background: url("../assets/portada.svg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-
 }
 </style>

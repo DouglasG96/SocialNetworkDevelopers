@@ -8,6 +8,6 @@ namespace APISND.Interface
 {
     public interface IEmail
     {
-        Task<bool> SendEmailBuy(EmailDTO emailDTO);
+        Task<bool> SendEmail(EmailDTO emailDTO);
     }
 }
