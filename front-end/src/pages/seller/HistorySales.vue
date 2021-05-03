@@ -178,7 +178,7 @@ export default {
           try {
      this.$q.loading.show();
 
-            await api.AprovveSale({idSaleOrder: item.idOrdenVenta, idBuyOrder: item.idOrdenVenta});
+            await api.AprovveSale({idSaleOrder: item.idOrdenVenta, idBuyOrder: item.idOrdenCompra});
             this.$q.notify({
               type: "positive",
               position: "center",
@@ -220,7 +220,7 @@ export default {
           try {
      this.$q.loading.show();
 
-            await api.RejectSale({idSaleOrder: item.idOrdenVenta, idBuyOrder: item.idOrdenVenta});
+            await api.RejectSale({idSaleOrder: item.idOrdenVenta, idBuyOrder: item.idOrdenCompra});
             this.$q.notify({
               type: "positive",
               position: "center",

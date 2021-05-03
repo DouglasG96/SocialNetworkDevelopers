@@ -140,7 +140,7 @@ namespace APISND.Controllers
                     return StatusCode(StatusCodes.Status404NotFound, resp);
                 //return StatusCode(StatusCodes.Status201Created, user);
                 //return CreatedAtAction(nameof(GetUserByID), new { id = user.IdUsuario }, userDTO);
-                await _hubContext.Clients.All.SendAsync("NewPublication", publication);
+                await _hubContext.Clients.All.SendAsync("NewPublication", publication.Titulo);
 
                 return StatusCode(StatusCodes.Status201Created, publication);
 

@@ -65,11 +65,12 @@ export default {
 
   methods: {
     async onPublicationChanged(publication) {
+      console.log(publication);
       await this.getPublications();
       this.$q.notify({
         type: "info",
         position: "top-right",
-        message: "Se agrego una nueva publicacion " + publication.titulo
+        message: `Se agrego una nueva publicacion ${publication.publication}` 
       });
     },
     async getPublications() {

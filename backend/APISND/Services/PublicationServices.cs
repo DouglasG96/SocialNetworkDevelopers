@@ -54,6 +54,7 @@ namespace APISND.Services
             {
                 publication.FechaCreacion = DateTime.Now;
                 publication.FechaPublicacion = DateTime.Now;
+                publication.Raiting = 0;
                 _context.Publicaciones.Add(publication);
                 await _context.SaveChangesAsync();
                 return publication;
