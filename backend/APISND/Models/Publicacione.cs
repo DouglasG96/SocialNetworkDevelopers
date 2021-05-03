@@ -19,17 +19,21 @@ namespace APISND.Models
         public byte[] Imagen { get; set; }
         public int? Raiting { get; set; }
         public DateTime? FechaCreacion { get; set; }
+        public int? IdCategoria { get; set; }
         public DateTime? FechaPublicacion { get; set; }
         public int? IdSubCategoria { get; set; }
         public int? IdTipoPublicacion { get; set; }
-        public int? IdMinicipio { get; set; }
+        public int? IdDepartamento { get; set; }
+        public int? IdMunicipio { get; set; }
         public string Descripcion { get; set; }
         public decimal? Precio { get; set; }
         public int? IdEstadoPublicacion { get; set; }
         public int? IdUsuario { get; set; }
         public string Delivery { get; set; }
 
+        public virtual Departamento IdDepartamentoNavigation { get; set; }
         public virtual EstadoPublicacion IdEstadoPublicacionNavigation { get; set; }
+        public virtual Municipio IdMunicipioNavigation { get; set; }
         public virtual SubCategoria IdSubCategoriaNavigation { get; set; }
         public virtual TipoPublicacion IdTipoPublicacionNavigation { get; set; }
         public virtual Usuario IdUsuarioNavigation { get; set; }

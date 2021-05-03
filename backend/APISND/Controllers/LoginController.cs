@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using APISND.DTO;
+using APISND.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SNDAPI.DTO;
 using SNDAPI.Exceptions;
 using SNDAPI.Interface;
 using System;
@@ -9,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SNDAPI.Controllers
+namespace APISND.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]/[action]")]
@@ -25,7 +26,7 @@ namespace SNDAPI.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(string), 200)]
-        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] AuthDTO user)
         {

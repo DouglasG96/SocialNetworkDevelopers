@@ -22,6 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using APISND.Hubs;
 
 namespace APISND
 {
@@ -52,6 +53,14 @@ namespace APISND
             services.AddTransient<IUser, UserServices>();
             services.AddTransient<ICategories, CategoriesServices>();
             services.AddTransient<IPublication, PublicationServices>();
+            services.AddTransient<IEmail, EmailServices>();
+            services.AddTransient<ISaleOrder, SaleOrderServices>();
+            services.AddTransient <ICategories, CategoriesServices>();
+            services.AddTransient<ISubCategory, SubCategoryServices>();
+            services.AddTransient<IBuyOrder, BuyOrderServices>();
+            services.AddTransient<IAdress, AdressServices>();
+
+            services.AddSignalR();//Añadimos servicio para SignalR
 
 
             //swagger
@@ -95,13 +104,27 @@ namespace APISND
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuer = true,
-                    ValidateAudience = true,
+                    ValidateAudience = false,
                     ValidAudience = Configuration["Jwt:Audience"],
                     ValidIssuer = Configuration["Jwt:Issuer"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                 };
             });
 
+            ////var key = Configuration.GetValue<string>("Jwt:Key");
+            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            //{
+            //    options.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidateIssuer = true,
+            //        ValidateAudience = true,
+            //        ValidateLifetime = true,
+            //        ValidateIssuerSigningKey = true,
+            //        ValidIssuer = "SNDAuthenticationServer",
+            //        ValidAudience = "SND",
+            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+            //    };
+            //});
 
         }
 
@@ -127,7 +150,8 @@ namespace APISND
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            //agregar punto de acceso disponible al hub signalR
+            app.UseEndpoints(endpoints => endpoints.MapHub<PublicationHub>("/publication-hub"));
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

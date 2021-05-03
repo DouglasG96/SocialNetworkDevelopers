@@ -14,7 +14,7 @@ namespace APISND.Interface
         Task<Usuario> UpdateUser(Usuario user);
         Task<Usuario> DeleteUser(int id);
         bool UserExists(int id);
-
+        Task<bool> UserExistsEmail(string email);
 
     }
 }

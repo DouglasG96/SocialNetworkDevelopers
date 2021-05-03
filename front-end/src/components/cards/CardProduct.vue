@@ -45,6 +45,8 @@ export default {
     return {
     }
   },
+  created () {
+  },
   methods: {
     ...mapActions("shoppingCart", ["addShoppingCart","cleanShoppingCart"]),
      getDetail(data) {

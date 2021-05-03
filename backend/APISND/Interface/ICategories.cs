@@ -1,5 +1,4 @@
-﻿using APISND.Requests;
-using SNDAPI.DTO;
+﻿using APISND.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +8,6 @@ namespace SNDAPI.Interface
 {
     public interface ICategories
     {
-        List<CategoriesRequest> CargarCategorias();
+        List<Categoria> GetCategories();
     }
 }

@@ -1,50 +1,51 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SNDAPI.DTO;
-using SNDAPI.Exceptions;
 using SNDAPI.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SNDAPI.Services;
-using APISND.Requests;
+using AutoMapper;
+using APISND.Helpers;
 
-namespace SNDAPI.Controllers
+namespace APISND.DTO
 {
     [ApiController]
-    [Route("api/[controller]/v1/[action]")]
+    [Route("api/v1/[controller]/[action]")]
+
     public class CategoriesController : ControllerBase
     {
         
-        private readonly ICategories _categorias;
+        private readonly ICategories _categoryServices;
+        private readonly IMapper _mapper;
 
-        public CategoriesController(ICategories categorias)
+        public CategoriesController(ICategories category, IMapper mapper)
         {
-            _categorias = categorias;
+            _categoryServices = category;
+            _mapper = mapper;
         } 
 
 
         [HttpGet]
-        [ProducesResponseType(typeof(string), 200)]
+        [AuthorizeRoles(Rol.Administrator, Rol.Buyer, Rol.Seller)]
+        [ProducesResponseType(typeof(CategoriesDTO), 200)]
         [ProducesResponseType(401)]
-        [AllowAnonymous]
-        public IActionResult CargarCategorias()
+        public IActionResult GetCategories()
         {
             try
             {
-                var listaCategorias = _categorias.CargarCategorias();
+                var resp = _mapper.Map<List<CategoriesDTO>>(_categoryServices.GetCategories());
 
-                return Ok(new { response = listaCategorias, status = StatusCodes.Status200OK });
-            }
-            catch (CategoriesLoadException e)
-            {
-                return StatusCode(StatusCodes.Status404NotFound, e.Message);
+                if (resp == null)
+                    return NotFound(resp);
+
+                return Ok(resp);
             }
             catch (Exception e)
             {
-                return StatusCode(500);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
             }
         }
     }

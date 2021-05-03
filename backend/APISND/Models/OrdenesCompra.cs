@@ -19,6 +19,7 @@ namespace APISND.Models
         public decimal? TotalCompraConIva { get; set; }
         public decimal? TotalCompraSinIva { get; set; }
         public string EstadoOrdenCompra { get; set; }
+        public int? Cantidad { get; set; }
 
         public virtual Publicacione IdPublicacionNavigation { get; set; }
         public virtual Usuario IdUsuarioNavigation { get; set; }

@@ -3,12 +3,14 @@
     <q-page-container>
       <q-page class="flex bg-image flex-center">
         <q-card
+        style="opacity: 0.9"
           v-bind:style="$q.screen.lt.sm ? { width: '80%' } : { width: '50%' }"
         >
           <q-card-section>
-            <q-avatar size="103px" class="absolute-center shadow-10">
-              <img src="profile.svg" />
-            </q-avatar>
+             <img src="../assets/logo.png" width="100" height="100"  class="absolute-center shadow-10"/>
+            <!-- <q-avatar size="103px" class="absolute-center shadow-10">
+              <img src="../assets/logo.PNG" />
+            </q-avatar> -->
           </q-card-section>
           <q-card-section>
             <div class="text-center q-pt-lg">
@@ -25,7 +27,7 @@
               <q-input
                 filled
                 v-model="email"
-                label="Username"
+                label="correo"
                 lazy-rules
                 :rules="rules.required"
                 class="text-lowercase"
@@ -35,13 +37,13 @@
                 type="password"
                 filled
                 v-model="password"
-                label="Password"
+                label="Contraseña"
                 lazy-rules
                 :rules="rules.required"
                 class="text-lowercase"
               />
 
-              <div class="row">
+              <div class="row text-center">
                 <div class="col-6">
                   <q-btn label="Acceder" type="submit" color="positive" />
                 </div>
@@ -81,7 +83,7 @@ export default {
     }
   },
   computed: {
-    ...mapState("auth", ["user"])
+    ...mapState("auth", ["user"]),
   },
 
   methods: {
@@ -100,7 +102,13 @@ export default {
           password: this.password.trim()
         });
         this.$q.loading.hide();
-        this.$router.push({ path: "/" }).catch(error => {console.log(error);});
+        if(this.user.idRole === '1')
+            this.$router.push({ path: "/Mantenimientos/Usuarios" }).catch(error => {console.log(error);});
+        if(this.user.idRole === '2')
+            this.$router.push({ path: "/MisPublicaciones" }).catch(error => {console.log(error);});
+        if(this.user.idRole === '3')
+            this.$router.push({ path: "/" }).catch(error => {console.log(error);});
+        
       } catch (error) {
         this.$q.loading.hide();
         console.log(error);
@@ -110,8 +118,6 @@ export default {
           message: error.data,
           actions: [{ icon: 'close', color: 'white' }]
         });
-        this.email = "";
-        this.password = "";
       }
     }
   }
@@ -120,6 +126,10 @@ export default {
 
 <style>
 .bg-image {
-  background-image: linear-gradient(135deg, #363da8 0%, #dfdee4 100%);
+  background: url('../assets/login.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: black;
 }
 </style>
