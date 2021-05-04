@@ -167,6 +167,8 @@ namespace APISND.Services
                 return "Aprobada";
             if (status == 3)
                 return "Cancelada";
+            if (status == 4)
+                return "Entregado";
 
             return "";
         }

@@ -16,6 +16,9 @@ namespace APISND.DTO
         public string EstadoOrdenCompra { get; set; }
         public int? Cantidad { get; set; }
         public string TituloPublicacion { get; set; }
+        public int IdOrdenVenta { get; set; }
+        public string Vendedor { get; set; }
+
 
     }
 }
