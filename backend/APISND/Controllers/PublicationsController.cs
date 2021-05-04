@@ -72,7 +72,7 @@ namespace APISND.Controllers
         {
             try
             {
-                var resp = _mapper.Map<PublicationDTO>(await _publicationServices.GetPublicationById(id));
+                var resp = await _publicationServices.GetPublicationById(id);
 
                 if (resp == null)
                     return NotFound(new { message = $"Publicacion con Id = {id} no encontrado" });

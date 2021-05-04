@@ -36,11 +36,29 @@ namespace APISND.Services
 
             }
         }
-        public async Task<Publicacione> GetPublicationById(int id)
+        public async Task<PublicationDTO> GetPublicationById(int id)
         {
             try
             {
-                return await _context.Publicaciones.FirstOrDefaultAsync(x => x.IdPublicacion == id);
+                //return await _context.Publicaciones.FirstOrDefaultAsync(x => x.IdPublicacion == id);
+                var publication = await (from p in _context.Publicaciones
+                                   join u in _context.Usuarios
+                                   on p.IdUsuario equals u.IdUsuario
+                                   where p.IdPublicacion == id
+                                   select new PublicationDTO
+                                   {
+                                       IdPublicacion = p.IdPublicacion,
+                                       Titulo = p.Titulo,
+                                       Imagen = p.Imagen,
+                                       Raiting = p.Raiting,
+                                       Descripcion = p.Descripcion,
+                                       FechaCreacion = p.FechaCreacion,
+                                       Precio = p.Precio,
+                                       IdUsuario = p.IdUsuario,
+                                       IdEstadoPublicacion = p.IdEstadoPublicacion,
+                                       Contribuyente = u.Contribuyente
+                                   }).FirstOrDefaultAsync();
+                return publication;
             }
             catch (Exception e)
             {

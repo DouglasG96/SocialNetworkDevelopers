@@ -24,6 +24,7 @@ namespace APISND.DTO
         public int? IdEstadoPublicacion { get; set; }
         public int? IdUsuario { get; set; }
         public string Delivery { get; set; }
+        public string Contribuyente { get; set; }
         public IFormFile file { get; set; }
     }
 }
