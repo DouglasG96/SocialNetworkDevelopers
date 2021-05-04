@@ -9,10 +9,6 @@ namespace APISND.Models
     {
         public Usuario()
         {
-            ChatIdUsuarioDestinatarioNavigations = new HashSet<Chat>();
-            ChatIdUsuarioEmisorNavigations = new HashSet<Chat>();
-            ContactoIdUsuarioContactoNavigations = new HashSet<Contacto>();
-            ContactoIdUsuarioNavigations = new HashSet<Contacto>();
             OrdenesCompras = new HashSet<OrdenesCompra>();
             OrdenesVenta = new HashSet<OrdenesVenta>();
             Publicaciones = new HashSet<Publicacione>();
@@ -39,10 +35,6 @@ namespace APISND.Models
         public virtual Departamento IdDepartamentoNavigation { get; set; }
         public virtual Municipio IdMunicipioNavigation { get; set; }
         public virtual Role IdRolNavigation { get; set; }
-        public virtual ICollection<Chat> ChatIdUsuarioDestinatarioNavigations { get; set; }
-        public virtual ICollection<Chat> ChatIdUsuarioEmisorNavigations { get; set; }
-        public virtual ICollection<Contacto> ContactoIdUsuarioContactoNavigations { get; set; }
-        public virtual ICollection<Contacto> ContactoIdUsuarioNavigations { get; set; }
         public virtual ICollection<OrdenesCompra> OrdenesCompras { get; set; }
         public virtual ICollection<OrdenesVenta> OrdenesVenta { get; set; }
         public virtual ICollection<Publicacione> Publicaciones { get; set; }

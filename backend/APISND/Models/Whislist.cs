@@ -11,6 +11,7 @@ namespace APISND.Models
         public int? IdPublicacion { get; set; }
         public int? IdUsuario { get; set; }
         public DateTime? FechaCreacion { get; set; }
+        public int? EstadoWishlist { get; set; }
 
         public virtual Publicacione IdPublicacionNavigation { get; set; }
         public virtual Usuario IdUsuarioNavigation { get; set; }
