@@ -14,13 +14,13 @@ namespace APISND.Services
     public class PublicationServices : IPublication
     {
         static readonly ILog log = LogManager.GetLogger(typeof(UserServices));
-
         private readonly SocialNetworkDeveloperContext _context;
         private readonly IMapper _mapper;
+
         public PublicationServices(SocialNetworkDeveloperContext context, IMapper mapper)
         {
             _context = context;
-            mapper = _mapper;
+            this._mapper = mapper;
         }
 
         public async Task<List<Publicacione>> GetPublications()
@@ -66,15 +66,15 @@ namespace APISND.Services
             }
         }
 
-        public async Task<Publicacione> UpdatePublication(Publicacione publication)
+        public async Task<Publicacione> UpdatePublication(UpdatePublicationDTO model)
         {
             try
             {
-                var model = await _context.Publicaciones.AsNoTracking().FirstOrDefaultAsync(x => x.IdPublicacion == publication.IdPublicacion);
+                var publication = await _context.Publicaciones.FirstOrDefaultAsync(x => x.IdPublicacion == model.IdPublicacion);
                 if (model != null)
                 {
-
-                    _context.Publicaciones.Add(publication).State = EntityState.Modified;
+                    _mapper.Map(model, publication);
+                    _context.Update(publication).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
 
                     return publication;
