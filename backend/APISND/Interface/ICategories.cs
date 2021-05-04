@@ -9,5 +9,7 @@ namespace SNDAPI.Interface
     public interface ICategories
     {
         List<Categoria> GetCategories();
+        Task<Categoria> AddCategory(Categoria categoria);
+
     }
 }

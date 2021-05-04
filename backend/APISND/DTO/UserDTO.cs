@@ -23,5 +23,7 @@ namespace APISND.DTO
         public string TelefonoContacto { get; set; }
         public string CorreoElectronico { get; set; }
         public string Contrasena { get; set; }
+        public string Contribuyente { get; set; }
+
     }
 }

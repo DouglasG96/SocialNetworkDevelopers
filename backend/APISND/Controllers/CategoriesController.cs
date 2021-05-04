@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using SNDAPI.Services;
 using AutoMapper;
 using APISND.Helpers;
+using APISND.Models;
 
 namespace APISND.DTO
 {
@@ -46,6 +47,33 @@ namespace APISND.DTO
             catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
+        }
+        /// <summary>
+        /// Peticioón para agregar una categoria
+        /// </summary>
+        /// <param name="categoriesDTO"></param>
+        /// <returns></returns>
+        [AuthorizeRoles(Rol.Administrator)]
+        [HttpPost]
+        [ProducesResponseType(typeof(CategoriesDTO), 201)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> AddCategory([FromBody] CategoriesDTO categoriesDTO)
+        {
+            try
+            {
+                var category = _mapper.Map<Categoria>(categoriesDTO);
+                var resp = await _categoryServices.AddCategory(category);
+
+                if (resp == null)
+                    return StatusCode(StatusCodes.Status404NotFound, resp);
+                return StatusCode(StatusCodes.Status201Created, category);
+
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
     }
