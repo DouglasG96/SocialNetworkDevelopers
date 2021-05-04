@@ -14,6 +14,7 @@ namespace APISND.Mapper
             CreateMap <Categoria, CategoriesDTO>().ReverseMap();
             CreateMap<SubCategoria, SubCategoryDTO>().ReverseMap();
             CreateMap<OrdenesCompra, BuyOrderDTO>().ReverseMap();
+            CreateMap<Wishlist, WishlistDTO>().ReverseMap();
         }
     }
 }

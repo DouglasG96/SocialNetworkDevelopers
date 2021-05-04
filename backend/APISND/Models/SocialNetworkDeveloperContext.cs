@@ -28,7 +28,7 @@ namespace APISND.Models
         public virtual DbSet<SubCategoria> SubCategorias { get; set; }
         public virtual DbSet<TipoPublicacion> TipoPublicacions { get; set; }
         public virtual DbSet<Usuario> Usuarios { get; set; }
-        public virtual DbSet<Whislist> Whislists { get; set; }
+        public virtual DbSet<Wishlist> Wishlists { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -300,6 +300,13 @@ namespace APISND.Models
 
                 entity.Property(e => e.Contrasena).HasMaxLength(25);
 
+                entity.Property(e => e.Contribuyente)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .HasColumnName("contribuyente")
+                    .HasDefaultValueSql("('N')")
+                    .IsFixedLength(true);
+
                 entity.Property(e => e.CorreoElectronico)
                     .HasMaxLength(150)
                     .HasColumnName("correoElectronico");
@@ -350,12 +357,12 @@ namespace APISND.Models
                     .HasConstraintName("fk_usuarios_roles");
             });
 
-            modelBuilder.Entity<Whislist>(entity =>
+            modelBuilder.Entity<Wishlist>(entity =>
             {
                 entity.HasKey(e => e.IdWhislist)
                     .HasName("pk_whislist");
 
-                entity.ToTable("Whislist");
+                entity.ToTable("Wishlist");
 
                 entity.Property(e => e.IdWhislist).HasColumnName("idWhislist");
 
@@ -370,12 +377,12 @@ namespace APISND.Models
                 entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
 
                 entity.HasOne(d => d.IdPublicacionNavigation)
-                    .WithMany(p => p.Whislists)
+                    .WithMany(p => p.Wishlists)
                     .HasForeignKey(d => d.IdPublicacion)
                     .HasConstraintName("fk_whislist_publicaciones");
 
                 entity.HasOne(d => d.IdUsuarioNavigation)
-                    .WithMany(p => p.Whislists)
+                    .WithMany(p => p.Wishlists)
                     .HasForeignKey(d => d.IdUsuario)
                     .HasConstraintName("fk_whislist_usuarios");
             });

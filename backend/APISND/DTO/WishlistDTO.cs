@@ -8,19 +8,13 @@ namespace APISND.DTO
 {
     public class WishlistDTO
     {
-        public int IdUsuario { get; set; }
-        [Required]
-        public int? IdRol { get; set; }
-        [Required]
-        public string NombreCompleto { get; set; }
-        [Required]
-        public string Nombres { get; set; }
-        [Required]
-        public string Apellidos { get; set; }
-        public string Dui { get; set; }
-        public string Nit { get; set; }
-        public string TelefonoContacto { get; set; }
-        public string CorreoElectronico { get; set; }
-        public string Contrasena { get; set; }
+        public int idWhislist { get; set; }
+        public int idPublicacion { get; set; }
+        public int idUsuario{ get; set; }
+        public string FechaCreacion { get; set; }
+        public string Titulo { get; set; }
+        public string Descripcion { get; set; }
+        public decimal Precio { get; set; }
+        public int Estado{ get; set; }
     }
 }

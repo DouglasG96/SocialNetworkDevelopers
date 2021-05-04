@@ -55,10 +55,11 @@ namespace APISND
             services.AddTransient<IPublication, PublicationServices>();
             services.AddTransient<IEmail, EmailServices>();
             services.AddTransient<ISaleOrder, SaleOrderServices>();
-            services.AddTransient <ICategories, CategoriesServices>();
+            services.AddTransient<ICategories, CategoriesServices>();
             services.AddTransient<ISubCategory, SubCategoryServices>();
             services.AddTransient<IBuyOrder, BuyOrderServices>();
             services.AddTransient<IAdress, AdressServices>();
+            services.AddTransient<IWishList, WishlistServices>();
 
             services.AddSignalR();//Añadimos servicio para SignalR
 

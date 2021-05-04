@@ -37,10 +37,9 @@ namespace APISND.Services
                                 IdOrdenCompra = s.IdOrdenCompra,
                                 IdPublicacion = s.IdPublicacion,
                                 IdUsuario = s.IdUsuario,
-                                EstadoOrdenCompra = statusBuyer(s.EstadoOrdenCompra),
+                                EstadoOrdenCompra = statusBuyer((int) s.EstadoOrdenCompra),
                                 FechaHoraOrdenCompra = Convert.ToDateTime(s.FechaHoraOrdenCompra).ToString("dd/MM/yyyy HH:mm:ss"),
-                                TotalCompraConIva = s.TotalCompraConIva,
-                                TotalCompraSinIva = s.TotalCompraSinIva,
+                                TotalCompra = s.TotalCompra,
                                 Cantidad = (int)s.Cantidad,
                                 TituloPublicacion = p.Titulo
 
@@ -57,13 +56,13 @@ namespace APISND.Services
             }
         }
 
-        private static string statusBuyer(string status)
+        private static string statusBuyer(int status)
         {
-            if (status == "1")
+            if (status == 1)
                 return "Pendiente";
-            if (status == "2")
+            if (status == 2)
                 return "Aprobada";
-            if (status == "3")
+            if (status == 3)
                 return "Cancelada";
 
             return "";

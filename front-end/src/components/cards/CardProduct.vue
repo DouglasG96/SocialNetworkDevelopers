@@ -1,9 +1,7 @@
 <template>
   <div>
     <q-card class="">
-      <q-img :src="'data:image/jpeg;base64,'+ data.imagen" height="150px">
-        <!-- <q-chip v-if="data.chip" :class="data.chip_class" :color="data.chip_color" :label="data.chip"></q-chip> -->
-      </q-img>
+      <q-img :src="'data:image/jpeg;base64,'+ data.imagen" height="150px"/>
 
       <q-card-section>
         <q-btn
@@ -68,9 +66,8 @@
 
         <q-card-actions align="center">
           <q-btn v-close-popup flat color="success" label="Si agregar"
-                 @click="addWishList(data.idPublicacion,data.idUsuario)"
+                 @click="addWishList"
           />
-          <!--@click="addWishList"-->
           <q-btn v-close-popup flat color="primary" label="Cancelar"/>
         </q-card-actions>
       </q-card>
@@ -84,6 +81,24 @@
           </q-toolbar-title>
           <q-btn flat round dense icon="close" @click="drawer = false"/>
         </q-toolbar>
+        <div class="q-pa-md" style="max-width: 350px">
+          <q-list bordered>
+            <q-item clickable v-ripple>
+              <q-item-section thumbnail>
+                <img src="https://cdn.quasar.dev/img/mountains.jpg">
+                <!--<q-img :src="'data:image/jpeg;base64,'+ data.imagen" height="150px"/>-->
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Single line item</q-item-label>
+                <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              </q-item-section>
+
+              <q-item-section side top>
+                <q-item-label caption>meta</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </div>
       </q-drawer>
 
       <q-page-container>
@@ -119,14 +134,59 @@ export default {
         console.log(error);
       });
     },
-    addWishList(idPublicacion,idUsuario) {
-      console.log('idPublicacion',idPublicacion)
-      console.log('idUsuario',idUsuario)
-      api.
-      if (idPublicacion > 0)
-      {
-        this.triggerPositive()
+    async addWishList() {
+      try {
+        var d = new Date();
+        var fechaCreacion = this.formatDate(d);
+
+        let itemWishList = {
+          IdPublicacion: this.data.idPublicacion,
+          IdUsuario: this.data.idUsuario,
+          FechaCreacion: fechaCreacion,
+          EstadoWishlist: 1
+        }
+        let response = await api.AddPublicationWishList(itemWishList)
+        if(response != null)
+        {
+          this.triggerPositive()
+        }
+        await this.GetPublicationWishList()
+      } catch (error) {
+        console.log(error);
+        this.$q.notify({
+          type: "negative",
+          position: "center",
+          message: "Error Interno en el servidor, intente mas tarde"
+        });
+      } finally {
+        this.$q.loading.hide();
       }
+    },
+    async GetPublicationWishList() {
+      try {
+        let response = await api.GetPublicationWishList(this.data.idUsuario)
+        console.log(response)
+        this.drawer = !this.drawer
+      } catch (error) {
+        console.log(error);
+        this.$q.notify({
+          type: "negative",
+          position: "center",
+          message: "Error Interno en el servidor al intentar traer el historico de wishlist, intente mas tarde"
+        });
+      } finally {
+        this.$q.loading.hide();
+      }
+    },
+    formatDate(date) {
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var ampm = hours >= 12 ? 'pm' : 'am';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? '0'+minutes : minutes;
+      var strTime = hours + ':' + minutes + ' ' + ampm;
+      return date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + strTime;
     },
     triggerPositive () {
       this.$q.notify({

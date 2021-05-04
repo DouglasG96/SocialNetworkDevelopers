@@ -19,28 +19,23 @@ namespace APISND.Controllers
     [ApiController]
     public class WishlistController : ControllerBase
     {
-        private readonly IUser _user;
+        private readonly IWishList _wishlist;
         private readonly IMapper _mapper;
-        public WishlistController(IUser user, IMapper mapper)
+        public WishlistController(IWishList wishList, IMapper mapper)
         {
-            _user = user;
+            _wishlist = wishList;
             _mapper = mapper;
         }
 
-        /// <summary>
-        /// Peticion para obtener todos los Usuarios
-        /// </summary>
-        /// <returns></returns>
-        //[AuthorizeRoles(Rol.Administrator)]
-        [ProducesResponseType(typeof(UserDTO), 200)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(500)]
         [HttpGet]
-        public IActionResult GetUsers()
+        [ProducesResponseType(typeof(WishlistDTO), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public IActionResult GetPublicationWishList(int idUser)
         {
             try
             {
-                var resp = _mapper.Map<List<UserDTO>>(_user.GetUsers());
+                var resp = _wishlist.GetPublicationWishList(idUser);
 
                 if (resp == null)
                     return NotFound(resp);
@@ -53,54 +48,21 @@ namespace APISND.Controllers
             }
         }
 
-        /// <summary>
-        /// Peticio para obtener informacion de un usuario
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [AuthorizeRoles(Rol.Administrator)]
-        [ProducesResponseType(typeof(UserDTO), 200)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(500)]
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserByID(int id)
-        {
-            try
-            {
-                var resp =  _mapper.Map<UserDTO>(await _user.GetUserByID(id));
-
-                if (resp == null)
-                    return NotFound(new { message = $"Usuario con Id = {id} no encontrado" });
-
-                return Ok(resp);
-            }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
-            }
-        }
-
-        /// <summary>
-        /// Peticion para agregar un usuario
-        /// </summary>
-        /// <param name="userDTO"></param>
-        /// <returns></returns>
-        //[AuthorizeRoles(Rol.Administrator)]
+        //[AuthorizeRoles(Rol.Buyer)]
         [HttpPost]
-        [ProducesResponseType(typeof(UserDTO), 201)]
+        [ProducesResponseType(typeof(WishlistDTO), 201)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> AddUser([FromBody] UserDTO userDTO)
+        public async Task<IActionResult> AddPublicationWishList([FromBody] WishlistDTO wishlistDTO)
         {
             try
             {
-                var user = _mapper.Map<Usuario>(userDTO);
-                var resp = await _user.AddUser(user);
+                var wishlist = _mapper.Map<Wishlist>(wishlistDTO);
+                var resp = await _wishlist.AddPublicationWishList(wishlist);
 
                 if (resp == null)
                     return StatusCode(StatusCodes.Status404NotFound, resp);
-                //return StatusCode(StatusCodes.Status201Created, user);
-                return CreatedAtAction(nameof(GetUserByID), new { id = user.IdUsuario }, userDTO);
+                return CreatedAtAction(nameof(GetPublicationWishList), new { id = wishlist }, wishlistDTO);
 
             }
             catch (Exception e)
@@ -109,50 +71,24 @@ namespace APISND.Controllers
             }
         }
 
-        //[AuthorizeRoles(Rol.Administrator)]
+        [AuthorizeRoles(Rol.Buyer)]
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(UserDTO), 204)]
+        [ProducesResponseType(typeof(WishlistDTO), 204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserDTO userDTO)
+        public async Task<IActionResult> DeletePublicationWishlist(int id, [FromBody] WishlistDTO wishlistDTO)
         {
             try
             {
-                if (id != userDTO.IdUsuario)
+                if (id != wishlistDTO.idWhislist)
                     return BadRequest();
 
-                if (!_user.UserExists(id))
-                    return NotFound(new { message = $"Usuario con Id = {id} no existe" } );
+                var whislist = _mapper.Map<Wishlist>(wishlistDTO);
+                await _wishlist.DeletePublicationWishlist(whislist);
 
-                var user = _mapper.Map<Usuario>(userDTO);
-                await _user.UpdateUser(user);
+                return StatusCode(StatusCodes.Status204NoContent, whislist);
 
-                return StatusCode(StatusCodes.Status204NoContent, user);
-
-            }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
-            }
-        }
-
-
-        //[AuthorizeRoles(Rol.Administrator)]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(500)]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
-        {
-            try
-            {
-                if (!_user.UserExists(id))
-                    return NotFound(new { message = $"Usuario con Id = {id} no existe" });
-
-                await _user.DeleteUser(id);
-
-                return NoContent();
             }
             catch (Exception e)
             {

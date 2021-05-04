@@ -47,8 +47,8 @@ namespace APISND.Services
 
                         var saleOrder = _mapper.Map<OrdenesVenta>(saleOrderDTO);
                         saleOrder.FechaHoraOrdenVenta = DateTime.Now;
-                        saleOrder.TotalVentaConIva = saleOrderDTO.Cantidad * (publication.Precio + (publication.Precio * 0.13m));
-                        saleOrder.TotalVentaSinIva = saleOrderDTO.Cantidad * publication.Precio;
+                        //saleOrder.TotalVentaConIva = saleOrderDTO.Cantidad * (publication.Precio + (publication.Precio * 0.13m));
+                        saleOrder.TotalVenta = saleOrderDTO.Cantidad * publication.Precio;
                         db.OrdenesVentas.Add(saleOrder);
                         await db.SaveChangesAsync();
 
@@ -59,9 +59,9 @@ namespace APISND.Services
                             IdPublicacion = publication.IdPublicacion,
                             IdUsuario = buyer.IdUsuario,
                             FechaHoraOrdenCompra = DateTime.Now,
-                            TotalCompraConIva = saleOrderDTO.Cantidad * (publication.Precio + (publication.Precio * 0.13m)),
-                            TotalCompraSinIva = saleOrderDTO.Cantidad * publication.Precio,
-                            EstadoOrdenCompra = "1",
+                            //TotalCompraConIva = saleOrderDTO.Cantidad * (publication.Precio + (publication.Precio * 0.13m)),
+                            TotalCompra = saleOrderDTO.Cantidad * publication.Precio,
+                            EstadoOrdenCompra = 1,
                             Cantidad = saleOrderDTO.Cantidad
                         };
                         db.OrdenesCompras.Add(objCompra);
@@ -137,10 +137,9 @@ namespace APISND.Services
                                 IdOrdenVenta = s.IdOrdenVenta,
                                 IdPublicacion = s.IdPublicacion,
                                 IdUsuario = s.IdUsuario,
-                                EstadoOrdenVenta = statusSales(s.EstadoOrdenVenta),
+                                EstadoOrdenVenta = statusSales(Convert.ToInt32(s.EstadoOrdenVenta)),
                                 FechaHoraOrdenVenta = Convert.ToDateTime(s.FechaHoraOrdenVenta).ToString("dd/MM/yyyy HH:mm:ss"),
-                                TotalVentaConIva = s.TotalVentaConIva,
-                                TotalVentaSinIva = s.TotalVentaSinIva,
+                                TotalVenta = s.TotalVenta,
                                 Cantidad = (int)s.Cantidad,
                                 TituloPublicacion = p.Titulo,
                                 Comprador = u.NombreCompleto,
@@ -148,8 +147,6 @@ namespace APISND.Services
                                 IdComprador = (int)c.IdUsuario,
 
                             }).ToList();
-                //var saleOrder =  _context.OrdenesVentas.Where(x => x.IdUsuario == id).ToList();
-
                 return list;
 
             }
@@ -162,13 +159,13 @@ namespace APISND.Services
 
         }
 
-        private static string statusSales(string status)
+        private static string statusSales(int status)
         {
-            if (status == "1")
+            if (status == 1)
                 return "Pendiente";
-            if (status == "2")
+            if (status == 2)
                 return "Aprobada";
-            if (status == "3")
+            if (status == 3)
                 return "Cancelada";
 
             return "";
@@ -192,7 +189,7 @@ namespace APISND.Services
                         var seller = await _userServices.GetUserByID((int)saleOrder.IdUsuario);
                         var publication = await _publicationServices.GetPublicationById((int)saleOrder.IdPublicacion);
 
-                        saleOrder.EstadoOrdenVenta = "2"; //aprobada
+                        saleOrder.EstadoOrdenVenta = 2; //aprobada
                         db.OrdenesVentas.Add(saleOrder).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
 
@@ -200,7 +197,7 @@ namespace APISND.Services
                         var buyOrder = await _context.OrdenesCompras.FirstOrDefaultAsync(x => x.IdOrdenCompra == statusOrderDTO.IdBuyOrder);
                         if (buyOrder != null)
                         {
-                            buyOrder.EstadoOrdenCompra = "2"; //aprobada
+                            buyOrder.EstadoOrdenCompra = 2; //aprobada
                             db.OrdenesCompras.Add(buyOrder).State = EntityState.Modified;
                             await _context.SaveChangesAsync();
                         }
@@ -211,7 +208,7 @@ namespace APISND.Services
                         {
                             EmailBuyer = buyer.CorreoElectronico,
                             EmailSeller = seller.CorreoElectronico,
-                            Title = string.Format("Su compra/venta de la Publicaicon {0} fue Aprobada", publication.Titulo),
+                            Title = string.Format("Su compra/venta de la Publicacion {0} fue Aprobada", publication.Titulo),
                             MessagesSeller = string.Format(@"Estimado/a <b>{0}</b> su venta fue aprobada exitosamente, favor coordinar entrega con comprador, 
                                                     <br/> 
                                                     Detalle de la Venta 
@@ -227,7 +224,7 @@ namespace APISND.Services
                                                     Total sin Iva: <b>{5}</b>
                                                     <br/>
                                                     Total con Iva: <b>{5}</b>"
-                            , seller.NombreCompleto, publication.Titulo, saleOrder.Cantidad, buyer.NombreCompleto, buyer.TelefonoContacto, saleOrder.TotalVentaSinIva, saleOrder.TotalVentaConIva),
+                            , seller.NombreCompleto, publication.Titulo, saleOrder.Cantidad, buyer.NombreCompleto, buyer.TelefonoContacto, saleOrder.TotalVenta),
 
                             MessagesBuyer = string.Format(@"Estimado/a <b>{0}</b> su compra fue aprobada por el vendedor, 
                                                     <br/> 
@@ -245,7 +242,7 @@ namespace APISND.Services
                                                     <br/>
                                                     Telefono: <b>{6}</b>"
 
-                            , buyer.NombreCompleto, publication.Titulo, saleOrder.Cantidad, saleOrder.TotalVentaSinIva, Math.Round((decimal)saleOrder.TotalVentaConIva, 2), seller.NombreCompleto, seller.TelefonoContacto),
+                            , buyer.NombreCompleto, publication.Titulo, saleOrder.Cantidad, Math.Round((decimal)saleOrder.TotalVenta, 2), seller.NombreCompleto, seller.TelefonoContacto),
                         };
                         //si falla envio correo no registrar la aprobacion
                         var email = await _emailServices.SendEmail(emailDTO);
@@ -288,7 +285,7 @@ namespace APISND.Services
                         var seller = await _userServices.GetUserByID((int)saleOrder.IdUsuario);
                         var publication = await _publicationServices.GetPublicationById((int)saleOrder.IdPublicacion);
 
-                        saleOrder.EstadoOrdenVenta = "3"; //rechazada
+                        saleOrder.EstadoOrdenVenta = 3; //rechazada
                         db.OrdenesVentas.Add(saleOrder).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
 
@@ -296,7 +293,7 @@ namespace APISND.Services
                         var buyOrder = await _context.OrdenesCompras.FirstOrDefaultAsync(x => x.IdOrdenCompra == statusOrderDTO.IdBuyOrder);
                         if (buyOrder != null)
                         {
-                            buyOrder.EstadoOrdenCompra = "3"; //rechazada
+                            buyOrder.EstadoOrdenCompra = 3; //rechazada
                             db.OrdenesCompras.Add(buyOrder).State = EntityState.Modified;
                             await _context.SaveChangesAsync();
                         }
@@ -323,7 +320,7 @@ namespace APISND.Services
                                                     Total sin Iva: <b>{5}</b>
                                                     <br/>
                                                     Total con Iva: <b>{5}</b>"
-                            , seller.NombreCompleto, publication.Titulo, saleOrder.Cantidad, buyer.NombreCompleto, buyer.TelefonoContacto, saleOrder.TotalVentaSinIva, saleOrder.TotalVentaConIva),
+                            , seller.NombreCompleto, publication.Titulo, saleOrder.Cantidad, buyer.NombreCompleto, buyer.TelefonoContacto, saleOrder.TotalVenta),
 
                             MessagesBuyer = string.Format(@"Estimado/a <b>{0}</b> su compra fue <b>rechazada</b> por el vendedor, 
                                                     <br/> 
@@ -341,7 +338,7 @@ namespace APISND.Services
                                                     <br/>
                                                     Telefono: <b>{6}</b>"
 
-                            , buyer.NombreCompleto, publication.Titulo, saleOrder.Cantidad, saleOrder.TotalVentaSinIva, Math.Round((decimal)saleOrder.TotalVentaConIva, 2), seller.NombreCompleto, seller.TelefonoContacto),
+                            , buyer.NombreCompleto, publication.Titulo, saleOrder.Cantidad, Math.Round((decimal)saleOrder.TotalVenta, 2), seller.NombreCompleto, seller.TelefonoContacto),
                         };
                         //si falla envio correo no registrar la aprobacion
                         var email = await _emailServices.SendEmail(emailDTO);

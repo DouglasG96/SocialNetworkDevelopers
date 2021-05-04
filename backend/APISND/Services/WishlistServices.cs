@@ -11,10 +11,9 @@ using System.Threading.Tasks;
 
 namespace APISND.Services
 {
-    public class WishlistServices : IUser
+    public class WishlistServices : IWishList
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(UserServices));
-
+        static readonly ILog log = LogManager.GetLogger(typeof(WishlistServices));
         private readonly SocialNetworkDeveloperContext _context;
         private readonly IMapper _mapper;
 
@@ -23,104 +22,78 @@ namespace APISND.Services
             _context = context;
             _mapper = mapper;
         }
-
-        public  List<Usuario> GetUsers()
+       
+        public List<WishlistDTO> GetPublicationWishList(int idUsuario)
         {
-            try
-            {
-                return  _context.Usuarios.ToList();
-            }
-            catch (Exception e)
-            {
-                log.ErrorFormat("Error al obtener datos de Usuarios GetUsers()  {0} : {1} ", e.Source, e.Message);
-                throw;
+                try
+                {
+                    var list = (from wsh in _context.Wishlists
+                                join pbl in _context.Publicaciones
+                                on wsh.IdPublicacion equals pbl.IdPublicacion
+                                join usr in _context.Usuarios
+                                on pbl.IdUsuario equals usr.IdUsuario
+                                where wsh.IdUsuario == idUsuario && wsh.EstadoWishlist == 1
+                                orderby pbl.FechaPublicacion descending
+                                select new WishlistDTO
+                                {
+                                    idWhislist = wsh.IdWhislist,
+                                    idPublicacion = (int) wsh.IdPublicacion,
+                                    idUsuario = (int) wsh.IdUsuario,
+                                    FechaCreacion = Convert.ToDateTime(wsh.FechaCreacion).ToString("dd/MM/yyyy HH:mm:ss"),
+                                    Titulo = pbl.Titulo,
+                                    Descripcion = pbl.Descripcion,
+                                    Precio = (decimal) pbl.Precio,
 
-            }
+                                }).ToList();
+                    return list;
+
+                }
+                catch (Exception e)
+                {
+                    log.ErrorFormat("Error al obtener datos de la wishlist del usuario GetPublicationWishList()  {0} : {1} ", e.Source, e.Message);
+
+                    throw;
+                }
         }
 
-        public async Task<Usuario> GetUserByID(int id)
+        public async Task<Wishlist> AddPublicationWishList(Wishlist wishlist)
         {
             try
             {
-                return await _context.Usuarios.FirstOrDefaultAsync(x => x.IdUsuario == id);
-            }
-            catch (Exception e)
-            {
-                log.ErrorFormat("Error al obtener datos de Usuario GetUserByID()  {0} : {1} ", e.Source, e.Message);
-                throw;
-            }
-        }
-
-        public async Task<Usuario> AddUser(Usuario user)
-        {
-            try
-            {
-                _context.Usuarios.Add(user);
+                _context.Wishlists.Add(wishlist);
                 await _context.SaveChangesAsync();
-                return user;
+                return wishlist;
             }
             catch (Exception e)
             {
                 log.ErrorFormat("Error al Crear Usuario AddUser()  {0} : {1} ", e.Source, e.Message);
                 throw;
             }
+
         }
 
-        public async Task<Usuario> UpdateUser(Usuario user)
+        public async Task<Wishlist> DeletePublicationWishlist(Wishlist whislist)
         {
             try
             {
-                var model = await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(x => x.IdUsuario == user.IdUsuario);
+                var model = await _context.Wishlists.AsNoTracking().FirstOrDefaultAsync(x => x.IdWhislist == whislist.IdWhislist);
                 if(model != null)
                 {
-
-                    _context.Usuarios.Add(user).State = EntityState.Modified;
+                    _context.Wishlists.Add(whislist).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
 
-                    return user;
+                    return whislist;
                 }
                 return null;
             }
             catch (Exception e)
             {
-                log.ErrorFormat("Error al  Actualizar Usuario UpdateUser()  {0} : {1} ", e.Source, e.Message);
+                log.ErrorFormat("Error al eliminar publicacion de la wishlist DeletePublicationWishlist()  {0} : {1} ", e.Source, e.Message);
 
-                throw;
-            }
-        }
-
-        public async Task<Usuario> DeleteUser(int id)
-        {
-            try
-            {
-                var user = await _context.Usuarios.FirstOrDefaultAsync(x => x.IdUsuario == id);
-                if (user != null)
-                {
-                    _context.Usuarios.Remove(user);
-                    await _context.SaveChangesAsync();
-                    return user;
-                }
-                return null;
-            }
-            catch (Exception e)
-            {
-                log.ErrorFormat("Error al Eliminar Usuario DeleteUser()  {0} : {1} ", e.Source, e.Message);
-                throw;
-            }
-
-        }
-        public bool UserExists(int id)
-        {
-            try
-            {
-                return _context.Usuarios.AsNoTracking().Any(x => x.IdUsuario == id);
-            }
-            catch (Exception e)
-            {
-                log.ErrorFormat("Error al Validar si Existe Usuario UserExists()  {0} : {1} ", e.Source, e.Message);
                 throw;
             }
         }
 
     }
+
 }
