@@ -5,7 +5,7 @@
     :data="myData"
     :export-fields="myExportFields"
   >
-<q-btn round color="primary" icon="text_snippet" />
+<q-btn round color="primary" icon="download" />
   </download-excel>
 </template>
 

@@ -4,20 +4,10 @@
       <q-card class="no-border no-shadow">
         <q-card-section class="q-pa-sm">
           <!-- <q-input filled  label="Buscar..." v-model="search" /> -->
-          <q-input
-            rounded
-            v-model="search"
-            outlined
-            placeholder="Search Product"
-          >
+          <q-input rounded v-model="search" outlined placeholder="Search Product">
             <template v-slot:append>
               <q-icon v-if="search === ''" name="search" />
-              <q-icon
-                v-else
-                name="clear"
-                class="cursor-pointer"
-                @click="search = ''"
-              />
+              <q-icon v-else name="clear" class="cursor-pointer" @click="search = ''" />
             </template>
           </q-input>
         </q-card-section>
@@ -46,22 +36,19 @@ export default {
     return {
       texto: "",
       dataFilterd: [],
-      dataProduct: [],
+      dataProduct: []
     };
   },
   async mounted() {
-    console.log(this.user);
-    try {
-      this.dataProduct = await api.getPublications();
-    } catch (error) {
-      console.log(error);
-    }
-    this.dataFilterd = this.dataProduct;
+    this.getPublications();
   },
-  created() {},
+  created() {
+    // escuchar eventos signalR
+    this.$apihub.$on("info-publication", this.onPublicationChanged);
+  },
 
   computed: {
-        ...mapState("auth", ["user"]),
+    ...mapState("auth", ["user"]),
     search: {
       get() {
         return this.texto;
@@ -74,6 +61,32 @@ export default {
         this.texto = value;
       }
     }
+  },
+
+  methods: {
+    async onPublicationChanged(publication) {
+      console.log(publication);
+      await this.getPublications();
+      this.$q.notify({
+        type: "info",
+        position: "top-right",
+        message: `Se agrego una nueva publicacion ${publication.publication}` 
+      });
+    },
+    async getPublications() {
+      console.log(this.user);
+
+      try {
+        this.dataProduct = await api.getPublications();
+      } catch (error) {
+        console.log(error);
+      }
+      this.dataFilterd = this.dataProduct;
+    }
+  },
+  beforeDestroy() {
+    // limpiar eventos signalR
+    this.$apihub.$off("info-publication", this.onPublicationChanged);
   }
 };
 </script>

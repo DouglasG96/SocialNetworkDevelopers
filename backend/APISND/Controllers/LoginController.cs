@@ -26,7 +26,7 @@ namespace APISND.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(string), 200)]
-        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] AuthDTO user)
         {

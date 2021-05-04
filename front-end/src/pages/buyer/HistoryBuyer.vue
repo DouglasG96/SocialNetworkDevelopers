@@ -13,25 +13,27 @@
         :pagination.sync="pagination"
         :filter="filter"
       >
-          <!-- <ButtonExportExcel
-            :myName="nameExcel"
-            :myWorksheet="'Dispositivos'"
+        <template v-slot:top>
+          <ButtonExportExcel
+            :myName="'Historico de Compras SNB&S'"
+            :myWorksheet="'Histórico de Compras'"
             :myData="dataHistory"
             :myExportFields="{
-              Dispositivo: 'device',
-              'Marca/Modelo': 'marca',
-              Numero: 'numero',
-              App: 'versionApp',
+              'Fecha de Compra': 'fechaHoraOrdenCompra',
+              'Publicación': 'tituloPublicacion',
+              'Cantidad': 'cantidad',
+              'Total con Iva': 'totalCompraConIva',
+              'Total sin Iva': 'totalCompraSinIva',
+              'Estado': 'estadoOrdenCompra',
+
             }"
-          ></ButtonExportExcel> -->
-        <template v-slot:top>
+          ></ButtonExportExcel>
           <q-space />
           <q-input borderless dense debounce="300" color="primary" v-model="filter">
             <template v-slot:append>
               <q-icon name="search" />
             </template>
           </q-input>
-          <div class="row q-col-gutter-sm"></div>
         </template>
       </q-table>
     </div>
@@ -47,7 +49,6 @@ export default {
   data() {
     return {
       dataHistory: [],
-      nameExcel: "Exportar",
       columns: [
         {
           name: "idOrdenCompra",
@@ -71,6 +72,12 @@ export default {
           name: "cantidad",
           label: "Cantidad",
           field: "cantidad",
+          sortable: true
+        },
+        {
+          name: "totalCompraSinIva",
+          label: "Total",
+          field: "totalCompraSinIva",
           sortable: true
         },
         {

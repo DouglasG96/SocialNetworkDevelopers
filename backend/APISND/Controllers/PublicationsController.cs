@@ -1,9 +1,12 @@
 ﻿using APISND.DTO;
+using APISND.Helpers;
+using APISND.Hubs;
 using APISND.Interface;
 using APISND.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,17 +21,22 @@ namespace APISND.Controllers
     {
         private readonly IPublication _publicationServices;
         private readonly IMapper _mapper;
+        private readonly IHubContext<PublicationHub> _hubContext;
 
-        public PublicationsController(IPublication publication, IMapper mapper)
+
+
+        public PublicationsController(IPublication publication, IMapper mapper, IHubContext<PublicationHub> hubContext)
         {
             _publicationServices = publication;
             _mapper = mapper;
+            _hubContext = hubContext;
         }
 
         /// <summary>
         /// obtiene todas las publicaciones(productos)
         /// </summary>
         /// <returns></returns>
+        [AuthorizeRoles(Rol.Buyer)]
         [ProducesResponseType(typeof(PublicationDTO), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -55,7 +63,7 @@ namespace APISND.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        //[AuthorizeRoles(Rol.Administrator)]
+        [AuthorizeRoles(Rol.Buyer, Rol.Seller)]
         [ProducesResponseType(typeof(PublicationDTO), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -83,7 +91,7 @@ namespace APISND.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
 
-        //[AuthorizeRoles(Rol.Administrator)]
+        //[AuthorizeRoles(Rol.Buyer, Rol.Seller)]
         [ProducesResponseType(typeof(PublicationDTO), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -105,11 +113,11 @@ namespace APISND.Controllers
             }
         }
         /// <summary>
-        /// Peticion para agregar un usuario
-        /// <returns></returns>
+        /// Petición para agregar una nueva publicación
         /// </summary>
-        /// <param name="userDTO"></param>
-        //[AuthorizeRoles(Rol.Administrator)]
+        /// <param name="publicationDTO"></param>
+        /// <returns></returns>
+        [AuthorizeRoles(Rol.Seller)]
         [HttpPost]
         [ProducesResponseType(typeof(PublicationDTO), 201)]
         [ProducesResponseType(404)]
@@ -132,6 +140,8 @@ namespace APISND.Controllers
                     return StatusCode(StatusCodes.Status404NotFound, resp);
                 //return StatusCode(StatusCodes.Status201Created, user);
                 //return CreatedAtAction(nameof(GetUserByID), new { id = user.IdUsuario }, userDTO);
+                await _hubContext.Clients.All.SendAsync("NewPublication", publication.Titulo);
+
                 return StatusCode(StatusCodes.Status201Created, publication);
 
 
@@ -142,6 +152,18 @@ namespace APISND.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Petición para actualizar una publicación
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="publicationDTO"></param>
+        /// <returns></returns>
+        [AuthorizeRoles(Rol.Seller, Rol.Buyer)]
+        [HttpPost]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         [HttpPut]
         public async Task<IActionResult> UpdatePublication(int id, [FromBody] PublicationDTO publicationDTO)
         {
@@ -165,8 +187,12 @@ namespace APISND.Controllers
             }
         }
 
-
-        //[AuthorizeRoles(Rol.Administrator)]
+        /// <summary>
+        /// Petición para Elimar una publicación
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [AuthorizeRoles(Rol.Seller)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]

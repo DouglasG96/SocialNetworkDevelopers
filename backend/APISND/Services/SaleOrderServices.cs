@@ -100,7 +100,7 @@ namespace APISND.Services
                                                     , buyer.NombreCompleto, publication.Titulo, saleOrderDTO.Cantidad),
                         };
                         //si falla envio correo no registrar la venta
-                        var email = await _emailServices.SendEmailBuy(emailDTO);
+                        var email = await _emailServices.SendEmail(emailDTO);
 
                         if (!email)
                             throw new Exception();
@@ -144,7 +144,8 @@ namespace APISND.Services
                                 Cantidad = (int)s.Cantidad,
                                 TituloPublicacion = p.Titulo,
                                 Comprador = u.NombreCompleto,
-                                IdOrdenCompra = c.IdOrdenCompra
+                                IdOrdenCompra = c.IdOrdenCompra,
+                                IdComprador = (int)c.IdUsuario,
 
                             }).ToList();
                 //var saleOrder =  _context.OrdenesVentas.Where(x => x.IdUsuario == id).ToList();
@@ -173,7 +174,7 @@ namespace APISND.Services
             return "";
         }
 
-        public async Task<bool> AprovveSale(int idSaleOrder, int ididBuyOrder)
+        public async Task<bool> AprovveSale(StatusOrderDTO statusOrderDTO)
         {
             using (var db = new SocialNetworkDeveloperContext())
             {
@@ -181,24 +182,76 @@ namespace APISND.Services
                 {
                     try
                     {
-                        //actualizo orden de venta
-                        var saleOrder =  await _context.OrdenesVentas.FirstOrDefaultAsync(x => x.IdOrdenVenta == idSaleOrder);
 
-                        if(saleOrder != null)
-                        {
-                            saleOrder.EstadoOrdenVenta = "2"; //aprobada
-                        }
+                        
+                        var saleOrder =  await _context.OrdenesVentas.FirstOrDefaultAsync(x => x.IdOrdenVenta == statusOrderDTO.IdSaleOrder);
+
+                        if (saleOrder == null)
+                            return false;
+
+                        var seller = await _userServices.GetUserByID((int)saleOrder.IdUsuario);
+                        var publication = await _publicationServices.GetPublicationById((int)saleOrder.IdPublicacion);
+
+                        saleOrder.EstadoOrdenVenta = "2"; //aprobada
                         db.OrdenesVentas.Add(saleOrder).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
 
                         //actualizacion orden de compra
-                        var buyOrder = await _context.OrdenesCompras.FirstOrDefaultAsync(x => x.IdOrdenCompra == ididBuyOrder);
+                        var buyOrder = await _context.OrdenesCompras.FirstOrDefaultAsync(x => x.IdOrdenCompra == statusOrderDTO.IdBuyOrder);
                         if (buyOrder != null)
                         {
                             buyOrder.EstadoOrdenCompra = "2"; //aprobada
+                            db.OrdenesCompras.Add(buyOrder).State = EntityState.Modified;
+                            await _context.SaveChangesAsync();
                         }
-                        db.OrdenesCompras.Add(buyOrder).State = EntityState.Modified;
-                        await _context.SaveChangesAsync();
+                        var buyer = await _userServices.GetUserByID((int)buyOrder.IdUsuario);
+
+
+                        EmailDTO emailDTO = new EmailDTO()
+                        {
+                            EmailBuyer = buyer.CorreoElectronico,
+                            EmailSeller = seller.CorreoElectronico,
+                            Title = string.Format("Su compra/venta de la Publicaicon {0} fue Aprobada", publication.Titulo),
+                            MessagesSeller = string.Format(@"Estimado/a <b>{0}</b> su venta fue aprobada exitosamente, favor coordinar entrega con comprador, 
+                                                    <br/> 
+                                                    Detalle de la Venta 
+                                                    <br/>
+                                                    Publicación: <b>{1}</b>
+                                                    <br/>
+                                                    Cantidad: <b>{2}</b>
+                                                     <br/>
+                                                    Cliente: <b>{3}</b>
+                                                    <br/> 
+                                                    Telefono: <b>{4}</b>
+                                                    <br/>
+                                                    Total sin Iva: <b>{5}</b>
+                                                    <br/>
+                                                    Total con Iva: <b>{5}</b>"
+                            , seller.NombreCompleto, publication.Titulo, saleOrder.Cantidad, buyer.NombreCompleto, buyer.TelefonoContacto, saleOrder.TotalVentaSinIva, saleOrder.TotalVentaConIva),
+
+                            MessagesBuyer = string.Format(@"Estimado/a <b>{0}</b> su compra fue aprobada por el vendedor, 
+                                                    <br/> 
+                                                    Detalle De la Compra 
+                                                    <br/>
+                                                    Publicación: <b>{1}</b>
+                                                    <br/>
+                                                    Cantidad: <b>{2}</b>
+                                                    <br/>
+                                                    Total sin Iva: <b>{3}</b>
+                                                    <br/>
+                                                    Total con Iva: <b>{4}</b>
+                                                    <br/>
+                                                    Vendedor: <b>{5}</b>
+                                                    <br/>
+                                                    Telefono: <b>{6}</b>"
+
+                            , buyer.NombreCompleto, publication.Titulo, saleOrder.Cantidad, saleOrder.TotalVentaSinIva, Math.Round((decimal)saleOrder.TotalVentaConIva, 2), seller.NombreCompleto, seller.TelefonoContacto),
+                        };
+                        //si falla envio correo no registrar la aprobacion
+                        var email = await _emailServices.SendEmail(emailDTO);
+
+                        if (!email)
+                            throw new Exception();
 
 
                         await transaction.CommitAsync();
@@ -215,6 +268,103 @@ namespace APISND.Services
                     }
                 }
             }
+        }
+
+        public async Task<bool> RejectSale(StatusOrderDTO statusOrderDTO)
+        {
+            using (var db = new SocialNetworkDeveloperContext())
+            {
+                using (var transaction = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+
+
+                        var saleOrder = await _context.OrdenesVentas.FirstOrDefaultAsync(x => x.IdOrdenVenta == statusOrderDTO.IdSaleOrder);
+
+                        if (saleOrder == null)
+                            return false;
+
+                        var seller = await _userServices.GetUserByID((int)saleOrder.IdUsuario);
+                        var publication = await _publicationServices.GetPublicationById((int)saleOrder.IdPublicacion);
+
+                        saleOrder.EstadoOrdenVenta = "3"; //rechazada
+                        db.OrdenesVentas.Add(saleOrder).State = EntityState.Modified;
+                        await _context.SaveChangesAsync();
+
+                        //actualizacion orden de compra
+                        var buyOrder = await _context.OrdenesCompras.FirstOrDefaultAsync(x => x.IdOrdenCompra == statusOrderDTO.IdBuyOrder);
+                        if (buyOrder != null)
+                        {
+                            buyOrder.EstadoOrdenCompra = "3"; //rechazada
+                            db.OrdenesCompras.Add(buyOrder).State = EntityState.Modified;
+                            await _context.SaveChangesAsync();
+                        }
+                        var buyer = await _userServices.GetUserByID((int)buyOrder.IdUsuario);
+
+
+                        EmailDTO emailDTO = new EmailDTO()
+                        {
+                            EmailBuyer = buyer.CorreoElectronico,
+                            EmailSeller = seller.CorreoElectronico,
+                            Title = string.Format("Su compra/venta de la Publicaicon {0} fue Rechazada", publication.Titulo),
+                            MessagesSeller = string.Format(@"Estimado/a <b>{0}</b> su venta fue <b>rechazada</b> exitosamente, favor notificar al comprador el porque, 
+                                                    <br/> 
+                                                    Detalle de la Venta 
+                                                    <br/>
+                                                    Publicación: <b>{1}</b>
+                                                    <br/>
+                                                    Cantidad: <b>{2}</b>
+                                                     <br/>
+                                                    Cliente: <b>{3}</b>
+                                                    <br/> 
+                                                    Telefono: <b>{4}</b>
+                                                    <br/>
+                                                    Total sin Iva: <b>{5}</b>
+                                                    <br/>
+                                                    Total con Iva: <b>{5}</b>"
+                            , seller.NombreCompleto, publication.Titulo, saleOrder.Cantidad, buyer.NombreCompleto, buyer.TelefonoContacto, saleOrder.TotalVentaSinIva, saleOrder.TotalVentaConIva),
+
+                            MessagesBuyer = string.Format(@"Estimado/a <b>{0}</b> su compra fue <b>rechazada</b> por el vendedor, 
+                                                    <br/> 
+                                                    Detalle de la Compra 
+                                                    <br/>
+                                                    Publicación: <b>{1}</b>
+                                                    <br/>
+                                                    Cantidad: <b>{2}</b>
+                                                    <br/>
+                                                    Total sin Iva: <b>{3}</b>
+                                                    <br/>
+                                                    Total con Iva: <b>{4}</b>
+                                                    <br/>
+                                                    Vendedor: <b>{5}</b>
+                                                    <br/>
+                                                    Telefono: <b>{6}</b>"
+
+                            , buyer.NombreCompleto, publication.Titulo, saleOrder.Cantidad, saleOrder.TotalVentaSinIva, Math.Round((decimal)saleOrder.TotalVentaConIva, 2), seller.NombreCompleto, seller.TelefonoContacto),
+                        };
+                        //si falla envio correo no registrar la aprobacion
+                        var email = await _emailServices.SendEmail(emailDTO);
+
+                        if (!email)
+                            throw new Exception();
+
+
+                        await transaction.CommitAsync();
+
+                        return true;
+                    }
+                    catch (Exception e)
+                    {
+
+                        transaction.Rollback();
+                        log.ErrorFormat("Error al ejecutar transaccion para rechazar venta RejectSale()  {0} : {1} ", e.Source, e.Message);
+
+                        return false;
+                    }
+                }
+            }
+
         }
     }
 }

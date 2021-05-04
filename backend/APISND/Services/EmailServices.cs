@@ -11,7 +11,7 @@ namespace APISND.Services
 {
     public class EmailServices : IEmail
     {
-        public async Task<bool> SendEmailBuy(EmailDTO emailDTO)
+        public async Task<bool> SendEmail(EmailDTO emailDTO)
         {
             try
             {
@@ -26,7 +26,7 @@ namespace APISND.Services
                 //mensaje vendedor
                 var mailMessageSeller = new MailMessage
                 {
-                    From = new MailAddress("sndutec@gmail.com", "Cristian Torres"),
+                    From = new MailAddress("sndutec@gmail.com", "SNB&S Compra y Venta"),
                     Subject =  emailDTO.Title,
                     Body = emailDTO.MessagesSeller,
                     IsBodyHtml = true,
@@ -37,7 +37,7 @@ namespace APISND.Services
                 //mensaje comprador
                 var mailMessageBuyer = new MailMessage
                 {
-                    From = new MailAddress("sndutec@gmail.com", "Cristian Torres"),
+                    From = new MailAddress("sndutec@gmail.com", "SNB&S Compra y Venta"),
                     Subject = emailDTO.Title,
                     Body = emailDTO.MessagesBuyer,
                     IsBodyHtml = true,

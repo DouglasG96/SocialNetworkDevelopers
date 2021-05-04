@@ -128,6 +128,7 @@
 import api from "src/api/publication";
 import { mapState } from "vuex";
 
+
 export default {
   data() {
     return {
@@ -159,6 +160,9 @@ export default {
   },
   computed: {
     ...mapState("auth", ["user"])
+  },
+
+  created () {
 
   },
   methods: {
@@ -218,6 +222,7 @@ export default {
       }
     },
 
-  }
+  },
+
 };
 </script>

@@ -108,6 +108,8 @@ export default {
       cardModal: false
     }
   },
+  created () {
+  },
   methods: {
     ...mapActions("shoppingCart", ["addShoppingCart", "cleanShoppingCart"]),
     getDetail(data) {

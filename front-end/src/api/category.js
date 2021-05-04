@@ -1,12 +1,13 @@
-import axios from "axios";
-import enpoint from './endpoint'
+// import axios from "axios";
+// import enpoint from './endpoint'
+import { api } from 'boot/axios'
 import subCategory from "./subCategory";
 
 
-const url = enpoint;
+// const url = enpoint;
 
 async function getCategory() {
-    var resp = await axios.get(`${url}/Categories/GetCategories`);
+    var resp = await api.get(`/Categories/GetCategories`);
     return resp.data;
 }
 
