@@ -32,7 +32,7 @@ namespace APISND.Controllers
         /// Peticion para obtener todos los Usuarios
         /// </summary>
         /// <returns></returns>
-        [AuthorizeRoles(Rol.Administrator)]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(UserDTO), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -168,7 +168,7 @@ namespace APISND.Controllers
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpGet]
         [ProducesResponseType(typeof(bool), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]

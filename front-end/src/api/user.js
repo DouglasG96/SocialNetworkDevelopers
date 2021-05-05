@@ -1,14 +1,15 @@
-import axios from "axios";
-import endpoint from './endpoint'
+import { api } from 'boot/axios'
 
-const url = endpoint;
+import validation from './validation'
+
+
 
 async function getUsers () {
     var resp = await api.get(`/Users/GetUsers`);
     return resp.data;
 }
-async function userExistsEmail () {
-    var resp = await api.get(`/Users/GetUsers`);
+async function userExistsEmail (email) {
+    var resp = await api.get(`/Users/UserExistsEmail?email=${encodeURIComponent(email)}`);
     return resp.data;
 }
 async function addUser (user) {

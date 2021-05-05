@@ -61,21 +61,30 @@
                 filled
                 ref="dui"
                 v-model="dui"
-                type="number"
                 label="dui / sin guión"
                 lazy-rules
                 :rules="rules.requiredDui"
+                mask="#########"
               />
               <q-input
                 filled
                 v-model="nit"
-                type="number"
                 label="nit / sin guiones"
                 lazy-rules
-                :rules="rules.required"
+                :rules="rules.requiredNit"
+                mask="##############"
+
               />
-              <q-input filled v-model="phone" label="telefono" lazy-rules :rules="rules.required" />
+                
+              <q-input 
+                filled 
+                v-model="phone" 
+                label="telefono" 
+                lazy-rules 
+                :rules="rules.required" 
+                mask="########" />
               <q-input
+                ref="correo"
                 filled
                 type="email"
                 v-model="email"
@@ -141,6 +150,10 @@ export default {
           v => !!v || "Campo Requerido.",
           v => (v && v.length == 9) || "Dui debe tener 9 caracteres"
         ],
+        requiredNit: [
+          v => !!v || "Campo Requerido.",
+          v => (v && v.length == 14) || "Nit debe tener 14 caracteres"
+        ],
         requiredNumber: [
           val => (val !== null && val !== "") || "Please type your age",
           val => (val > 0 && val < 100) || "Please type a real age"
@@ -165,27 +178,33 @@ export default {
         return;
       }
 
-      var isDui = await api.isDui(this.dui);
-      console.log(!isDui.isValid);
-      if (!isDui.isValid) {
-        this.$q.notify({
-          type: "negative",
-          position: "center",
-          message: "Dui Invalido"
-        });
-        this.$refs.dui.focus();
-      }
-
       try {
         this.$q.loading.show();
 
+        var isDui = await api.isDui(this.dui);
+        if (!isDui.isValid) {
+          this.$q.notify({
+            type: "negative",
+            position: "center",
+            message: "Dui Invalido"
+          });
+          this.$refs.dui.focus();
+          this.$q.loading.hide();
+          return;
+        }
+
         var existEmail = await api.userExistsEmail(this.email);
+        console.log(existEmail);
         if (existEmail) {
           this.$q.notify({
             type: "warning",
             position: "center",
             message: "Correo electronico ingresado, ya esta registrado..."
           });
+          this.$refs.correo.focus();
+
+          this.$q.loading.hide();
+
           return;
         }
 
