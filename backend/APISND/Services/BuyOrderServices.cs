@@ -82,7 +82,7 @@ namespace APISND.Services
             return "";
         }
 
-        public async Task<bool> ReceivedBuyer(StatusOrderDTO statusOrderDTO)
+        public async Task<bool> ReceivedBuyer(ReceivedBuyerDTO receivedBuyerDTO)
         {
             try
             {
@@ -93,26 +93,39 @@ namespace APISND.Services
                         try
                         {
 
-                            var buyOrder = await _context.OrdenesCompras.FirstOrDefaultAsync(x => x.IdOrdenCompra == statusOrderDTO.IdBuyOrder);
+                            var buyOrder = await _context.OrdenesCompras.FirstOrDefaultAsync(x => x.IdOrdenCompra == receivedBuyerDTO.IdBuyOrder);
 
                             if (buyOrder == null)
                                 return false;
 
                             var buyer = await _userServices.GetUserByID((int)buyOrder.IdUsuario);
-                            var publication = await _publicationServices.GetPublicationById((int)buyOrder.IdPublicacion);
-
+                          
                             buyOrder.EstadoOrdenCompra = 4; //recibido
                             db.OrdenesCompras.Add(buyOrder).State = EntityState.Modified;
                             await _context.SaveChangesAsync();
 
                             //actualizacion orden de compra
-                            var saleOrder = await _context.OrdenesVentas.FirstOrDefaultAsync(x => x.IdOrdenVenta == statusOrderDTO.IdSaleOrder);
+                            var saleOrder = await _context.OrdenesVentas.FirstOrDefaultAsync(x => x.IdOrdenVenta == receivedBuyerDTO.IdSaleOrder);
                             if (saleOrder != null)
                             {
                                 saleOrder.EstadoOrdenVenta = 4; //entregado
                                 db.OrdenesVentas.Add(saleOrder).State = EntityState.Modified;
                                 await _context.SaveChangesAsync();
                             }
+
+                            //actualizar publicación
+                            //var publication = await _publicationServices.GetPublicationById((int)buyOrder.IdPublicacion);
+                            var publication = await _context.Publicaciones.FirstOrDefaultAsync(x => x.IdPublicacion == buyOrder.IdPublicacion);
+
+                            if (publication != null)
+                            {
+                                publication.Raiting = receivedBuyerDTO.Raiting;
+
+                                db.Update(publication).State = EntityState.Modified;
+                                await _context.SaveChangesAsync();
+                            }
+
+
                             var seller = await _userServices.GetUserByID((int)saleOrder.IdUsuario);
 
 
@@ -133,9 +146,7 @@ namespace APISND.Services
                                                     <br/> 
                                                     Telefono: <b>{4}</b>
                                                     <br/>
-                                                    Total sin Iva: <b>{5}</b>
-                                                    <br/>
-                                                    Total con Iva: <b>{5}</b>"
+                                                    Total: <b>{5}</b>"
                                 , seller.NombreCompleto, publication.Titulo, saleOrder.Cantidad, buyer.NombreCompleto, buyer.TelefonoContacto, saleOrder.TotalVenta),
 
                                 MessagesBuyer = string.Format(@"Estimado/a <b>{0}</b> acaba de confirmar de recibido la mercaderia de su compra, gracias por utilizar SNB&S, 
@@ -146,13 +157,11 @@ namespace APISND.Services
                                                     <br/>
                                                     Cantidad: <b>{2}</b>
                                                     <br/>
-                                                    Total sin Iva: <b>{3}</b>
+                                                    Total: <b>{3}</b>
                                                     <br/>
-                                                    Total con Iva: <b>{4}</b>
+                                                    Vendedor: <b>{4}</b>
                                                     <br/>
-                                                    Vendedor: <b>{5}</b>
-                                                    <br/>
-                                                    Telefono: <b>{6}</b>"
+                                                    Telefono: <b>{5}</b>"
 
                                 , buyer.NombreCompleto, publication.Titulo, saleOrder.Cantidad, Math.Round((decimal)saleOrder.TotalVenta, 2), seller.NombreCompleto, seller.TelefonoContacto),
                             };

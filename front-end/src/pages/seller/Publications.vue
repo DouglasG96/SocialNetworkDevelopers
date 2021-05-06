@@ -57,10 +57,12 @@
                 <q-item>
                   <q-input
                     filled
-                    type="number"
                     class="full-width"
-                    v-model.number="price"
+                    v-model="price"
                     label="Precio"
+                       mask="#.##"
+        fill-mask="0"
+        reverse-fill-mask
                     :rules="rules.required"
                     lazy-rules
                   />
@@ -145,8 +147,8 @@ export default {
       rules: {
         required: [v => !!v || "Campo Requerido."],
         requiredNumber: [
-          val => (val !== null && val !== "") || "Please type your age",
-          val => (val > 0 && val < 100) || "Please type a real age"
+          val => (val !== null && val !== "") || "Campo Requerido.",
+          val => (val > 0) || "Ingrese un valor valido"
         ]
       }
     };

@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace APISND.Controllers
@@ -42,6 +43,28 @@ namespace APISND.Controllers
                     return NotFound(resp);
 
                 return Ok(resp);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
+        }
+
+        [AuthorizeRoles(Rol.Buyer)]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        [HttpPut]
+        public async Task<IActionResult> ReceivedBuyer(ReceivedBuyerDTO receivedBuyerDTO)
+        {
+            try
+            {
+                var resp = await _buyOrderServices.ReceivedBuyer(receivedBuyerDTO);
+
+                if (!resp)
+                    return NotFound(resp);
+
+                return StatusCode(StatusCodes.Status204NoContent, resp);
             }
             catch (Exception e)
             {
