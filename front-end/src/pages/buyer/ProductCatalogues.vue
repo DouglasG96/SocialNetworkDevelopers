@@ -3,11 +3,13 @@
     <div>
       <q-card class="no-border no-shadow">
         <q-card-section class="q-pa-sm">
-          <!-- <q-input filled  label="Buscar..." v-model="search" /> -->
           <q-input rounded v-model="search" outlined placeholder="Search Product">
             <template v-slot:append>
               <q-icon v-if="search === ''" name="search" />
               <q-icon v-else name="clear" class="cursor-pointer" @click="search = ''" />
+            </template>
+            <template v-slot:after>
+              <q-btn round icon="list" @click="GetWishList"/>
             </template>
           </q-input>
         </q-card-section>
@@ -70,7 +72,7 @@ export default {
       this.$q.notify({
         type: "info",
         position: "top-right",
-        message: `Se agrego una nueva publicacion ${publication.publication}` 
+        message: `Se agrego una nueva publicacion ${publication.publication}`
       });
     },
     async getPublications() {
@@ -82,7 +84,10 @@ export default {
         console.log(error);
       }
       this.dataFilterd = this.dataProduct;
-    }
+    },
+    async GetWishList(){
+      await this.$emit('get-history-wish-list')
+    },
   },
   beforeDestroy() {
     // limpiar eventos signalR

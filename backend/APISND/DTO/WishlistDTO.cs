@@ -15,6 +15,7 @@ namespace APISND.DTO
         public string Titulo { get; set; }
         public string Descripcion { get; set; }
         public decimal Precio { get; set; }
-        public int Estado{ get; set; }
+        public byte[] Imagen { get; set; }
+        public int EstadoWishlist { get; set; }
     }
 }

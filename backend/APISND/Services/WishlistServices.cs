@@ -43,7 +43,7 @@ namespace APISND.Services
                                     Titulo = pbl.Titulo,
                                     Descripcion = pbl.Descripcion,
                                     Precio = (decimal) pbl.Precio,
-
+                                    Imagen = pbl.Imagen,
                                 }).ToList();
                     return list;
 
@@ -51,7 +51,6 @@ namespace APISND.Services
                 catch (Exception e)
                 {
                     log.ErrorFormat("Error al obtener datos de la wishlist del usuario GetPublicationWishList()  {0} : {1} ", e.Source, e.Message);
-
                     throw;
                 }
         }
@@ -66,31 +65,31 @@ namespace APISND.Services
             }
             catch (Exception e)
             {
-                log.ErrorFormat("Error al Crear Usuario AddUser()  {0} : {1} ", e.Source, e.Message);
+                log.ErrorFormat("Error al Crear Usuario AddPublicationWishList()  {0} : {1} ", e.Source, e.Message);
                 throw;
             }
 
         }
 
-        public async Task<Wishlist> DeletePublicationWishlist(Wishlist whislist)
+        public async Task<bool> DeletePublicationWishlist(int idWishList)
         {
+
             try
             {
-                var model = await _context.Wishlists.AsNoTracking().FirstOrDefaultAsync(x => x.IdWhislist == whislist.IdWhislist);
-                if(model != null)
-                {
-                    _context.Wishlists.Add(whislist).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
+                var itemwishlistexist = await _context.Wishlists.FirstOrDefaultAsync(x => x.IdWhislist == idWishList);
 
-                    return whislist;
-                }
-                return null;
+                if (itemwishlistexist == null)
+                    return false;
+
+                itemwishlistexist.EstadoWishlist = 0; //eliminada
+                _context.Wishlists.Add(itemwishlistexist).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return true;
             }
             catch (Exception e)
             {
-                log.ErrorFormat("Error al eliminar publicacion de la wishlist DeletePublicationWishlist()  {0} : {1} ", e.Source, e.Message);
-
-                throw;
+                log.ErrorFormat("Error al ejecutar transaccion para eliminar item de una wishlist DeletePublicationWishlist()  {0} : {1} ", e.Source, e.Message);
+                return false;
             }
         }
 
