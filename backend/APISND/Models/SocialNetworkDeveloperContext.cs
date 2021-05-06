@@ -28,7 +28,7 @@ namespace APISND.Models
         public virtual DbSet<SubCategoria> SubCategorias { get; set; }
         public virtual DbSet<TipoPublicacion> TipoPublicacions { get; set; }
         public virtual DbSet<Usuario> Usuarios { get; set; }
-        public virtual DbSet<Whislist> Whislists { get; set; }
+        public virtual DbSet<Wishlist> Wishlists { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -356,7 +356,7 @@ namespace APISND.Models
                     .HasConstraintName("fk_usuarios_roles");
             });
 
-            modelBuilder.Entity<Whislist>(entity =>
+            modelBuilder.Entity<Wishlist>(entity =>
             {
                 entity.HasKey(e => e.IdWhislist)
                     .HasName("pk_whislist");
@@ -381,7 +381,7 @@ namespace APISND.Models
                     .HasConstraintName("fk_whislist_publicaciones");
 
                 entity.HasOne(d => d.IdUsuarioNavigation)
-                    .WithMany(p => p.Whislists)
+                    .WithMany(p => p.Wishlists)
                     .HasForeignKey(d => d.IdUsuario)
                     .HasConstraintName("fk_whislist_usuarios");
             });
