@@ -71,28 +71,25 @@ namespace APISND.Controllers
             }
         }
 
-        [AuthorizeRoles(Rol.Buyer)]
-        [HttpPut("{id}")]
-        [ProducesResponseType(typeof(WishlistDTO), 204)]
-        [ProducesResponseType(400)]
+        //[AuthorizeRoles(Rol.Buyer)]
+        [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> DeletePublicationWishlist(int id, [FromBody] WishlistDTO wishlistDTO)
+        public async Task<IActionResult> DeletePublicationWishlist(int idWishList)
         {
             try
             {
-                if (id != wishlistDTO.idWhislist)
-                    return BadRequest();
+                bool resp = await _wishlist.DeletePublicationWishlist(idWishList);
+                if (!resp)
+                    return StatusCode(StatusCodes.Status404NotFound, resp);
 
-                var whislist = _mapper.Map<Wishlist>(wishlistDTO);
-                await _wishlist.DeletePublicationWishlist(whislist);
-
-                return StatusCode(StatusCodes.Status204NoContent, whislist);
-
+                return StatusCode(StatusCodes.Status200OK, resp);
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
     }

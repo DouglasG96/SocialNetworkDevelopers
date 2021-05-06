@@ -3,7 +3,8 @@
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
       <q-card class>
         <q-card-section class="text-center text-h6">
-          <q-icon name="history" class="q-mr-sm" />Historial de Ventas
+          <q-icon name="history" class="q-mr-sm"/>
+          Historial de Ventas
         </q-card-section>
       </q-card>
       <q-table
@@ -14,9 +15,9 @@
         :pagination.sync="pagination"
         :filter="filter"
       >
-     
+
         <template v-slot:top>
-                    <ButtonExportExcel
+          <ButtonExportExcel
             :myName="'Historico de Ventas SNB&S'"
             :myWorksheet="'Histórico de Compras'"
             :myData="dataHistory"
@@ -30,12 +31,12 @@
 
             }"
           ></ButtonExportExcel>
-        <q-space />
-        <q-input borderless dense debounce="300" color="primary" v-model="filter">
-          <template v-slot:append>
-            <q-icon name="search" />
-          </template>
-        </q-input>
+          <q-space/>
+          <q-input borderless dense debounce="300" color="primary" v-model="filter">
+            <template v-slot:append>
+              <q-icon name="search"/>
+            </template>
+          </q-input>
 
         </template>
 
@@ -66,16 +67,16 @@
             <q-td key="actions" :props="props">
               <template v-if="props.row.estadoOrdenVenta == 'Pendiente'">
 
-              <q-btn color="positive" label="Aprobar" size="sm" flat dense @click="approve(props.row)" />
-              <q-btn
-                color="negative"
-                label="Rechazar"
-                size="sm"
-                class="q-ml-sm"
-                flat
-                dense
-                @click="reject(props.row)"
-              />
+                <q-btn color="positive" label="Aprobar" size="sm" flat dense @click="approve(props.row)"/>
+                <q-btn
+                  color="negative"
+                  label="Rechazar"
+                  size="sm"
+                  class="q-ml-sm"
+                  flat
+                  dense
+                  @click="reject(props.row)"
+                />
               </template>
             </q-td>
           </q-tr>
@@ -86,17 +87,17 @@
 </template>
 <script>
 import api from "src/api/saleOrder";
-import { mapState } from "vuex";
+import {mapState} from "vuex";
 import ButtonExportExcel from "src/components/ButtonExportExcel.vue";
 
 
 export default {
-  components: { ButtonExportExcel },
+  components: {ButtonExportExcel},
 
-  data () {
+  data() {
     return {
       dataHistory: [],
-        columns: [
+      columns: [
         {
           name: "idOrdenVenta",
           label: "Id",
@@ -146,7 +147,7 @@ export default {
       formTitle: "",
     }
   },
-  async mounted () {
+  async mounted() {
     await this.getHistorySales();
   },
 
@@ -156,14 +157,15 @@ export default {
 
   methods: {
     async getHistorySales() {
-    try {
-      this.dataHistory = await api.GetHistorySalesByIdSeller(parseInt(this.user.idUser))
-      console.log(this.dataHistory);
-    } catch (error) {
-      console.log(error);
-    };
+      try {
+        this.dataHistory = await api.GetHistorySalesByIdSeller(parseInt(this.user.idUser))
+        console.log(this.dataHistory);
+      } catch (error) {
+        console.log(error);
+      }
+      ;
     },
-    async approve(item){
+    async approve(item) {
 
       console.log(item);
       this.$q
@@ -176,7 +178,7 @@ export default {
         })
         .onOk(async () => {
           try {
-     this.$q.loading.show();
+            this.$q.loading.show();
 
             await api.AprovveSale({idSaleOrder: item.idOrdenVenta, idBuyOrder: item.idOrdenCompra});
             this.$q.notify({
@@ -191,8 +193,8 @@ export default {
               position: "center",
               message: "Error Interno, Intente mas Tarde"
             });
-          }finally{
-        this.$q.loading.hide();
+          } finally {
+            this.$q.loading.hide();
           }
         })
         .onOk(() => {
@@ -205,7 +207,7 @@ export default {
           // console.log('I am triggered on both OK and Cancel')
         });
     },
-    async reject(item){
+    async reject(item) {
 
       console.log(item);
       this.$q
@@ -218,7 +220,7 @@ export default {
         })
         .onOk(async () => {
           try {
-     this.$q.loading.show();
+            this.$q.loading.show();
 
             await api.RejectSale({idSaleOrder: item.idOrdenVenta, idBuyOrder: item.idOrdenCompra});
             this.$q.notify({
@@ -233,8 +235,8 @@ export default {
               position: "center",
               message: "Error Interno, Intente mas Tarde"
             });
-          }finally{
-        this.$q.loading.hide();
+          } finally {
+            this.$q.loading.hide();
           }
         })
         .onOk(() => {
