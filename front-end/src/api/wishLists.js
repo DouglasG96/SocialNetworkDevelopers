@@ -8,12 +8,12 @@ async function AddPublicationWishList (itemWishList) {
 }
 
 async function GetPublicationWishList (idUser) {
-  var resp = await axios.get(`${url}/Wishlist/GetPublicationWishList`, idUser);
+  var resp = await axios.get(`${url}/Wishlist/GetPublicationWishList?idUser=${idUser}`);
   return resp.data;
 }
 
-async function deleteWishList (idWishList,itemWishList) {
-  var resp = await axios.post(`${url}/Users/AddUser`, idWishList,itemWishList);
+async function deleteWishList (idWishList) {
+  var resp = await axios.get(`${url}/Wishlist/DeletePublicationWishlist?idWishList=${idWishList}`);
   return resp.data;
 }
 

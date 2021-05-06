@@ -11,6 +11,6 @@ namespace APISND.Interface
     {
         List<WishlistDTO> GetPublicationWishList(int idUsuario);
         Task<Wishlist> AddPublicationWishList(Wishlist wishlist);
-        Task<Wishlist> DeletePublicationWishlist(Wishlist whislist);
+        Task<bool> DeletePublicationWishlist(int idWishList);
     }
 }

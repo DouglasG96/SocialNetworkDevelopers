@@ -12,16 +12,13 @@
           style="top: 0; right: 12px; transform: translateY(-50%);"
           @click="cardModal = true"
         />
-        <!--@click="drawer = !drawer"-->
       </q-card-section>
 
       <q-card-section>
         <div class="text-h6">
-          <!-- {{ data.title }} -->
           {{ data.titulo }}
         </div>
         <div class="text-subtitle1 text-justify q-mt-sm">
-          <!-- {{ data.caption }} -->
           {{ data.descripcion }}
         </div>
       </q-card-section>
@@ -33,7 +30,6 @@
         </span>
         </div>
       </q-card-section>
-      <!--<side-bar-wishlist></side-bar-wishlist>-->
     </q-card>
     <q-dialog v-model="cardModal">
       <q-card class="my-card" style="width: 500px">
@@ -82,22 +78,32 @@
           <q-btn flat round dense icon="close" @click="drawer = false"/>
         </q-toolbar>
         <div class="q-pa-md" style="max-width: 350px">
-          <q-list bordered>
-            <q-item clickable v-ripple>
-              <q-item-section thumbnail>
-                <img src="https://cdn.quasar.dev/img/mountains.jpg">
-                <!--<q-img :src="'data:image/jpeg;base64,'+ data.imagen" height="150px"/>-->
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>Single line item</q-item-label>
-                <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
-              </q-item-section>
+            <div v-if="historyWishlist !== null"
+              v-for="(item, item_index) in historyWishlist"
+              :key="item_index"
+            >
+              <q-list bordered>
+                <q-item clickable v-ripple :data="item">
+                    <q-item-section thumbnail>
+                      <img :src="`data:image/jpeg;base64,${item.imagen}`"/>
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>{{item.titulo}}</q-item-label>
+                      <q-item-label caption>{{item.descripcion}}</q-item-label>
+                    </q-item-section>
 
-              <q-item-section side top>
-                <q-item-label caption>meta</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
+                    <q-item-section side top>
+                      <q-item-label caption>$ {{item.precio}}</q-item-label>
+                    </q-item-section>
+                  <q-item-section right side>
+                    <div class="text-grey-8 q-gutter-xs">
+                      <q-btn class="gt-xs" size="12px" flat dense round icon="delete" @click="deleteWishList(item.idWhislist)" />
+                    </div>
+                  </q-item-section>
+                  </q-item>
+                </q-list>
+              <br>
+            </div>
         </div>
       </q-drawer>
 
@@ -120,10 +126,14 @@ export default {
   data() {
     return {
       drawer: false,
-      cardModal: false
+      cardModal: false,
+      actionValidateDeleteItem: false,
+      historyWishlist: null
     }
   },
-  created () {
+   async mounted(){
+  },
+  async created () {
   },
   methods: {
     ...mapActions("shoppingCart", ["addShoppingCart", "cleanShoppingCart"]),
@@ -149,8 +159,8 @@ export default {
         if(response != null)
         {
           this.triggerPositive()
+          await this.getHistoryWishlist()
         }
-        await this.GetPublicationWishList()
       } catch (error) {
         console.log(error);
         this.$q.notify({
@@ -162,21 +172,73 @@ export default {
         this.$q.loading.hide();
       }
     },
-    async GetPublicationWishList() {
+    async getHistoryWishlist(){
       try {
-        let response = await api.GetPublicationWishList(this.data.idUsuario)
-        console.log(response)
-        this.drawer = !this.drawer
+        let responseHistory = await api.GetPublicationWishList(this.data.idUsuario)
+        if(responseHistory.length > 0)
+        {
+          this.historyWishlist = responseHistory
+          this.drawer = !this.drawer
+        }
+        else
+        {
+          this.$q.notify({
+            type: "warning",
+            position: "center",
+            message: "No has agregado ningun item a tu wishlist"
+          });
+        }
       } catch (error) {
         console.log(error);
         this.$q.notify({
           type: "negative",
           position: "center",
-          message: "Error Interno en el servidor al intentar traer el historico de wishlist, intente mas tarde"
+          message: "Hubo un error al cargar la informacion de la wishlist"
         });
       } finally {
         this.$q.loading.hide();
       }
+    },
+    async deleteWishList(idWishlist)
+    {
+      this.$q
+        .dialog({
+          title: "Mensaje de confirmacion",
+          dark: true,
+          message: "¿Seguro que quieres eliminar este item de tu wishlist?",
+          cancel: true,
+          persistent: true
+        })
+        .onOk(async () => {
+          try {
+            let responseDelete = await api.deleteWishList(idWishlist)
+            if(responseDelete != null)
+            {
+              this.triggerPositiveDelete()
+              this.drawer = false;
+              await this.getHistoryWishlist()
+              this.drawer = !this.drawer
+            }
+          } catch (error) {
+            console.log(error);
+            this.$q.notify({
+              type: "negative",
+              position: "center",
+              message: "Hubo un error al eliminar item de tu wishlist"
+            });
+          } finally {
+            this.$q.loading.hide();
+          }
+        })
+        .onOk(() => {
+          // console.log('>>>> second OK catcher')
+        })
+        .onCancel(() => {
+          console.log("Cancel");
+        })
+        .onDismiss(() => {
+          // console.log('I am triggered on both OK and Cancel')
+        });
     },
     formatDate(date) {
       var hours = date.getHours();
@@ -196,6 +258,13 @@ export default {
       });
       //Ejecuta la funcion para mostrar el sidebar
       this.drawer = !this.drawer
+    },
+    triggerPositiveDelete() {
+      this.$q.notify({
+        type: "positive",
+        position: "center",
+        message: "El item ha sido eliminado de tu wishlist"
+      });
     }
   },
 }
