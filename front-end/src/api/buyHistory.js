@@ -5,10 +5,15 @@ import { api } from 'boot/axios'
 
 async function GetHistoryBuysByIdBuyer(idBuyer) {
   var resp = await api.get(`/BuyOrders/GetHistoryBuysByIdBuyer?idBuyer=${encodeURIComponent(idBuyer)}`);
+  return resp.data;
+}
 
+async function ReceivedBuyer(buyerOrder) {
+  var resp = await api.put(`/BuyOrders/ReceivedBuyer`, buyerOrder);
   return resp.data;
 }
 
 export default {
-  GetHistoryBuysByIdBuyer
+  GetHistoryBuysByIdBuyer,
+  ReceivedBuyer
 }

@@ -223,10 +223,8 @@ namespace APISND.Services
                                                     <br/> 
                                                     Telefono: <b>{4}</b>
                                                     <br/>
-                                                    Total sin Iva: <b>{5}</b>
-                                                    <br/>
-                                                    Total con Iva: <b>{5}</b>"
-                            , seller.NombreCompleto, publication.Titulo, saleOrder.Cantidad, buyer.NombreCompleto, buyer.TelefonoContacto, saleOrder.TotalVenta),
+                                                    Total: <b>{5}</b>"
+                            , seller.NombreCompleto, publication.Titulo, saleOrder.Cantidad, buyer.NombreCompleto, buyer.TelefonoContacto, Math.Round((decimal)saleOrder.TotalVenta, 2)),
 
                             MessagesBuyer = string.Format(@"Estimado/a <b>{0}</b> su compra fue aprobada por el vendedor, 
                                                     <br/> 
@@ -236,13 +234,11 @@ namespace APISND.Services
                                                     <br/>
                                                     Cantidad: <b>{2}</b>
                                                     <br/>
-                                                    Total sin Iva: <b>{3}</b>
+                                                    Total: <b>{3}
+                                                    </b>
+                                                    Vendedor: <b>{4}</b>
                                                     <br/>
-                                                    Total con Iva: <b>{4}</b>
-                                                    <br/>
-                                                    Vendedor: <b>{5}</b>
-                                                    <br/>
-                                                    Telefono: <b>{6}</b>"
+                                                    Telefono: <b>{5}</b>"
 
                             , buyer.NombreCompleto, publication.Titulo, saleOrder.Cantidad, Math.Round((decimal)saleOrder.TotalVenta, 2), seller.NombreCompleto, seller.TelefonoContacto),
                         };
@@ -319,10 +315,8 @@ namespace APISND.Services
                                                     <br/> 
                                                     Telefono: <b>{4}</b>
                                                     <br/>
-                                                    Total sin Iva: <b>{5}</b>
-                                                    <br/>
-                                                    Total con Iva: <b>{5}</b>"
-                            , seller.NombreCompleto, publication.Titulo, saleOrder.Cantidad, buyer.NombreCompleto, buyer.TelefonoContacto, saleOrder.TotalVenta),
+                                                    Total: <b>{5}</b>"
+                            , seller.NombreCompleto, publication.Titulo, saleOrder.Cantidad, buyer.NombreCompleto, buyer.TelefonoContacto, Math.Round((decimal)saleOrder.TotalVenta, 2)),
 
                             MessagesBuyer = string.Format(@"Estimado/a <b>{0}</b> su compra fue <b>rechazada</b> por el vendedor, 
                                                     <br/> 
@@ -332,13 +326,11 @@ namespace APISND.Services
                                                     <br/>
                                                     Cantidad: <b>{2}</b>
                                                     <br/>
-                                                    Total sin Iva: <b>{3}</b>
+                                                    Total: <b>{3}</b>
                                                     <br/>
-                                                    Total con Iva: <b>{4}</b>
+                                                    Vendedor: <b>{4}</b>
                                                     <br/>
-                                                    Vendedor: <b>{5}</b>
-                                                    <br/>
-                                                    Telefono: <b>{6}</b>"
+                                                    Telefono: <b>{5}</b>"
 
                             , buyer.NombreCompleto, publication.Titulo, saleOrder.Cantidad, Math.Round((decimal)saleOrder.TotalVenta, 2), seller.NombreCompleto, seller.TelefonoContacto),
                         };

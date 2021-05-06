@@ -10,7 +10,7 @@ namespace APISND.Interface
     public interface IBuyOrder
     {
         List<BuyOrderDTO> GetHistoryBuysByIdBuyer(int id);
-        Task<bool> ReceivedBuyer(StatusOrderDTO statusOrderDTO);
+        Task<bool> ReceivedBuyer(ReceivedBuyerDTO statusOrderDTO);
 
     }
 }
