@@ -37,9 +37,9 @@ namespace APISND.Services
                             join p in _context.Publicaciones
                             on s.IdPublicacion equals p.IdPublicacion
                             join v in _context.OrdenesVentas
-                            on p.IdPublicacion equals v.IdPublicacion
+                            on s.IdOrdenVenta equals v.IdOrdenVenta
                             join u in _context.Usuarios
-                            on v.IdUsuario equals u.IdUsuario
+                            on p.IdUsuario equals u.IdUsuario
                             where s.IdUsuario == id
                             orderby s.FechaHoraOrdenCompra descending
                             select new BuyOrderDTO
@@ -137,7 +137,7 @@ namespace APISND.Services
                             //}
 
 
-                            var seller = await _userServices.GetUserByID((int)saleOrder.IdUsuario);
+                            var seller = await _userServices.GetUserByID((int)publication.IdUsuario);
 
 
                             EmailDTO emailDTO = new EmailDTO()

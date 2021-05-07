@@ -116,6 +116,8 @@ namespace APISND.Models
                     .HasColumnType("datetime")
                     .HasColumnName("fechaHoraOrdenCompra");
 
+                entity.Property(e => e.IdOrdenVenta).HasColumnName("idOrdenVenta");
+
                 entity.Property(e => e.IdPublicacion).HasColumnName("idPublicacion");
 
                 entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
@@ -123,6 +125,11 @@ namespace APISND.Models
                 entity.Property(e => e.TotalCompra)
                     .HasColumnType("decimal(14, 2)")
                     .HasColumnName("totalCompra");
+
+                entity.HasOne(d => d.IdOrdenVentaNavigation)
+                    .WithMany(p => p.OrdenesCompras)
+                    .HasForeignKey(d => d.IdOrdenVenta)
+                    .HasConstraintName("FK_OrdenesCompras_OrdenesVentas");
 
                 entity.HasOne(d => d.IdPublicacionNavigation)
                     .WithMany(p => p.OrdenesCompras)
@@ -150,8 +157,6 @@ namespace APISND.Models
 
                 entity.Property(e => e.IdPublicacion).HasColumnName("idPublicacion");
 
-                entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
-
                 entity.Property(e => e.TotalVenta)
                     .HasColumnType("decimal(14, 2)")
                     .HasColumnName("totalVenta");
@@ -160,11 +165,6 @@ namespace APISND.Models
                     .WithMany(p => p.OrdenesVenta)
                     .HasForeignKey(d => d.IdPublicacion)
                     .HasConstraintName("FK_OrdenesNegocios_Publicaciones");
-
-                entity.HasOne(d => d.IdUsuarioNavigation)
-                    .WithMany(p => p.OrdenesVenta)
-                    .HasForeignKey(d => d.IdUsuario)
-                    .HasConstraintName("FK_OrdenesNegocios_Usuarios");
             });
 
             modelBuilder.Entity<Publicacione>(entity =>

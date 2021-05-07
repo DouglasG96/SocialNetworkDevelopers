@@ -49,19 +49,20 @@ namespace APISND.Services
                         saleOrder.FechaHoraOrdenVenta = DateTime.Now;
                         //saleOrder.TotalVentaConIva = saleOrderDTO.Cantidad * (publication.Precio + (publication.Precio * 0.13m));
                         saleOrder.TotalVenta = saleOrderDTO.Cantidad * publication.Precio;
+                        saleOrder.EstadoOrdenVenta = 1; //pendiente
                         db.OrdenesVentas.Add(saleOrder);
                         await db.SaveChangesAsync();
 
                         //Creacion de orden de compra
                         OrdenesCompra objCompra = new OrdenesCompra()
                         {
-                            //IdOrdenCompra = 0,
+                            IdOrdenVenta = saleOrder.IdOrdenVenta,
                             IdPublicacion = publication.IdPublicacion,
                             IdUsuario = buyer.IdUsuario,
                             FechaHoraOrdenCompra = DateTime.Now,
                             //TotalCompraConIva = saleOrderDTO.Cantidad * (publication.Precio + (publication.Precio * 0.13m)),
                             TotalCompra = saleOrderDTO.Cantidad * publication.Precio,
-                            EstadoOrdenCompra = 1,
+                            EstadoOrdenCompra = 1, //pendiente
                             Cantidad = saleOrderDTO.Cantidad
                         };
                         db.OrdenesCompras.Add(objCompra);
@@ -123,24 +124,24 @@ namespace APISND.Services
         {
             try
             {
-                var list =  (from s in _context.OrdenesVentas
+                var list =  (from o in _context.OrdenesVentas
                             join p in _context.Publicaciones
-                            on s.IdPublicacion equals p.IdPublicacion
+                            on o.IdPublicacion equals p.IdPublicacion
                             join c in _context.OrdenesCompras
-                            on p.IdPublicacion equals c.IdPublicacion
+                            on o.IdOrdenVenta equals c.IdOrdenVenta
                             join u in _context.Usuarios
                             on c.IdUsuario equals u.IdUsuario 
-                            where s.IdUsuario == id
-                            orderby s.FechaHoraOrdenVenta descending
+                            where p.IdUsuario == id
+                            orderby o.FechaHoraOrdenVenta descending
                             select new SaleOrderDTO
                             {
-                                IdOrdenVenta = s.IdOrdenVenta,
-                                IdPublicacion = s.IdPublicacion,
-                                IdUsuario = s.IdUsuario,
-                                EstadoOrdenVenta = statusSales(Convert.ToInt32(s.EstadoOrdenVenta)),
-                                FechaHoraOrdenVenta = Convert.ToDateTime(s.FechaHoraOrdenVenta).ToString("dd/MM/yyyy HH:mm:ss"),
-                                TotalVenta = s.TotalVenta,
-                                Cantidad = (int)s.Cantidad,
+                                IdOrdenVenta = o.IdOrdenVenta,
+                                IdPublicacion = o.IdPublicacion,
+                                IdUsuario = p.IdUsuario,
+                                EstadoOrdenVenta = statusSales(Convert.ToInt32(o.EstadoOrdenVenta)),
+                                FechaHoraOrdenVenta = Convert.ToDateTime(o.FechaHoraOrdenVenta).ToString("dd/MM/yyyy HH:mm:ss"),
+                                TotalVenta = o.TotalVenta,
+                                Cantidad = (int)o.Cantidad,
                                 TituloPublicacion = p.Titulo,
                                 Comprador = u.NombreCompleto,
                                 IdOrdenCompra = c.IdOrdenCompra,
@@ -182,26 +183,27 @@ namespace APISND.Services
                     try
                     {
 
-                        
-                        var saleOrder =  await _context.OrdenesVentas.FirstOrDefaultAsync(x => x.IdOrdenVenta == statusOrderDTO.IdSaleOrder);
+
+                        var saleOrder = await db.OrdenesVentas.FirstOrDefaultAsync(x => x.IdOrdenVenta == statusOrderDTO.IdSaleOrder);
 
                         if (saleOrder == null)
                             return false;
 
-                        var seller = await _userServices.GetUserByID((int)saleOrder.IdUsuario);
                         var publication = await _publicationServices.GetPublicationById((int)saleOrder.IdPublicacion);
 
+                        var seller = await _userServices.GetUserByID((int)publication.IdUsuario);
+
                         saleOrder.EstadoOrdenVenta = 2; //aprobada
-                        db.OrdenesVentas.Add(saleOrder).State = EntityState.Modified;
-                        await _context.SaveChangesAsync();
+                        db.Update(saleOrder).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
 
                         //actualizacion orden de compra
-                        var buyOrder = await _context.OrdenesCompras.FirstOrDefaultAsync(x => x.IdOrdenCompra == statusOrderDTO.IdBuyOrder);
+                        var buyOrder = await db.OrdenesCompras.FirstOrDefaultAsync(x => x.IdOrdenCompra == statusOrderDTO.IdBuyOrder);
                         if (buyOrder != null)
                         {
                             buyOrder.EstadoOrdenCompra = 2; //aprobada
-                            db.OrdenesCompras.Add(buyOrder).State = EntityState.Modified;
-                            await _context.SaveChangesAsync();
+                            db.Update(buyOrder).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
                         }
                         var buyer = await _userServices.GetUserByID((int)buyOrder.IdUsuario);
 
@@ -275,25 +277,26 @@ namespace APISND.Services
                     {
 
 
-                        var saleOrder = await _context.OrdenesVentas.FirstOrDefaultAsync(x => x.IdOrdenVenta == statusOrderDTO.IdSaleOrder);
+                        var saleOrder = await db.OrdenesVentas.FirstOrDefaultAsync(x => x.IdOrdenVenta == statusOrderDTO.IdSaleOrder);
 
                         if (saleOrder == null)
                             return false;
 
-                        var seller = await _userServices.GetUserByID((int)saleOrder.IdUsuario);
                         var publication = await _publicationServices.GetPublicationById((int)saleOrder.IdPublicacion);
 
+                        var seller = await _userServices.GetUserByID((int)publication.IdUsuario);
+
                         saleOrder.EstadoOrdenVenta = 3; //rechazada
-                        db.OrdenesVentas.Add(saleOrder).State = EntityState.Modified;
-                        await _context.SaveChangesAsync();
+                        db.Update(saleOrder).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
 
                         //actualizacion orden de compra
-                        var buyOrder = await _context.OrdenesCompras.FirstOrDefaultAsync(x => x.IdOrdenCompra == statusOrderDTO.IdBuyOrder);
+                        var buyOrder = await db.OrdenesCompras.FirstOrDefaultAsync(x => x.IdOrdenCompra == statusOrderDTO.IdBuyOrder);
                         if (buyOrder != null)
                         {
                             buyOrder.EstadoOrdenCompra = 3; //rechazada
-                            db.OrdenesCompras.Add(buyOrder).State = EntityState.Modified;
-                            await _context.SaveChangesAsync();
+                            db.Update(buyOrder).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
                         }
                         var buyer = await _userServices.GetUserByID((int)buyOrder.IdUsuario);
 

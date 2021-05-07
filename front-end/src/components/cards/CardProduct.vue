@@ -69,7 +69,6 @@
       </q-card>
     </q-dialog>
 
-    <q-layout view="hHh lpR fFf">
 
       <q-drawer v-model="drawer" side="right" overlay bordered>
         <q-toolbar>
@@ -111,7 +110,7 @@
         <router-view/>
       </q-page-container>
 
-    </q-layout>
+
   </div>
 </template>
 

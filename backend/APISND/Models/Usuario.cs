@@ -10,7 +10,6 @@ namespace APISND.Models
         public Usuario()
         {
             OrdenesCompras = new HashSet<OrdenesCompra>();
-            OrdenesVenta = new HashSet<OrdenesVenta>();
             Publicaciones = new HashSet<Publicacione>();
             Ratings = new HashSet<Rating>();
             Whislists = new HashSet<Whislist>();
@@ -38,7 +37,6 @@ namespace APISND.Models
         public virtual Municipio IdMunicipioNavigation { get; set; }
         public virtual Role IdRolNavigation { get; set; }
         public virtual ICollection<OrdenesCompra> OrdenesCompras { get; set; }
-        public virtual ICollection<OrdenesVenta> OrdenesVenta { get; set; }
         public virtual ICollection<Publicacione> Publicaciones { get; set; }
         public virtual ICollection<Rating> Ratings { get; set; }
         public virtual ICollection<Whislist> Whislists { get; set; }

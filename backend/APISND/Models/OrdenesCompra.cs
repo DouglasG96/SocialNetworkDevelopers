@@ -10,11 +10,13 @@ namespace APISND.Models
         public int IdOrdenCompra { get; set; }
         public int? IdPublicacion { get; set; }
         public int? IdUsuario { get; set; }
+        public int? IdOrdenVenta { get; set; }
         public DateTime? FechaHoraOrdenCompra { get; set; }
         public decimal? TotalCompra { get; set; }
         public int? EstadoOrdenCompra { get; set; }
         public int? Cantidad { get; set; }
 
+        public virtual OrdenesVenta IdOrdenVentaNavigation { get; set; }
         public virtual Publicacione IdPublicacionNavigation { get; set; }
         public virtual Usuario IdUsuarioNavigation { get; set; }
     }
