@@ -93,7 +93,7 @@ namespace APISND.Services
                         try
                         {
 
-                            var buyOrder = await _context.OrdenesCompras.FirstOrDefaultAsync(x => x.IdOrdenCompra == receivedBuyerDTO.IdBuyOrder);
+                            var buyOrder = await db.OrdenesCompras.FirstOrDefaultAsync(x => x.IdOrdenCompra == receivedBuyerDTO.IdBuyOrder);
 
                             if (buyOrder == null)
                                 return false;
@@ -101,29 +101,40 @@ namespace APISND.Services
                             var buyer = await _userServices.GetUserByID((int)buyOrder.IdUsuario);
                           
                             buyOrder.EstadoOrdenCompra = 4; //recibido
-                            db.OrdenesCompras.Add(buyOrder).State = EntityState.Modified;
-                            await _context.SaveChangesAsync();
+                            db.Update(buyOrder).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
 
                             //actualizacion orden de compra
-                            var saleOrder = await _context.OrdenesVentas.FirstOrDefaultAsync(x => x.IdOrdenVenta == receivedBuyerDTO.IdSaleOrder);
+                            var saleOrder = await db.OrdenesVentas.FirstOrDefaultAsync(x => x.IdOrdenVenta == receivedBuyerDTO.IdSaleOrder);
                             if (saleOrder != null)
                             {
                                 saleOrder.EstadoOrdenVenta = 4; //entregado
-                                db.OrdenesVentas.Add(saleOrder).State = EntityState.Modified;
-                                await _context.SaveChangesAsync();
+                                db.Update(saleOrder).State = EntityState.Modified;
+                                await db.SaveChangesAsync();
                             }
+
+                            //inserto raiting de publicacion
+                            Rating rating = new Rating()
+                            {
+                                Rating1 = receivedBuyerDTO.Raiting,
+                                FechaHoraCreacion = DateTime.Now,
+                                IdPublicacion = buyOrder.IdPublicacion,
+                                IdUsuario = buyOrder.IdUsuario
+                            };
+                            db.Ratings.Add(rating);
+                            await db.SaveChangesAsync();
 
                             //actualizar publicación
                             //var publication = await _publicationServices.GetPublicationById((int)buyOrder.IdPublicacion);
-                            var publication = await _context.Publicaciones.FirstOrDefaultAsync(x => x.IdPublicacion == buyOrder.IdPublicacion);
+                            var publication = await db.Publicaciones.FirstOrDefaultAsync(x => x.IdPublicacion == buyOrder.IdPublicacion);
 
-                            if (publication != null)
-                            {
-                                publication.Raiting = receivedBuyerDTO.Raiting;
+                            //if (publication != null)
+                            //{
+                            //    publication.Raiting = receivedBuyerDTO.Raiting;
 
-                                db.Update(publication).State = EntityState.Modified;
-                                await _context.SaveChangesAsync();
-                            }
+                            //    db.Update(publication).State = EntityState.Modified;
+                            //    await _context.SaveChangesAsync();
+                            //}
 
 
                             var seller = await _userServices.GetUserByID((int)saleOrder.IdUsuario);

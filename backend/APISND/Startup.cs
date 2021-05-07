@@ -48,7 +48,7 @@ namespace APISND
             // Registro del Contexto de datos como Servicio Cadena conexion
             services.AddDbContext<SocialNetworkDeveloperContext>(options =>
                //options.UseSqlServer(Configuration.GetConnectionString("AppConnection2")).EnableSensitiveDataLogging());
-               options.UseSqlServer(Configuration.GetConnectionString("AppConnection3")).EnableSensitiveDataLogging());
+               options.UseSqlServer(Configuration.GetConnectionString("AppConnection2")).EnableSensitiveDataLogging());
 
             services.AddTransient<IAuth, AuthServices>();
             services.AddTransient<IUser, UserServices>();

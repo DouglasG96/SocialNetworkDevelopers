@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace APISND.Models
 {
-    public partial class Wishlist
+    public partial class Whislist
     {
         public int IdWhislist { get; set; }
         public int? IdPublicacion { get; set; }

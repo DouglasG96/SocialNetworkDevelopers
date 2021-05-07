@@ -27,7 +27,7 @@ namespace APISND.Services
         {
                 try
                 {
-                    var list = (from wsh in _context.Wishlists
+                    var list = (from wsh in _context.Whislists
                                 join pbl in _context.Publicaciones
                                 on wsh.IdPublicacion equals pbl.IdPublicacion
                                 join usr in _context.Usuarios
@@ -55,11 +55,11 @@ namespace APISND.Services
                 }
         }
 
-        public async Task<Wishlist> AddPublicationWishList(Wishlist wishlist)
+        public async Task<Whislist> AddPublicationWishList(Whislist wishlist)
         {
             try
             {
-                _context.Wishlists.Add(wishlist);
+                _context.Whislists.Add(wishlist);
                 await _context.SaveChangesAsync();
                 return wishlist;
             }
@@ -76,13 +76,13 @@ namespace APISND.Services
 
             try
             {
-                var itemwishlistexist = await _context.Wishlists.FirstOrDefaultAsync(x => x.IdWhislist == idWishList);
+                var itemwishlistexist = await _context.Whislists.FirstOrDefaultAsync(x => x.IdWhislist == idWishList);
 
                 if (itemwishlistexist == null)
                     return false;
 
                 itemwishlistexist.EstadoWishlist = 0; //eliminada
-                _context.Wishlists.Add(itemwishlistexist).State = EntityState.Modified;
+                _context.Whislists.Add(itemwishlistexist).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
                 return true;
             }

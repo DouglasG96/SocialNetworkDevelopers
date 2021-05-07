@@ -24,23 +24,24 @@ namespace APISND.Models
         public virtual DbSet<OrdenesCompra> OrdenesCompras { get; set; }
         public virtual DbSet<OrdenesVenta> OrdenesVentas { get; set; }
         public virtual DbSet<Publicacione> Publicaciones { get; set; }
+        public virtual DbSet<Rating> Ratings { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<SubCategoria> SubCategorias { get; set; }
         public virtual DbSet<TipoPublicacion> TipoPublicacions { get; set; }
         public virtual DbSet<Usuario> Usuarios { get; set; }
-        public virtual DbSet<Wishlist> Wishlists { get; set; }
+        public virtual DbSet<Whislist> Whislists { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-               optionsBuilder.UseSqlServer("data source=PROGRAMACION-3;initial catalog=SocialNetworkDeveloper;user id=sa;password=Fasan1;");
+                optionsBuilder.UseSqlServer("data source=PROGRAMACION-3;initial catalog=SocialNetworkDeveloper;user id=sa;password=Fasan1;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "Modern_Spanish_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<Categoria>(entity =>
             {
@@ -239,6 +240,35 @@ namespace APISND.Models
                     .HasConstraintName("FK_Publicaciones_Usuarios");
             });
 
+            modelBuilder.Entity<Rating>(entity =>
+            {
+                entity.HasKey(e => e.IdRating);
+
+                entity.ToTable("Rating");
+
+                entity.Property(e => e.IdRating).HasColumnName("idRating");
+
+                entity.Property(e => e.FechaHoraCreacion)
+                    .HasColumnType("datetime")
+                    .HasColumnName("fechaHoraCreacion");
+
+                entity.Property(e => e.IdPublicacion).HasColumnName("idPublicacion");
+
+                entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
+
+                entity.Property(e => e.Rating1).HasColumnName("Rating");
+
+                entity.HasOne(d => d.IdPublicacionNavigation)
+                    .WithMany(p => p.Ratings)
+                    .HasForeignKey(d => d.IdPublicacion)
+                    .HasConstraintName("FK_Rating_Publicaciones1");
+
+                entity.HasOne(d => d.IdUsuarioNavigation)
+                    .WithMany(p => p.Ratings)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .HasConstraintName("FK_Rating_Usuarios");
+            });
+
             modelBuilder.Entity<Role>(entity =>
             {
                 entity.HasKey(e => e.IdRol)
@@ -356,7 +386,7 @@ namespace APISND.Models
                     .HasConstraintName("fk_usuarios_roles");
             });
 
-            modelBuilder.Entity<Wishlist>(entity =>
+            modelBuilder.Entity<Whislist>(entity =>
             {
                 entity.HasKey(e => e.IdWhislist)
                     .HasName("pk_whislist");
@@ -381,7 +411,7 @@ namespace APISND.Models
                     .HasConstraintName("fk_whislist_publicaciones");
 
                 entity.HasOne(d => d.IdUsuarioNavigation)
-                    .WithMany(p => p.Wishlists)
+                    .WithMany(p => p.Whislists)
                     .HasForeignKey(d => d.IdUsuario)
                     .HasConstraintName("fk_whislist_usuarios");
             });
