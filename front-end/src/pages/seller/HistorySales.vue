@@ -25,8 +25,7 @@
               'Fecha de Venta': 'fechaHoraOrdenVenta',
               'Publicación': 'tituloPublicacion',
               'Cantidad': 'cantidad',
-              'Total con Iva': 'totalVentaConIva',
-              'Total sin Iva': 'totalVentaSinIva',
+              'Total': 'totalVenta',
               'Estado': 'estadoOrdenVenta',
 
             }"

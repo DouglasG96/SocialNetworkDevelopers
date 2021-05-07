@@ -22,8 +22,7 @@
               'Fecha de Compra': 'fechaHoraOrdenCompra',
               'Publicación': 'tituloPublicacion',
               'Cantidad': 'cantidad',
-              'Total con Iva': 'totalCompraConIva',
-              'Total sin Iva': 'totalCompraSinIva',
+              'Total': 'totalCompra',
               'Estado': 'estadoOrdenCompra',
 
             }"
