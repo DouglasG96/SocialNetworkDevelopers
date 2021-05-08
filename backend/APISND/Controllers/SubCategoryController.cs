@@ -29,7 +29,6 @@ namespace APISND.Controllers
 
         [AuthorizeRoles(Rol.Administrator)]
         [HttpGet]
-
         [ProducesResponseType(typeof(SubCategoryDTO), 201)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -55,7 +54,7 @@ namespace APISND.Controllers
         /// </summary>
         /// <param name="idCategory"></param>
         /// <returns></returns>
-        [AuthorizeRoles(Rol.Seller, Rol.Buyer)]
+        //[AuthorizeRoles(Rol.Seller, Rol.Buyer, Rol.Administrator)]
         [HttpGet]
         [ProducesResponseType(typeof(SubCategoryDTO), 200)]
         [ProducesResponseType(401)]
@@ -77,12 +76,12 @@ namespace APISND.Controllers
             }
         }
 
-        [AuthorizeRoles(Rol.Administrator)]
+        //[AuthorizeRoles(Rol.Administrator)]
         [HttpPost]
         [ProducesResponseType(typeof(SubCategoryDTO), 201)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> AddCategory([FromBody] SubCategoryDTO subCategoryDTO)
+        public async Task<IActionResult> AddSubCategory([FromBody] SubCategoryDTO subCategoryDTO)
         {
             try
             {
@@ -92,7 +91,6 @@ namespace APISND.Controllers
                 if (resp == null)
                     return StatusCode(StatusCodes.Status404NotFound, resp);
                 return StatusCode(StatusCodes.Status201Created, subCategory);
-
             }
             catch (Exception e)
             {
