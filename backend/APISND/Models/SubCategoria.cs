@@ -15,6 +15,7 @@ namespace APISND.Models
         public int IdSubCategoria { get; set; }
         public string NombreSubCategoria { get; set; }
         public int? IdCategoria { get; set; }
+        public int? EstadoSubCategoria { get; set; }
 
         public virtual Categoria IdCategoriaNavigation { get; set; }
         public virtual ICollection<Publicacione> Publicaciones { get; set; }

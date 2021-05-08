@@ -20,6 +20,21 @@ const routes = [
       {
         path: '/Mantenimientos/Usuarios',
         component: () => import('pages/mantenimientos/usuarios/UsersMaintenance.vue'),
+        meta: {requireAuth: false},
+      },
+      {
+        path: '/Mantenimientos/Categorias',
+        component: () => import('pages/mantenimientos/categorias/CategoriesMaintenance.vue'),
+        meta: {requireAuth: false}
+      },,
+      {
+        path: '/Mantenimientos/SubCategorias',
+        component: () => import('pages/mantenimientos/categorias/SubCategoriesMaintenance.vue'),
+        meta: {requireAuth: false}
+      },
+      {
+        path: '/Estadisticas',
+        component: () => import('pages/Estadisticas.vue'),
         meta: {requireAuth: false}
       },
       {path: '/HistorialCompras', component: () => import('pages/buyer/HistoryBuyer.vue'), meta: {requireAuth: true}},

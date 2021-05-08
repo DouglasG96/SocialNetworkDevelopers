@@ -26,6 +26,30 @@ namespace APISND.Controllers
             _mapper = mapper;
         }
 
+
+        [AuthorizeRoles(Rol.Administrator)]
+        [HttpGet]
+
+        [ProducesResponseType(typeof(SubCategoryDTO), 201)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult GetAllSubCategories()
+        {
+            try
+            {
+                var resp = _mapper.Map<List<SubCategoryDTO>>(_subCategoryServices.GetAllSubCategories());
+
+                if (resp == null)
+                    return NotFound(resp);
+
+                return Ok(resp);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
+        }
+
         /// <summary>
         /// Petición para obtener sub-categorias
         /// </summary>

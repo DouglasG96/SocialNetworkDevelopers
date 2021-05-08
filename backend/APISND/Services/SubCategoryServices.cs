@@ -19,6 +19,21 @@ namespace APISND.Services
             _context = context;
         }
 
+        public List<SubCategoria> GetAllSubCategories()
+        {
+            try
+            {
+                return _context.SubCategorias.ToList();
+
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error al obtener datos de SubCategoria GetAllCategories()  {0} : {1} ", e.Source, e.Message);
+                throw;
+            }
+
+        }
+
         public List<SubCategoria> GetSubCategoryByCategory(int id)
         {
             try

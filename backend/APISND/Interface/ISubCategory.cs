@@ -8,6 +8,7 @@ namespace APISND.Interface
 {
     public interface ISubCategory
     {
+        List<SubCategoria> GetAllSubCategories();
         List<SubCategoria> GetSubCategoryByCategory(int id);
         Task<SubCategoria> AddSubCategory(SubCategoria subCategoria);
 

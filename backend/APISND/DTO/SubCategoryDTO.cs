@@ -8,6 +8,7 @@ namespace APISND.DTO
     public class SubCategoryDTO
     {
         public int IdSubCategoria { get; set; }
+        public int EstadoSubCategoria { get; set; }
         public string NombreSubCategoria { get; set; }
         public int? IdCategoria { get; set; }
     }

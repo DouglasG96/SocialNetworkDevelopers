@@ -128,6 +128,16 @@
             </q-item>
           </q-list>
         </q-expansion-item>
+        <q-list>
+          <q-item to="/Estadisticas" v-if="this.user.idRole === '1'" active-class="q-item-no-link-highlighting">
+            <q-item-section avatar>
+              <q-icon name="dashboard"/>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Estadisticas</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
         <q-expansion-item icon="settings" label="Mantenimientos" v-if="this.user.idRole === '1'">
           <q-list class="q-pl-lg">
             <q-item to="/Mantenimientos/Usuarios" active-class="q-item-no-link-highlighting">
@@ -136,6 +146,22 @@
               </q-item-section>
               <q-item-section>
                 <q-item-label>Usuarios</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item to="/Mantenimientos/Categorias" active-class="q-item-no-link-highlighting">
+              <q-item-section avatar>
+                <q-icon name="list"/>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Categorias</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item to="/Mantenimientos/SubCategorias" active-class="q-item-no-link-highlighting">
+              <q-item-section avatar>
+                <q-icon name="check"/>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Sub Categorias</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
