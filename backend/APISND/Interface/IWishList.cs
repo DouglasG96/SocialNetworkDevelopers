@@ -10,7 +10,7 @@ namespace APISND.Interface
     public interface IWishList
     {
         List<WishlistDTO> GetPublicationWishList(int idUsuario);
-        Task<Whislist> AddPublicationWishList(Whislist wishlist);
+        Task<Wishlist> AddPublicationWishList(Wishlist wishlist);
         Task<bool> DeletePublicationWishlist(int idWishList);
     }
 }

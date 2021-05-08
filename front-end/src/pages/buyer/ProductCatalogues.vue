@@ -82,12 +82,6 @@ export default {
   },
   async mounted() {
     await this.getPublications();
-    /*
-    await this.$on('addWishList', function() {
-      console.log('si funciono')
-       this.getHistoryWishlist()
-    })
-    */
   },
   created() {
     // escuchar eventos signalR

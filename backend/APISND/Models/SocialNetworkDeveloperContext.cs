@@ -29,15 +29,14 @@ namespace APISND.Models
         public virtual DbSet<SubCategoria> SubCategorias { get; set; }
         public virtual DbSet<TipoPublicacion> TipoPublicacions { get; set; }
         public virtual DbSet<Usuario> Usuarios { get; set; }
-        public virtual DbSet<Whislist> Whislists { get; set; }
+        public virtual DbSet<Wishlist> Wishlists { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-               //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                //optionsBuilder.UseSqlServer("data source=DOUGLAS;initial catalog=SocialNetworkDeveloper;Integrated Security = True;");
-                optionsBuilder.UseSqlServer("data source=PROGRAMACION-3;initial catalog=SocialNetworkDeveloper;user id=sa;password=Fasan1;");
+                //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("data source=DOUGLAS;initial catalog=SocialNetworkDeveloper;Integrated Security = True;");
             }
         }
 
@@ -388,12 +387,12 @@ namespace APISND.Models
                     .HasConstraintName("fk_usuarios_roles");
             });
 
-            modelBuilder.Entity<Whislist>(entity =>
+            modelBuilder.Entity<Wishlist>(entity =>
             {
                 entity.HasKey(e => e.IdWhislist)
                     .HasName("pk_whislist");
 
-                entity.ToTable("Whislist");
+                entity.ToTable("Wishlist");
 
                 entity.Property(e => e.IdWhislist).HasColumnName("idWhislist");
 
@@ -408,12 +407,12 @@ namespace APISND.Models
                 entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
 
                 entity.HasOne(d => d.IdPublicacionNavigation)
-                    .WithMany(p => p.Whislists)
+                    .WithMany(p => p.Wishlists)
                     .HasForeignKey(d => d.IdPublicacion)
                     .HasConstraintName("fk_whislist_publicaciones");
 
                 entity.HasOne(d => d.IdUsuarioNavigation)
-                    .WithMany(p => p.Whislists)
+                    .WithMany(p => p.Wishlists)
                     .HasForeignKey(d => d.IdUsuario)
                     .HasConstraintName("fk_whislist_usuarios");
             });

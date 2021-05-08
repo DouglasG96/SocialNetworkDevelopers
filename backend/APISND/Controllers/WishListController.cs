@@ -57,7 +57,7 @@ namespace APISND.Controllers
         {
             try
             {
-                var wishlist = _mapper.Map<Whislist>(wishlistDTO);
+                var wishlist = _mapper.Map<Wishlist>(wishlistDTO);
                 var resp = await _wishlist.AddPublicationWishList(wishlist);
 
                 if (resp == null)
