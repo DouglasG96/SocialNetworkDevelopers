@@ -28,6 +28,21 @@ namespace SNDAPI.Services
             _configuration = configuration;
         }
 
+        public async Task<Categoria> AddCategory(Categoria categoria)
+        {
+            try
+            {
+                _context.Categorias.Add(categoria);
+                await _context.SaveChangesAsync();
+                return categoria;
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error al Crear Categoria AddCategory()  {0} : {1} ", e.Source, e.Message);
+                throw;
+            }
+        }
+
         public List<Categoria> GetCategories()
         {
             try

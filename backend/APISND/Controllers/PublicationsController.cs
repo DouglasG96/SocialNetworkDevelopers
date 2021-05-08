@@ -72,7 +72,7 @@ namespace APISND.Controllers
         {
             try
             {
-                var resp = _mapper.Map<PublicationDTO>(await _publicationServices.GetPublicationById(id));
+                var resp = await _publicationServices.GetPublicationById(id);
 
                 if (resp == null)
                     return NotFound(new { message = $"Publicacion con Id = {id} no encontrado" });
@@ -160,12 +160,11 @@ namespace APISND.Controllers
         /// <param name="publicationDTO"></param>
         /// <returns></returns>
         [AuthorizeRoles(Rol.Seller, Rol.Buyer)]
-        [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         [HttpPut]
-        public async Task<IActionResult> UpdatePublication(int id, [FromBody] PublicationDTO publicationDTO)
+        public async Task<IActionResult> UpdatePublication(int id, [FromBody] UpdatePublicationDTO publicationDTO)
         {
             try
             {
@@ -175,10 +174,10 @@ namespace APISND.Controllers
                 if (!_publicationServices.PublicationExists(id))
                     return NotFound(new { message = $"Publicacion con Id = {id} no existe" });
 
-                var publication = _mapper.Map<Publicacione>(publicationDTO);
-                await _publicationServices.UpdatePublication(publication);
+                //var publication = _mapper.Map<Publicacione>(publicationDTO);
+                await _publicationServices.UpdatePublication(publicationDTO);
 
-                return StatusCode(StatusCodes.Status204NoContent, publication);
+                return StatusCode(StatusCodes.Status204NoContent, publicationDTO);
 
             }
             catch (Exception e)

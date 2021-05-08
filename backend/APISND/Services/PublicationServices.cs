@@ -14,13 +14,13 @@ namespace APISND.Services
     public class PublicationServices : IPublication
     {
         static readonly ILog log = LogManager.GetLogger(typeof(UserServices));
-
         private readonly SocialNetworkDeveloperContext _context;
         private readonly IMapper _mapper;
+
         public PublicationServices(SocialNetworkDeveloperContext context, IMapper mapper)
         {
             _context = context;
-            mapper = _mapper;
+            this._mapper = mapper;
         }
 
         public async Task<List<Publicacione>> GetPublications()
@@ -36,11 +36,29 @@ namespace APISND.Services
 
             }
         }
-        public async Task<Publicacione> GetPublicationById(int id)
+        public async Task<PublicationDTO> GetPublicationById(int id)
         {
             try
             {
-                return await _context.Publicaciones.FirstOrDefaultAsync(x => x.IdPublicacion == id);
+                //return await _context.Publicaciones.FirstOrDefaultAsync(x => x.IdPublicacion == id);
+                var publication = await (from p in _context.Publicaciones
+                                   join u in _context.Usuarios
+                                   on p.IdUsuario equals u.IdUsuario
+                                   where p.IdPublicacion == id
+                                   select new PublicationDTO
+                                   {
+                                       IdPublicacion = p.IdPublicacion,
+                                       Titulo = p.Titulo,
+                                       Imagen = p.Imagen,
+                                       Raiting = p.Raiting,
+                                       Descripcion = p.Descripcion,
+                                       FechaCreacion = p.FechaCreacion,
+                                       Precio = p.Precio,
+                                       IdUsuario = p.IdUsuario,
+                                       IdEstadoPublicacion = p.IdEstadoPublicacion,
+                                       Contribuyente = u.Contribuyente
+                                   }).FirstOrDefaultAsync();
+                return publication;
             }
             catch (Exception e)
             {
@@ -66,15 +84,15 @@ namespace APISND.Services
             }
         }
 
-        public async Task<Publicacione> UpdatePublication(Publicacione publication)
+        public async Task<Publicacione> UpdatePublication(UpdatePublicationDTO model)
         {
             try
             {
-                var model = await _context.Publicaciones.AsNoTracking().FirstOrDefaultAsync(x => x.IdPublicacion == publication.IdPublicacion);
+                var publication = await _context.Publicaciones.FirstOrDefaultAsync(x => x.IdPublicacion == model.IdPublicacion);
                 if (model != null)
                 {
-
-                    _context.Publicaciones.Add(publication).State = EntityState.Modified;
+                    _mapper.Map(model, publication);
+                    _context.Update(publication).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
 
                     return publication;

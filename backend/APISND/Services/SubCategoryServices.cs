@@ -18,6 +18,7 @@ namespace APISND.Services
         {
             _context = context;
         }
+
         public List<SubCategoria> GetSubCategoryByCategory(int id)
         {
             try
@@ -31,6 +32,21 @@ namespace APISND.Services
                 throw;
             }
 
+        }
+
+        public async Task<SubCategoria> AddSubCategory(SubCategoria subCategoria)
+        {
+            try
+            {
+                _context.SubCategorias.Add(subCategoria);
+                await _context.SaveChangesAsync();
+                return subCategoria;
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error al Crear Categoria AddSubCategory()  {0} : {1} ", e.Source, e.Message);
+                throw;
+            }
         }
     }
 }

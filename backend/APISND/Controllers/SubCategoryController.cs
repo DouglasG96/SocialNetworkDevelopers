@@ -1,6 +1,7 @@
 ﻿using APISND.DTO;
 using APISND.Helpers;
 using APISND.Interface;
+using APISND.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -49,6 +50,29 @@ namespace APISND.Controllers
             catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
+        }
+
+        [AuthorizeRoles(Rol.Administrator)]
+        [HttpPost]
+        [ProducesResponseType(typeof(SubCategoryDTO), 201)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> AddCategory([FromBody] SubCategoryDTO subCategoryDTO)
+        {
+            try
+            {
+                var subCategory = _mapper.Map<SubCategoria>(subCategoryDTO);
+                var resp = await _subCategoryServices.AddSubCategory(subCategory);
+
+                if (resp == null)
+                    return StatusCode(StatusCodes.Status404NotFound, resp);
+                return StatusCode(StatusCodes.Status201Created, subCategory);
+
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
     }

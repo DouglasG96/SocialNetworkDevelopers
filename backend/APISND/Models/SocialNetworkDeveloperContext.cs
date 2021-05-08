@@ -24,24 +24,26 @@ namespace APISND.Models
         public virtual DbSet<OrdenesCompra> OrdenesCompras { get; set; }
         public virtual DbSet<OrdenesVenta> OrdenesVentas { get; set; }
         public virtual DbSet<Publicacione> Publicaciones { get; set; }
+        public virtual DbSet<Rating> Ratings { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<SubCategoria> SubCategorias { get; set; }
         public virtual DbSet<TipoPublicacion> TipoPublicacions { get; set; }
         public virtual DbSet<Usuario> Usuarios { get; set; }
-        public virtual DbSet<Wishlist> Wishlists { get; set; }
+        public virtual DbSet<Whislist> Whislists { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
                //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("data source=DOUGLAS;initial catalog=SocialNetworkDeveloper;Integrated Security = True;");
+                //optionsBuilder.UseSqlServer("data source=DOUGLAS;initial catalog=SocialNetworkDeveloper;Integrated Security = True;");
+                optionsBuilder.UseSqlServer("data source=PROGRAMACION-3;initial catalog=SocialNetworkDeveloper;user id=sa;password=Fasan1;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "Modern_Spanish_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<Categoria>(entity =>
             {
@@ -116,6 +118,8 @@ namespace APISND.Models
                     .HasColumnType("datetime")
                     .HasColumnName("fechaHoraOrdenCompra");
 
+                entity.Property(e => e.IdOrdenVenta).HasColumnName("idOrdenVenta");
+
                 entity.Property(e => e.IdPublicacion).HasColumnName("idPublicacion");
 
                 entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
@@ -123,6 +127,11 @@ namespace APISND.Models
                 entity.Property(e => e.TotalCompra)
                     .HasColumnType("decimal(14, 2)")
                     .HasColumnName("totalCompra");
+
+                entity.HasOne(d => d.IdOrdenVentaNavigation)
+                    .WithMany(p => p.OrdenesCompras)
+                    .HasForeignKey(d => d.IdOrdenVenta)
+                    .HasConstraintName("FK_OrdenesCompras_OrdenesVentas");
 
                 entity.HasOne(d => d.IdPublicacionNavigation)
                     .WithMany(p => p.OrdenesCompras)
@@ -150,8 +159,6 @@ namespace APISND.Models
 
                 entity.Property(e => e.IdPublicacion).HasColumnName("idPublicacion");
 
-                entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
-
                 entity.Property(e => e.TotalVenta)
                     .HasColumnType("decimal(14, 2)")
                     .HasColumnName("totalVenta");
@@ -160,11 +167,6 @@ namespace APISND.Models
                     .WithMany(p => p.OrdenesVenta)
                     .HasForeignKey(d => d.IdPublicacion)
                     .HasConstraintName("FK_OrdenesNegocios_Publicaciones");
-
-                entity.HasOne(d => d.IdUsuarioNavigation)
-                    .WithMany(p => p.OrdenesVenta)
-                    .HasForeignKey(d => d.IdUsuario)
-                    .HasConstraintName("FK_OrdenesNegocios_Usuarios");
             });
 
             modelBuilder.Entity<Publicacione>(entity =>
@@ -205,7 +207,7 @@ namespace APISND.Models
 
                 entity.Property(e => e.Imagen).HasColumnType("image");
 
-                entity.Property(e => e.Precio).HasColumnType("decimal(6, 2)");
+                entity.Property(e => e.Precio).HasColumnType("decimal(14, 2)");
 
                 entity.Property(e => e.Titulo).HasMaxLength(150);
 
@@ -238,6 +240,35 @@ namespace APISND.Models
                     .WithMany(p => p.Publicaciones)
                     .HasForeignKey(d => d.IdUsuario)
                     .HasConstraintName("FK_Publicaciones_Usuarios");
+            });
+
+            modelBuilder.Entity<Rating>(entity =>
+            {
+                entity.HasKey(e => e.IdRating);
+
+                entity.ToTable("Rating");
+
+                entity.Property(e => e.IdRating).HasColumnName("idRating");
+
+                entity.Property(e => e.FechaHoraCreacion)
+                    .HasColumnType("datetime")
+                    .HasColumnName("fechaHoraCreacion");
+
+                entity.Property(e => e.IdPublicacion).HasColumnName("idPublicacion");
+
+                entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
+
+                entity.Property(e => e.Rating1).HasColumnName("Rating");
+
+                entity.HasOne(d => d.IdPublicacionNavigation)
+                    .WithMany(p => p.Ratings)
+                    .HasForeignKey(d => d.IdPublicacion)
+                    .HasConstraintName("FK_Rating_Publicaciones1");
+
+                entity.HasOne(d => d.IdUsuarioNavigation)
+                    .WithMany(p => p.Ratings)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .HasConstraintName("FK_Rating_Usuarios");
             });
 
             modelBuilder.Entity<Role>(entity =>
@@ -357,12 +388,12 @@ namespace APISND.Models
                     .HasConstraintName("fk_usuarios_roles");
             });
 
-            modelBuilder.Entity<Wishlist>(entity =>
+            modelBuilder.Entity<Whislist>(entity =>
             {
                 entity.HasKey(e => e.IdWhislist)
                     .HasName("pk_whislist");
 
-                entity.ToTable("Wishlist");
+                entity.ToTable("Whislist");
 
                 entity.Property(e => e.IdWhislist).HasColumnName("idWhislist");
 
@@ -377,12 +408,12 @@ namespace APISND.Models
                 entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
 
                 entity.HasOne(d => d.IdPublicacionNavigation)
-                    .WithMany(p => p.Wishlists)
+                    .WithMany(p => p.Whislists)
                     .HasForeignKey(d => d.IdPublicacion)
                     .HasConstraintName("fk_whislist_publicaciones");
 
                 entity.HasOne(d => d.IdUsuarioNavigation)
-                    .WithMany(p => p.Wishlists)
+                    .WithMany(p => p.Whislists)
                     .HasForeignKey(d => d.IdUsuario)
                     .HasConstraintName("fk_whislist_usuarios");
             });

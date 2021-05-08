@@ -25,8 +25,7 @@
               'Fecha de Venta': 'fechaHoraOrdenVenta',
               'Publicación': 'tituloPublicacion',
               'Cantidad': 'cantidad',
-              'Total con Iva': 'totalVentaConIva',
-              'Total sin Iva': 'totalVentaSinIva',
+              'Total': 'totalVenta',
               'Estado': 'estadoOrdenVenta',
 
             }"
@@ -58,8 +57,8 @@
             <q-td key="cantidad" :props="props">
               {{ props.row.cantidad }}
             </q-td>
-            <q-td key="totalVentaSinIva" :props="props">
-              {{ props.row.totalVentaSinIva }}
+            <q-td key="totalVenta" :props="props">
+              {{ props.row.totalVenta }}
             </q-td>
             <q-td key="estadoOrdenVenta" :props="props">
               {{ props.row.estadoOrdenVenta }}
@@ -124,9 +123,9 @@ export default {
           field: "cantidad"
         },
         {
-          name: "totalVentaSinIva",
+          name: "totalVenta",
           label: "Total",
-          field: "totalVentaSinIva"
+          field: "totalVenta"
         },
         {
           name: "estadoOrdenVenta",

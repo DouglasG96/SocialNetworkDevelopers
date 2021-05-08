@@ -49,6 +49,7 @@ namespace APISND
             services.AddDbContext<SocialNetworkDeveloperContext>(options =>
                //options.UseSqlServer(Configuration.GetConnectionString("AppConnection2")).EnableSensitiveDataLogging());
                options.UseSqlServer(Configuration.GetConnectionString("AppConnection3")).EnableSensitiveDataLogging());
+               //options.UseSqlServer(Configuration.GetConnectionString("AppConnection2")).EnableSensitiveDataLogging());
 
             services.AddTransient<IAuth, AuthServices>();
             services.AddTransient<IUser, UserServices>();
@@ -62,7 +63,7 @@ namespace APISND
             services.AddTransient<IAdress, AdressServices>();
             services.AddTransient<IWishList, WishlistServices>();
 
-            services.AddSignalR();//Añadimos servicio para SignalR
+            services.AddSignalR();//Aï¿½adimos servicio para SignalR
 
 
             //swagger

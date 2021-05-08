@@ -22,8 +22,7 @@
               'Fecha de Compra': 'fechaHoraOrdenCompra',
               'Publicación': 'tituloPublicacion',
               'Cantidad': 'cantidad',
-              'Total con Iva': 'totalCompraConIva',
-              'Total sin Iva': 'totalCompraSinIva',
+              'Total': 'totalCompra',
               'Estado': 'estadoOrdenCompra',
 
             }"
@@ -35,8 +34,54 @@
             </template>
           </q-input>
         </template>
+
+        <!-- Renderiza data en tabla -->
+        <template v-slot:body="props">
+          <q-tr :props="props">
+            <q-td key="idOrdenCompra" :props="props">{{ props.row.idOrdenCompra }}</q-td>
+            <q-td key="fechaHoraOrdenCompra" :props="props">{{ props.row.fechaHoraOrdenCompra }}</q-td>
+            <q-td key="vendedor" :props="props">{{ props.row.vendedor }}</q-td>
+            <q-td key="tituloPublicacion" :props="props">{{ props.row.tituloPublicacion }}</q-td>
+            <q-td key="cantidad" :props="props">{{ props.row.cantidad }}</q-td>
+            <q-td key="totalCompra" :props="props">{{ props.row.totalCompra }}</q-td>
+            <q-td key="estadoOrdenCompra" :props="props">{{ props.row.estadoOrdenCompra }}</q-td>
+            <q-td key="actions" :props="props">
+              <template v-if="props.row.estadoOrdenCompra == 'Aprobada'">
+                <q-btn
+                  color="positive"
+                  label="Recibido"
+                  size="sm"
+                  flat
+                  dense
+                  @click="received(props.row)"
+                />
+              </template>
+            </q-td>
+          </q-tr>
+        </template>
       </q-table>
     </div>
+
+    <!-- dialogo calificar producto -->
+    <q-dialog v-model="dialog">
+      <q-card>
+        <q-card-section class="row items-center q-pb-none">
+          <div class="text-h6">Calificar Producto</div>
+          <q-space />
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <div class="text-subtitle2 q-mt-sm">
+            <q-rating v-model="raiting" size="2em" color="green-5" />
+          </div>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Calificar" @click="rate" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 <script>
@@ -57,9 +102,15 @@ export default {
           sortable: true
         },
         {
-          name: "fechaHoraOrdenVenta",
+          name: "fechaHoraOrdenCompra",
           label: "Fecha de Compra",
-          field: "fechaHoraOrdenVenta",
+          field: "fechaHoraOrdenCompra",
+          sortable: true
+        },
+        {
+          name: "vendedor",
+          label: "Vendedor",
+          field: "vendedor",
           sortable: true
         },
         {
@@ -75,9 +126,9 @@ export default {
           sortable: true
         },
         {
-          name: "totalCompraSinIva",
+          name: "totalCompra",
           label: "Total",
-          field: "totalCompraSinIva",
+          field: "totalCompra",
           sortable: true
         },
         {
@@ -85,12 +136,21 @@ export default {
           label: "Estado",
           field: "estadoOrdenCompra",
           sortable: true
+        },
+        {
+          name: "actions",
+          label: "Acciones",
+          field: "actions"
         }
       ],
       filter: "",
       pagination: {
         rowsPerPage: 15
-      }
+      },
+      dialog: false,
+      raiting: 1,
+      idSaleOrder: 0,
+      idBuyOrder: 0,
     };
   },
   computed: {
@@ -107,6 +167,40 @@ export default {
         );
       } catch (error) {
         console.log(error);
+      }
+    },
+    async received(item){
+      this.dialog = true;
+      console.log(item);
+      this.idSaleOrder = item.idOrdenVenta;
+      this.idBuyOrder = item.idOrdenCompra;
+    },
+    async rate(item){
+      console.log(item);
+      this.$q.loading.show();
+      try {
+        await api.ReceivedBuyer(
+          {
+            idSaleOrder: parseInt(this.idSaleOrder),
+            idBuyOrder: parseInt(this.idBuyOrder),
+            raiting: parseInt(this.raiting),
+          }
+        );
+        await this.getHistoryBuyers();
+        this.$q.notify({
+          type: "positive",
+          position: "center",
+          message: "Gracias por su calificación"
+        });
+      } catch (error) {
+        console.log(error);
+                this.$q.notify({
+          type: "negative",
+          position: "center",
+          message: "Error Interno, Intente mas Tarde"
+        });
+      }finally{
+        this.$q.loading.hide();
       }
     }
   }
