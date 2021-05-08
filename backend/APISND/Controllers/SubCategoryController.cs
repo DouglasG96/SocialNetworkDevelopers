@@ -97,5 +97,26 @@ namespace APISND.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
+
+        //[AuthorizeRoles(Rol.Administrator)]
+        [HttpPost]
+        [ProducesResponseType(typeof(SubCategoryDTO), 201)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> EditSubCategory([FromBody] SubCategoryDTO subCategoryDTO)
+        {
+            try
+            {
+                var subCategories = _mapper.Map<SubCategoria>(subCategoryDTO);
+                await _subCategoryServices.EditSubCategory(subCategories);
+
+                return StatusCode(StatusCodes.Status201Created, subCategories);
+
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
+        }
     }
 }
