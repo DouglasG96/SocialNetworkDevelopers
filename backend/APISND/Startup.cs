@@ -62,6 +62,7 @@ namespace APISND
             services.AddTransient<IBuyOrder, BuyOrderServices>();
             services.AddTransient<IAdress, AdressServices>();
             services.AddTransient<IWishList, WishlistServices>();
+            services.AddTransient<IStatistics, StatisticsServices>();
 
             services.AddSignalR();//A�adimos servicio para SignalR
 
