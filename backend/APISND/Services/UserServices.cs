@@ -73,7 +73,7 @@ namespace APISND.Services
                 var model = await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(x => x.IdUsuario == user.IdUsuario);
                 if(model != null)
                 {
-                    _context.Usuarios.Add(user).State = EntityState.Modified;
+                    _context.Update(user).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
 
                     return user;
@@ -130,6 +130,29 @@ namespace APISND.Services
             catch (Exception e)
             {
                 log.ErrorFormat("Error al Validar si Existe Usuario por medio de email UserExistsEmail()  {0} : {1} ", e.Source, e.Message);
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdatePassword(UserPasswordDTO userPasswordDTO)
+        {
+            try
+            {
+                var user = await _context.Usuarios.FirstOrDefaultAsync(x => x.CorreoElectronico == userPasswordDTO.Email);
+                if (user != null)
+                {
+                    user.Contrasena = userPasswordDTO.Password;
+                    _context.Update(user).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error al  Actualizar Contraseña UpdatePassword()  {0} : {1} ", e.Source, e.Message);
+                return false;
                 throw;
             }
         }

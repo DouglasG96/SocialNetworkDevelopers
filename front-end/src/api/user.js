@@ -20,6 +20,10 @@ async function updateUser (id, user) {
     var resp = await api.put(`/Users/UpdateUser/${encodeURIComponent(id)}`, user);
     return resp.data;
 }
+async function updatePassword (user) {
+    var resp = await api.put(`/Users/UpdatePassword`, user);
+    return resp.data;
+}
 
 async function deleteUser (id) {
     var resp = await api.delete(`/Users/DeleteUser/${encodeURIComponent(id)}`);
@@ -34,5 +38,6 @@ export default
     updateUser,
     deleteUser,
     userExistsEmail,
+    updatePassword,
     ...validation
 }

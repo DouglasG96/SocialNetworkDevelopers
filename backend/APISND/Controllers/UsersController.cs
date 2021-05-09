@@ -140,6 +140,28 @@ namespace APISND.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpPut]
+        [ProducesResponseType(typeof(UserDTO), 204)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> UpdatePassword(UserPasswordDTO userPasswordDTO)
+        {
+            try
+            {
+                var resp = await _user.UpdatePassword(userPasswordDTO);
+                if(resp)
+                    return StatusCode(StatusCodes.Status204NoContent, userPasswordDTO);
+
+                return StatusCode(StatusCodes.Status404NotFound, resp);
+
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
+        }
+
 
         [AuthorizeRoles(Rol.Administrator)]
         [ProducesResponseType(204)]

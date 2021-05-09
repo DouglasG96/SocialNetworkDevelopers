@@ -41,7 +41,7 @@
               </div>
               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <q-item>
-                  <q-file filled bottom-slots v-model="fileImage" label="Subir Imagen" counter >
+                  <q-file filled bottom-slots v-model="fileImage" label="Subir Imagen" counter>
                     <template v-slot:prepend>
                       <q-icon name="cloud_upload" @click.stop />
                     </template>
@@ -60,9 +60,9 @@
                     class="full-width"
                     v-model="price"
                     label="Precio"
-                       mask="#.##"
-        fill-mask="0"
-        reverse-fill-mask
+                    mask="#.##"
+                    fill-mask="0"
+                    reverse-fill-mask
                     :rules="rules.required"
                     lazy-rules
                   />
@@ -130,7 +130,6 @@
 import api from "src/api/publication";
 import { mapState } from "vuex";
 
-
 export default {
   data() {
     return {
@@ -148,7 +147,7 @@ export default {
         required: [v => !!v || "Campo Requerido."],
         requiredNumber: [
           val => (val !== null && val !== "") || "Campo Requerido.",
-          val => (val > 0) || "Ingrese un valor valido"
+          val => val > 0 || "Ingrese un valor valido"
         ]
       }
     };
@@ -164,9 +163,7 @@ export default {
     ...mapState("auth", ["user"])
   },
 
-  created () {
-
-  },
+  created() {},
   methods: {
     changeCategory() {
       this.getSubcategory();
@@ -193,7 +190,10 @@ export default {
         myFormData.set("titulo", this.title);
         myFormData.set("file", this.fileImage);
         myFormData.set("idCategoria", parseInt(this.category.idCategoria));
-        myFormData.set("idSubCategoria", parseInt(this.subCategory.idSubCategoria));
+        myFormData.set(
+          "idSubCategoria",
+          parseInt(this.subCategory.idSubCategoria)
+        );
         myFormData.set("idTipoPublicacion", parseInt(1));
         myFormData.set("descripcion", this.description);
         myFormData.set("precio", parseFloat(this.price));
@@ -208,23 +208,26 @@ export default {
         this.$q.notify({
           type: "positive",
           position: "center",
-          message: "Publicación Agregada Correctamente."
+          message: "Publicación Agregada Correctamente.",
+          actions: [{ icon: "close", color: "white" }]
         });
         setTimeout(() => {
           this.$router.push({ path: "/MisPublicaciones" }).catch(error => {
             console.log(error);
           });
         }, 4000);
-
       } catch (error) {
-          console.log(error);
-      }finally{
+        console.log(error);
+        this.$q.notify({
+          type: "negative",
+          position: "center",
+          message: "Error Interno, Intente mas Tarde",
+          actions: [{ icon: "close", color: "white" }]
+        });
+      } finally {
         this.$q.loading.hide();
-
       }
-    },
-
-  },
-
+    }
+  }
 };
 </script>
