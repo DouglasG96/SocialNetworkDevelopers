@@ -48,7 +48,7 @@ namespace APISND
             // Registro del Contexto de datos como Servicio Cadena conexion
             services.AddDbContext<SocialNetworkDeveloperContext>(options =>
                //options.UseSqlServer(Configuration.GetConnectionString("AppConnection2")).EnableSensitiveDataLogging());
-               options.UseSqlServer(Configuration.GetConnectionString("AppConnection")).EnableSensitiveDataLogging());
+               options.UseSqlServer(Configuration.GetConnectionString("AppConnectionProduccion")).EnableSensitiveDataLogging());
                //options.UseSqlServer(Configuration.GetConnectionString("AppConnection2")).EnableSensitiveDataLogging());
 
             services.AddTransient<IAuth, AuthServices>();
@@ -137,22 +137,21 @@ namespace APISND
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
+            //if (env.IsDevelopment())
+            //{
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SNDAPI v1"));
-            }
+            //}
 
             app.UseRouting();
 
-            app.UseCors(builder =>
-            builder
-                .WithOrigins("http://localhost:8080", "http://localhost:8081")
+            // global cors policy
+            app.UseCors(x => x
                 .AllowAnyMethod()
                 .AllowAnyHeader()
-                .AllowCredentials()
-        );
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials()); // allow credentials
 
             app.UseAuthentication();
             app.UseAuthorization();
