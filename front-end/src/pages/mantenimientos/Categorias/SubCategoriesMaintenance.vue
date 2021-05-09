@@ -25,9 +25,15 @@
             @input="changeCategory()"
           />
         </q-item>
+        <q-item>
+          <q-btn
+            round color="green"
+            icon="refresh"
+            @click="changeCategory()"
+          ></q-btn>
+        </q-item>
     </div>
     <!-- Dialogo para agregar y editar Registros -->
-
     <q-table
       title="Treats"
       :data="data"

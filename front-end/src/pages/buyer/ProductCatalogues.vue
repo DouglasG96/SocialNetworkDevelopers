@@ -37,7 +37,7 @@
              :key="item_index"
         >
           <q-list bordered>
-            <q-item clickable v-ripple :data="item">
+            <q-item v-ripple :data="item">
               <q-item-section thumbnail>
                 <img :src="`data:image/jpeg;base64,${item.imagen}`"/>
               </q-item-section>
@@ -52,6 +52,9 @@
               <q-item-section side bottom>
                 <div class="text-grey-8 ">
                  <q-btn class="" size="12px" flat dense round icon="delete" @click="deleteWishList(item.idWhislist)"/>
+                </div>
+                <div class="text-grey-8 ">
+                <!-- <q-btn class="" size="12px" flat dense round icon="visibility" @click="getDetailParent"/> -->
                 </div>
               </q-item-section>
             </q-item>
@@ -113,6 +116,10 @@ export default {
         position: "top-right",
         message: `Se agrego una nueva publicacion ${publication.publication}`
       });
+    },
+    getDetailParent()
+    {
+      this.$emit('getDetailWishlist')
     },
     async getPublications() {
       console.log(this.user);
