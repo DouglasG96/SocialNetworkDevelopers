@@ -21,16 +21,20 @@ namespace APISND.Services
         private readonly IEmail _emailServices;
         private readonly IUser _userServices;
         private readonly IPublication _publicationServices;
+        private readonly ITwilio _twilioServices;
 
 
 
-        public SaleOrderServices(SocialNetworkDeveloperContext context, IMapper maper, IEmail email, IUser user, IPublication publication)
+
+
+        public SaleOrderServices(SocialNetworkDeveloperContext context, IMapper maper, IEmail email, IUser user, IPublication publication, ITwilio twilioServices)
         {
             _context = context;
             _mapper = maper;
             _emailServices = email;
             _userServices = user;
             _publicationServices = publication;
+            _twilioServices = twilioServices;
         }
         public async Task<bool> AddSale(SaleOrderDTO saleOrderDTO)
         {
@@ -104,6 +108,15 @@ namespace APISND.Services
                         var email = await _emailServices.SendEmail(emailDTO);
 
                         if (!email)
+                            throw new Exception();
+
+                        //envio sms twilio
+                        var smsSeller = await  _twilioServices.SendSMS( seller.TelefonoContacto, "Se Realizo una solicitud de compra/venta en SNB&S");
+                        if (!smsSeller)
+                            throw new Exception();
+
+                        var smsBuyer = await _twilioServices.SendSMS(buyer.TelefonoContacto, "Acabas de realizar una solicitud de compra en SNB&S");
+                        if (!smsBuyer)
                             throw new Exception();
 
                         await transaction.CommitAsync();
@@ -250,6 +263,15 @@ namespace APISND.Services
                         if (!email)
                             throw new Exception();
 
+                        //envio sms twilio
+                        var smsSeller = await _twilioServices.SendSMS(seller.TelefonoContacto, "Acabas de Aprobadar una venta en SNB&S");
+                        if (!smsSeller)
+                            throw new Exception();
+
+                        var smsBuyer = await _twilioServices.SendSMS(buyer.TelefonoContacto, "Su compra fue aprobada por el vendedor en SNB&S");
+                        if (!smsBuyer)
+                            throw new Exception();
+
 
                         await transaction.CommitAsync();
 
@@ -343,6 +365,14 @@ namespace APISND.Services
                         if (!email)
                             throw new Exception();
 
+                        //envio sms twilio
+                        var smsSeller = await _twilioServices.SendSMS(seller.TelefonoContacto, "Acabas de Rechazar una venta en SNB&S");
+                        if (!smsSeller)
+                            throw new Exception();
+
+                        var smsBuyer = await _twilioServices.SendSMS(buyer.TelefonoContacto, "Su compra fue Rechazada por el vendedor en SNB&S");
+                        if (!smsBuyer)
+                            throw new Exception();
 
                         await transaction.CommitAsync();
 

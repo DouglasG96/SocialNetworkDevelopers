@@ -3,9 +3,11 @@ using APISND.Interface;
 using APISND.Models;
 using AutoMapper;
 using log4net;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,14 +21,17 @@ namespace APISND.Services
         private readonly IEmail _emailServices;
         private readonly IUser _userServices;
         private readonly IPublication _publicationServices;
+        private readonly ITwilio _twilioServices;
 
-        public BuyOrderServices(SocialNetworkDeveloperContext context, IMapper mapper, IEmail email, IUser user, IPublication publication)
+
+        public BuyOrderServices(SocialNetworkDeveloperContext context, IMapper mapper, IEmail email, IUser user, IPublication publication, ITwilio twilioServices)
         {
             _context = context;
             _mapper = mapper;
             _emailServices = email;
             _userServices = user;
             _publicationServices = publication;
+            _twilioServices = twilioServices;
         }
 
         public  List<BuyOrderDTO> GetHistoryBuysByIdBuyer(int id)
@@ -182,6 +187,15 @@ namespace APISND.Services
                             if (!email)
                                 throw new Exception();
 
+                            //envio sms twilio
+                            var smsSeller = await _twilioServices.SendSMS(seller.TelefonoContacto, "Una Venta fue Entregada con Exito en SNB&S");
+                            if (!smsSeller)
+                                throw new Exception();
+
+                            var smsBuyer = await _twilioServices.SendSMS(buyer.TelefonoContacto, "Acabas de Confirmar de Recibido tu Compra en SNB&S");
+                            if (!smsBuyer)
+                                throw new Exception();
+
 
                             await transaction.CommitAsync();
 
@@ -204,6 +218,45 @@ namespace APISND.Services
                 return false;
                 throw;
             }
+        }
+
+        public List<BuySummaryDTO> GetBuySummary()
+        {
+            var list = new List<BuySummaryDTO>();
+            try
+            {
+                var connection = _context.Database.GetDbConnection();
+                using (SqlConnection cnx = new SqlConnection(connection.ConnectionString))
+                {
+                    SqlCommand cmd = new SqlCommand("sp_salesSummary", cnx);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cnx.Open();
+                    var result = cmd.ExecuteReader();
+                    if (result.HasRows)
+                    {
+                        while (result.Read())
+                        {
+                            BuySummaryDTO b = new BuySummaryDTO()
+                            {
+                               Title = result["Title"].ToString(), 
+                               Value = (int)result["Value"],
+                               Icon = result["Icon"].ToString(),
+                               Color1 = result["Color1"].ToString(),
+                               Color2 = result["Color2"].ToString(),
+
+                            };
+                            list.Add(b);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+            return list;
         }
     }
 }

@@ -63,6 +63,8 @@ namespace APISND
             services.AddTransient<IAdress, AdressServices>();
             services.AddTransient<IWishList, WishlistServices>();
             services.AddTransient<IStatistics, StatisticsServices>();
+            services.AddTransient<ITwilio, TwilioServices>();
+
 
             services.AddSignalR();//A�adimos servicio para SignalR
 

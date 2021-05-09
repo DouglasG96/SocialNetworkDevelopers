@@ -118,7 +118,7 @@ export default {
         this.$q.loading.hide();
         if (this.user.idRole === "1")
           this.$router
-            .push({ path: "/Mantenimientos/Usuarios" })
+            .push({ path: "/Estadisticas" })
             .catch(error => {
               console.log(error);
             });

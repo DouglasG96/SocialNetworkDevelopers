@@ -13,7 +13,7 @@ namespace APISND.Services
     {
         private readonly string _accountSid = "ACcedeee9dbd2d2a12959337b3404742a9";
         private readonly string _authToken = "5dee42cc1277c09bbc21d1104eca0e80";
-        public bool SendSMS(string number, string msg)
+        public async Task<bool> SendSMS(string number, string msg)
         {
             try
             {
@@ -24,7 +24,7 @@ namespace APISND.Services
                 messageOptions.MessagingServiceSid = "MG648440611ba9866d251e08319f4fff70";
                 messageOptions.Body = msg;
 
-                var message = MessageResource.Create(messageOptions);
+                var message = await MessageResource.CreateAsync(messageOptions);
                 Console.WriteLine(message.Body);
 
                 return true;

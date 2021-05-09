@@ -12,5 +12,6 @@ namespace APISND.Interface
         List<BuyOrderDTO> GetHistoryBuysByIdBuyer(int id);
         Task<bool> ReceivedBuyer(ReceivedBuyerDTO statusOrderDTO);
 
+        List<BuySummaryDTO> GetBuySummary();
     }
 }

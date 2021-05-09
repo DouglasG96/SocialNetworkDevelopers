@@ -13,7 +13,13 @@ async function ReceivedBuyer(buyerOrder) {
   return resp.data;
 }
 
+async function GetBuySummary () {
+  var resp = await api.get(`/BuyOrders/GetBuySummary`);
+  return resp.data;
+}
+
 export default {
   GetHistoryBuysByIdBuyer,
-  ReceivedBuyer
+  ReceivedBuyer,
+  GetBuySummary
 }

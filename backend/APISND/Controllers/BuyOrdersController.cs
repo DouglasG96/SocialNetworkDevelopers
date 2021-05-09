@@ -72,5 +72,26 @@ namespace APISND.Controllers
             }
         }
 
+        [HttpGet]
+        [AuthorizeRoles(Rol.Administrator)]
+        [ProducesResponseType(typeof(BuySummaryDTO), 200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult GetBuySummary()
+        {
+            try
+            {
+                var resp = _buyOrderServices.GetBuySummary();
+
+                if (resp == null)
+                    return NotFound(resp);
+
+                return Ok(resp);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = e.Message });
+            }
+        }
     }
 }
