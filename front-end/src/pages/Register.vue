@@ -73,16 +73,16 @@
                 lazy-rules
                 :rules="rules.requiredNit"
                 mask="##############"
-
               />
-                
-              <q-input 
-                filled 
-                v-model="phone" 
-                label="telefono" 
-                lazy-rules 
-                :rules="rules.required" 
-                mask="########" />
+
+              <q-input
+                filled
+                v-model="phone"
+                label="telefono / sin guión"
+                lazy-rules
+                :rules="rules.required"
+                mask="########"
+              />
               <q-input
                 ref="correo"
                 filled
@@ -99,8 +99,7 @@
                 v-model="password"
                 label="contraseña"
                 lazy-rules
-                :rules="rules.required"
-                class="text-lowercase"
+                :rules="rules.requiredPaswword"
               />
 
               <div class="row">
@@ -153,6 +152,10 @@ export default {
         requiredNit: [
           v => !!v || "Campo Requerido.",
           v => (v && v.length == 14) || "Nit debe tener 14 caracteres"
+        ],
+        requiredPaswword: [
+          v => !!v || "Campo Requerido.",
+          v => (v && v.length >= 6) || "Contraseña debe al menos 6 caracteres"
         ],
         requiredNumber: [
           val => (val !== null && val !== "") || "Please type your age",
@@ -222,7 +225,9 @@ export default {
         this.$q.notify({
           type: "positive",
           position: "center",
-          message: "Gracias por Registrarte, Por Favor Inicia Sesión..."
+          message: "Gracias por Registrarte, Por Favor Inicia Sesión...",
+          actions: [{ icon: "close", color: "white" }]
+
         });
         //this.$q.loading.hide();
 
@@ -230,7 +235,7 @@ export default {
           this.$router.push({ path: "/Login" }).catch(error => {
             console.log(error);
           });
-        }, 4000);
+        }, 3000);
       } catch (error) {
         //this.$q.loading.hide();
 
@@ -238,7 +243,9 @@ export default {
         this.$q.notify({
           type: "negative",
           position: "center",
-          message: "Error Interno, Intente mas Tarde"
+          message: "Error Interno, Intente mas Tarde",
+          actions: [{ icon: "close", color: "white" }]
+
         });
       } finally {
         this.$q.loading.hide();

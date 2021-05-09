@@ -19,15 +19,21 @@
           </q-card-section>
           <q-card-section>
             <div class="text-center q-pt-lg">
-              <div class="col text-h6 ellipsis">Inicio de Sesión</div>
+              <div class="col text-h6 ellipsis">Restaurar Contraseña</div>
             </div>
           </q-card-section>
           <q-card-section>
-            <q-form ref="formLogin" autocomplete="off" class="q-gutter-md" @submit.prevent="login">
+            <q-form
+              ref="formRestorePassword"
+              autocomplete="off"
+              class="q-gutter-md"
+              @submit.prevent="restorePassword"
+            >
               <q-input
                 filled
                 v-model="email"
                 label="correo"
+                ref="correo"
                 lazy-rules
                 :rules="rules.requiredEmail"
                 class="text-lowercase"
@@ -37,28 +43,18 @@
                 type="password"
                 filled
                 v-model="password"
-                label="Contraseña"
+                label="Nueva Contraseña"
                 lazy-rules
                 :rules="rules.requiredPaswword"
               />
 
               <div class="row text-center">
                 <div class="col-6">
-                  <q-btn label="Acceder" type="submit" color="positive" />
+                  <q-btn label="Cambiar Contraseña" type="submit" color="positive" />
                 </div>
                 <div class="col-6">
-                  <q-btn label="Registrarse" to="/Register" color="secondary" class="q-ml-sm" />
+                  <q-btn label="Login" to="/Login" color="secondary" class="q-ml-sm" />
                 </div>
-              </div>
-              <div>
-                <q-btn
-                  color="secondary"
-                  label="Olvidé Contraseña"
-                  size="sm"
-                  flat
-                  dense
-                  @click="restorePassword()"
-                />
               </div>
             </q-form>
           </q-card-section>
@@ -70,6 +66,8 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import api from "src/api/user";
+
 export default {
   data() {
     return {
@@ -77,15 +75,15 @@ export default {
       password: "",
       rules: {
         required: [v => !!v || "Campo Requerido."],
-        requiredEmail: [
+        requiredPaswword: [
+          v => !!v || "Campo Requerido.",
+          v => (v && v.length >= 6) || "Contraseña debe al menos 6 caracteres"
+        ],
+                requiredEmail: [
           value => {
             const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return pattern.test(value) || "Correo requerido";
           }
-        ],
-        requiredPaswword: [
-          v => !!v || "Campo Requerido.",
-          v => (v && v.length >= 6) || "Contraseña debe al menos 6 caracteres"
         ]
       }
     };
@@ -102,49 +100,63 @@ export default {
 
   methods: {
     ...mapActions("auth", ["loginUser"]),
-    async login() {
-      //valido formulario
-      var validate = await this.$refs.formLogin.validate();
-      if (!validate) {
-        return;
-      }
-
+    async restorePassword() {
       try {
         this.$q.loading.show();
-        await this.loginUser({
-          email: this.email.trim(),
-          password: this.password.trim()
+
+        //valido formulario
+        var validate = await this.$refs.formRestorePassword.validate();
+        if (!validate) {
+          return;
+        }
+
+        var existEmail = await api.userExistsEmail(this.email);
+        console.log(existEmail);
+        if (!existEmail) {
+          this.$q.notify({
+            type: "warning",
+            position: "center",
+            message: "Correo electronico ingresado, no existe...",
+            actions: [{ icon: "close", color: "white" }]
+
+          });
+          this.$refs.correo.focus();
+
+          this.$q.loading.hide();
+
+          return;
+        }
+
+        await api.updatePassword({
+          email: this.email,
+          password: this.password
         });
-        this.$q.loading.hide();
-        if (this.user.idRole === "1")
-          this.$router
-            .push({ path: "/Mantenimientos/Usuarios" })
-            .catch(error => {
-              console.log(error);
-            });
-        if (this.user.idRole === "2")
-          this.$router.push({ path: "/MisPublicaciones" }).catch(error => {
+        this.$q.notify({
+          type: "positive",
+          position: "center",
+          message: "Contraseña actualizada exitosamente, Por Favor Inicia Sesión...",
+          actions: [{ icon: 'close', color: 'white' }]
+        });
+        //this.$q.loading.hide();
+
+        setTimeout(() => {
+          this.$router.push({ path: "/Login" }).catch(error => {
             console.log(error);
           });
-        if (this.user.idRole === "3")
-          this.$router.push({ path: "/" }).catch(error => {
-            console.log(error);
-          });
+        }, 3000);
       } catch (error) {
-        this.$q.loading.hide();
+        //this.$q.loading.hide();
+
         console.log(error);
         this.$q.notify({
           type: "negative",
           position: "center",
-          message: error.data,
-          actions: [{ icon: "close", color: "white" }]
+          message: "Error Interno, Intente mas Tarde",
+          actions: [{ icon: 'close', color: 'white' }]
         });
+      } finally {
+        this.$q.loading.hide();
       }
-    },
-    restorePassword() {
-      this.$router.push({ path: "/RestorePassword" }).catch(error => {
-        console.log(error);
-      });
     }
   }
 };

@@ -39,20 +39,6 @@ const routes = [
       },
       {path: '/HistorialCompras', component: () => import('pages/buyer/HistoryBuyer.vue'), meta: {requireAuth: true}},
 
-      // { path: '', component: () => import('pages/Dashboard.vue'),},
-      // { path: '/Dashboard2', component: () => import('pages/Dashboard2.vue'),},
-      // { path: '/Profile', component: () => import('pages/UserProfile.vue'), meta: { requireAuth: true }},
-      // {path: '/Map', component: () => import('pages/Map.vue')},
-      // {path: '/MapMarker', component: () => import('pages/MapMarker.vue')},
-      // {path: '/StreetView', component: () => import('pages/StreetView.vue')},
-      // {path: '/TreeTable', component: () => import('pages/TreeTable.vue')},
-      // {path: '/Charts', component: () => import('pages/Charts.vue')},
-      // {path: '/Cards', component: () => import('pages/Cards.vue')},
-      // {path: '/Tables', component: () => import('pages/Tables.vue')},
-      // {path: '/Contact', component: () => import('pages/Contact.vue')},
-      // {path: '/Calendar', component: () => import('pages/Calendar.vue')},
-      // {path: '/Pagination', component: () => import('pages/Pagination.vue')},
-      // {path: '/Taskboard', component: () => import('pages/TaskBoard.vue')},
     ]
   },
 
@@ -62,22 +48,15 @@ const routes = [
     meta: {requireAuth: false}
   },
   {
+    path: '/RestorePassWord',
+    component: () => import('pages/RestorePassword.vue'),
+    meta: {requireAuth: false}
+  },
+  {
     path: '/Register',
     component: () => import('pages/Register.vue'),
     meta: {requireAuth: false}
   },
-  // {
-  //   path: '/Maintenance',
-  //   component: () => import('pages/Maintenance.vue')
-  // },
-  // {
-  //   path: '/Mail',
-  //   component: () => import('layouts/Mail.vue')
-  // },
-  // {
-  //   path: '/Lock-2',
-  //   component: () => import('pages/LockScreen-2.vue')
-  // }
 ]
 
 // Always leave this as last one
