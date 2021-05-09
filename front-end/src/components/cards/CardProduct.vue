@@ -7,7 +7,7 @@
         <q-btn
           fab
           color="teal-7"
-          icon="fas fa-heart" padding="sm"
+          icon="playlist_add" padding="sm"
           class="absolute"
           style="top: 0; right: 12px; transform: translateY(-50%);"
           @click="cardModal = true"

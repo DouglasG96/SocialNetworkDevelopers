@@ -1,10 +1,12 @@
 ﻿using APISND.DTO;
 using APISND.Helpers;
+using APISND.Hubs;
 using APISND.Interface;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,12 +20,15 @@ namespace APISND.Controllers
     {
         private readonly ISaleOrder _saleOrderServices;
         private readonly IMapper _mapper;
+        private readonly IHubContext<PublicationHub> _hubContext;
 
 
-        public SaleOrdersController(ISaleOrder saleOrder, IMapper mapper)
+
+        public SaleOrdersController(ISaleOrder saleOrder, IMapper mapper, IHubContext<PublicationHub> hubContext)
         {
             _saleOrderServices = saleOrder;
             _mapper = mapper;
+            _hubContext = hubContext;
         }
 
         /// <summary>

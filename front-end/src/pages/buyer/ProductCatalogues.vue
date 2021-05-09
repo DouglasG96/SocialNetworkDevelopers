@@ -3,7 +3,7 @@
     <div>
       <q-card class="no-border no-shadow">
         <q-card-section class="q-pa-sm">
-          <q-input rounded v-model="search" outlined placeholder="Search Product">
+          <q-input rounded v-model="search" outlined placeholder="Buscar Producto">
             <template v-slot:append>
               <q-icon v-if="search === ''" name="search" />
               <q-icon v-else name="clear" class="cursor-pointer" @click="search = ''" />
@@ -49,9 +49,9 @@
               <q-item-section side top>
                 <q-item-label caption>$ {{item.precio}}</q-item-label>
               </q-item-section>
-              <q-item-section right side>
-                <div class="text-grey-8 q-gutter-xs">
-                 <q-btn class="gt-xs" size="12px" flat dense round icon="delete" @click="deleteWishList(item.idWhislist)"/>
+              <q-item-section side bottom>
+                <div class="text-grey-8 ">
+                 <q-btn class="" size="12px" flat dense round icon="delete" @click="deleteWishList(item.idWhislist)"/>
                 </div>
               </q-item-section>
             </q-item>
@@ -132,14 +132,14 @@ export default {
           this.historyWishlist = responseHistory
           this.drawer = !this.drawer
         }
-        else
-        {
-          this.$q.notify({
-            type: "warning",
-            position: "center",
-            message: "No has agregado ningun item a tu wishlist"
-          });
-        }
+        // else
+        // {
+        //   this.$q.notify({
+        //     type: "warning",
+        //     position: "center",
+        //     message: "No has agregado ningun item a tu wishlist"
+        //   });
+        // }
       } catch (error) {
         console.log(error);
         this.$q.notify({
