@@ -27,7 +27,7 @@
           <span class="text-h6">${{ data.precio }}</span>
           <span class="text-h5 float-right">
           <q-btn label="Ver Detalle" rounded color="secondary" outline @click="getDetail(data)"></q-btn>
-        </span>
+          </span>
         </div>
       </q-card-section>
     </q-card>
@@ -89,6 +89,10 @@ export default {
   },
   methods: {
     ...mapActions("shoppingCart", ["addShoppingCart", "cleanShoppingCart"]),
+    getDetailWishlistChild(){
+      this.$on("getDetailWishlist",this.getDetail(data));
+      console.log('si funciona el listener')
+    },
     getDetail(data) {
       this.cleanShoppingCart();
       this.addShoppingCart(data);

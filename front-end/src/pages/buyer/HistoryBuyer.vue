@@ -27,6 +27,11 @@
 
             }"
           ></ButtonExportExcel>
+          <q-btn
+            round color="green"
+            icon="refresh"
+            @click="getHistoryBuyers"
+          ></q-btn>
           <q-space />
           <q-input borderless dense debounce="300" color="primary" v-model="filter">
             <template v-slot:append>

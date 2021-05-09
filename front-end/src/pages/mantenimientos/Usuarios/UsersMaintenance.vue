@@ -17,6 +17,11 @@
           @click="show_dialog = true"
           no-caps
         ></q-btn>
+        <q-btn
+          round color="green"
+          icon="refresh"
+          @click="getUsers"
+        ></q-btn>
 
         <div class="row q-col-gutter-sm">
           <q-dialog v-model="show_dialog">
@@ -90,7 +95,7 @@
             </q-popup-edit>
           </q-td>
           <q-td key="IdRol" :props="props">
-            {{ props.row.idRol }}
+            {{ (props.row.idRol === 1) ? 'Administrador' : (props.row.idRol === 2) ? 'Vendedor' : 'Comprador' }}
             <q-popup-edit
               v-model="props.row.idRol"
               title="Actualizar Id Rol"

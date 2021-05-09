@@ -14,6 +14,11 @@
         :filter="filter"
       >
         <template v-slot:top>
+          <q-btn
+            round color="green"
+            icon="refresh"
+            @click="getPublicationsByIdUser"
+          ></q-btn>
           <q-space />
           <q-input borderless dense debounce="300" color="primary" v-model="filter">
             <template v-slot:append>
