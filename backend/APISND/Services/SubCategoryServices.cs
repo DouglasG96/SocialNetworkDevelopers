@@ -1,6 +1,8 @@
 ﻿using APISND.Interface;
 using APISND.Models;
+using AutoMapper;
 using log4net;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,6 +49,28 @@ namespace APISND.Services
                 throw;
             }
 
+        }
+
+        public async Task<SubCategoria> EditSubCategory(SubCategoria subCategoria)
+        {
+            try
+            {
+                var model = await _context.SubCategorias.AsNoTracking().FirstOrDefaultAsync(x => x.IdSubCategoria == subCategoria.IdSubCategoria);
+                if (model != null)
+                {
+                    _context.SubCategorias.Add(subCategoria).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+
+                    return subCategoria;
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error al  Actualizar Usuario UpdateUser()  {0} : {1} ", e.Source, e.Message);
+
+                throw;
+            }
         }
 
         public async Task<SubCategoria> AddSubCategory(SubCategoria subCategoria)

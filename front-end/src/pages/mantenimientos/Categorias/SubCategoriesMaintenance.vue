@@ -7,6 +7,7 @@
             color="primary"
             label="Nueva Sub Categoria"
             icon-right="add"
+            style="height: 55px"
             @click="show_dialog = true"
             no-caps
           ></q-btn>
@@ -24,7 +25,6 @@
             @input="changeCategory()"
           />
         </q-item>
-
     </div>
     <!-- Dialogo para agregar y editar Registros -->
 
@@ -40,44 +40,51 @@
         <div class="row q-col-gutter-sm">
           <q-dialog v-model="show_dialog">
             <div>
-              <q-form ref="formUser" autocomplete="off">
+              <q-form ref="formSubCategoria" autocomplete="off">
                 <q-card>
                   <q-card-section>
                     <div class="text-h6">{{formTitle}}</div>
                   </q-card-section>
                   <q-card-section>
                     <div class="row">
-                      <div class="col-6">
+                      <div class="col-12">
+                        <q-item>
+                          <q-select
+                            filled
+                            v-model="categoryModal"
+                            :options="optionsCategory"
+                            option-value="idCategoria"
+                            option-label="nombreCategoria"
+                            label="Categoria"
+                            :rules="rules.required"
+                            class="col-12"
+                          />
+                        </q-item>
+                      </div>
+                      <div class="col-12">
                         <q-item>
                           <q-input
                             filled
-                            v-model="editedItem.idRol"
-                            label="Rol"
+                            v-model="editedItem.nombreSubCategoria"
+                            label="Nombre de la Sub Categoria"
                             lazy-rules
                             :rules="rules.required"
+                            class="col-12"
                           ></q-input>
                         </q-item>
                       </div>
-                      <div class="col-6">
+                      <div class="col-12">
                         <q-item>
-                          <q-input
+                          <q-select
                             filled
-                            v-model="editedItem.nombres"
-                            label="Nombres"
-                            lazy-rules
+                            v-model="editedItem.estadoSubCategoria"
+                            :options="optionsEstadoSubCategoria"
+                            option-value="value"
+                            option-label="label"
+                            label="Estado de la sub categoria"
                             :rules="rules.required"
-                          ></q-input>
-                        </q-item>
-                      </div>
-                      <div class="col-6">
-                        <q-item>
-                          <q-input
-                            filled
-                            v-model="editedItem.apellidos"
-                            label="Apellidos"
-                            lazy-rules
-                            :rules="rules.required"
-                          ></q-input>
+                            class="col-12"
+                          />
                         </q-item>
                       </div>
                     </div>
@@ -102,37 +109,22 @@
       <!-- Renderiza data en tabla -->
       <template v-slot:body="props">
         <q-tr :props="props">
-          <q-td key="IdUsuario" :props="props">
-            {{ props.row.idUsuario }}
-            <q-popup-edit v-model="props.row.idUsuario">
-              <q-input v-model="props.row.idUsuario" dense autofocus></q-input>
+          <q-td key="idSubCategoria" :props="props">
+            {{ props.row.idSubCategoria }}
+            <q-popup-edit v-model="props.row.idSubCategoria">
+              <q-input v-model="props.row.idSubCategoria" dense autofocus></q-input>
             </q-popup-edit>
           </q-td>
-          <q-td key="IdRol" :props="props">
-            {{ props.row.idRol }}
-            <q-popup-edit
-              v-model="props.row.idRol"
-              title="Actualizar Id Rol"
-              buttons
-            >
-              <q-input
-                type="number"
-                v-model="props.row.idRol"
-                dense
-                autofocus
-              ></q-input>
+          <q-td key="nombreSubCategoria" :props="props">
+            <div class="text-pre-wrap">{{ props.row.nombreSubCategoria }}</div>
+            <q-popup-edit v-model="props.row.nombreSubCategoria">
+              <q-input v-model="props.row.nombreSubCategoria" dense autofocus></q-input>
             </q-popup-edit>
           </q-td>
-          <q-td key="Nombre" :props="props">
-            <div class="text-pre-wrap">{{ props.row.nombres }}</div>
-            <q-popup-edit v-model="props.row.nombres">
-              <q-input v-model="props.row.nombres" dense autofocus></q-input>
-            </q-popup-edit>
-          </q-td>
-          <q-td key="Apellidos" :props="props">
-            <div class="text-pre-wrap">{{ props.row.apellidos }}</div>
-            <q-popup-edit v-model="props.row.apellidos">
-              <q-input v-model="props.row.apellidos" dense autofocus></q-input>
+          <q-td key="estadoSubCategoria" :props="props">
+            <div class="text-pre-wrap">{{ (props.row.estadoSubCategoria === 1) ? 'Activo' : 'Inactivo'}}</div>
+            <q-popup-edit v-model="props.row.estadoSubCategoria">
+              <q-input v-model="props.row.estadoSubCategoria" dense autofocus></q-input>
             </q-popup-edit>
           </q-td>
           <q-td key="actions" :props="props">
@@ -143,14 +135,6 @@
               dense
               @click="editItem(props.row)"
             />
-            <q-btn
-              icon="delete"
-              size="sm"
-              class="q-ml-sm"
-              flat
-              dense
-              @click="deleteItem(props.row)"
-            />
           </q-td>
         </q-tr>
       </template>
@@ -159,46 +143,53 @@
 </template>
 
 <script>
-import api from "src/api/subCategory";
+import subCategory from "src/api/subCategory";
+import category from "src/api/category";
 import { mapState } from "vuex";
 
 export default {
   data() {
     return {
       optionsCategory: [],
+      optionsEstadoSubCategoria: [
+        {
+          label: 'Activo',
+          value : 1
+        },
+        {
+          label:'Inactivo',
+          value:  0
+        }
+      ],
       category: "",
+      categoryModal: "",
       show_dialog: false,
       editedIndex: -1,
       editedItem: {
-        idUsuario: null,
-        idRol: null,
-        nombres: null,
-        apellidos: null
+        idSubCategoria: 0,
+        estadoSubCategoria: 0,
+        nombreSubCategoria: "",
+        idCategoria: 0
       },
       columns: [
         {
-          name: "IdUsuario",
+          name: "idSubCategoria",
           label: "ID",
-          field: "idUsuario"
+          field: "idSubCategoria"
         },
         {
-          name: "IdRol",
-          label: "Rol",
-          field: "idRol"
+          name: "nombreSubCategoria",
+          label: "Nombre de Sub Categoria",
+          field: "nombreSubCategoria"
         },
         {
-          name: "Nombre",
-          label: "Nombres",
-          field: "nombres"
-        },
-        {
-          name: "Apellidos",
-          label: "Apellidos",
-          field: "apellidos"
+          name: "estadoSubCategoria",
+          label: "Estado",
+          field: "estadoSubCategoria"
         },
         {
           name: "actions",
-          label: "Actions",
+          label: "Acciones",
           field: "actions"
         }
       ],
@@ -217,7 +208,7 @@ export default {
   },
   async mounted() {
     try {
-      this.optionsCategory = await api.getCategory();
+      this.optionsCategory = await category.getCategory();
     } catch (error) {
       console.log(error);
     }
@@ -231,61 +222,22 @@ export default {
       ...mapState("auth", ["user"])
   },
   methods: {
-    changeCategory() {
-      this.getSubcategory();
-      console.log(this.category.idCategoria);
+    async changeCategory() {
+      await this.getSubcategory();
     },
     async getSubcategory() {
       try {
-        this.optionsSubCategory = await api.getSubCategoryByCategory(
+        const resp = await subCategory.getSubCategoryByCategory(
           this.category.idCategoria
         );
+        this.data = resp
       } catch (error) {
         console.log(error);
       }
     },
-    /*
-    async deleteItem(item) {
-      this.$q
-        .dialog({
-          title: "Confirm",
-          dark: true,
-          message: "Seguro que quieres Eliminar El Registro?",
-          cancel: true,
-          persistent: true
-        })
-        .onOk(async () => {
-          try {
-            await api.deleteUser(item.idUsuario);
-            const index = this.data.indexOf(item);
-            this.data.splice(index, 1);
-            this.$q.notify({
-              type: "positive",
-              position: "center",
-              message: "Usuario Eliminado Correctamente"
-            });
-          } catch (error) {
-            this.$q.notify({
-              type: "negative",
-              position: "center",
-              message: "Error Interno, Intente mas Tarde"
-            });
-          }
-        })
-        .onOk(() => {
-          // console.log('>>>> second OK catcher')
-        })
-        .onCancel(() => {
-          console.log(">>>> Cancel");
-        })
-        .onDismiss(() => {
-          // console.log('I am triggered on both OK and Cancel')
-        });
-    },
     editItem(item) {
       this.editedIndex = this.data.indexOf(item);
       this.editedItem = Object.assign({}, item);
-      console.log(this.editedItem);
       this.show_dialog = true;
     },
     close() {
@@ -294,11 +246,11 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
-      this.$refs.formUser.resetValidation();
+      this.$refs.formSubCategoria.resetValidation();
     },
     async save() {
       //valido formulario
-      var validate = await this.$refs.formUser.validate();
+      var validate = await this.$refs.formSubCategoria.validate();
       if (!validate) {
         return;
       }
@@ -306,21 +258,19 @@ export default {
       //Edito usuario
       if (this.editedIndex > -1) {
         try {
-          await api.updateUser(this.editedItem.idUsuario, {
-            idUsuario: this.editedItem.idUsuario,
-            idRol: this.editedItem.idRol,
-            nombreCompleto:
-              this.editedItem.nombres + " " + this.editedItem.apellidos,
-            nombres: this.editedItem.nombres,
-            apellidos: this.editedItem.apellidos
+          let resp = await subCategory.EditSubCategory( {
+            IdSubCategoria: this.editedItem.idSubCategoria,
+            IdCategoria: this.categoryModal.idCategoria,
+            NombreSubCategoria: this.editedItem.nombreSubCategoria,
+            EstadoSubCategoria: this.editedItem.estadoSubCategoria.value
           });
           this.$q.notify({
             type: "positive",
             position: "center",
-            message: "Usuario Editado Correctamente"
+            message: "Sub Categoria Editada Correctamente"
           });
           this.close();
-          await this.getUsers();
+          await this.getSubcategory();
         } catch (error) {
           console.log(error);
           this.$q.notify({
@@ -330,22 +280,19 @@ export default {
           });
         }
       } else {
-        //creo usuario
         try {
-          await api.addUser({
-            idRol: this.editedItem.idRol,
-            nombreCompleto:
-              this.editedItem.nombres + " " + this.editedItem.apellidos,
-            nombres: this.editedItem.nombres,
-            apellidos: this.editedItem.apellidos
+          let resp = await subCategory.AddSubCategory({
+            IdCategoria: this.categoryModal.idCategoria,
+            NombreSubCategoria: this.editedItem.nombreSubCategoria,
+            EstadoSubCategoria: this.editedItem.estadoSubCategoria.value
           });
           this.$q.notify({
             type: "positive",
             position: "center",
-            message: "Usuario Creado Correctamente"
+            message: "Sub Categoria Creada Correctamente"
           });
           this.close();
-          await this.getUsers();
+          await this.getSubcategory();
         } catch (error) {
           console.log(error);
           this.$q.notify({
@@ -356,7 +303,6 @@ export default {
         }
       }
     }
-    */
   }
 };
 </script>

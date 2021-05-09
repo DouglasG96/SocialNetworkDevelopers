@@ -11,6 +11,7 @@ namespace APISND.Interface
         List<SubCategoria> GetAllSubCategories();
         List<SubCategoria> GetSubCategoryByCategory(int id);
         Task<SubCategoria> AddSubCategory(SubCategoria subCategoria);
+        Task<SubCategoria> EditSubCategory(SubCategoria subCategoria);
 
     }
 }

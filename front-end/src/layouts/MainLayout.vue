@@ -148,6 +148,7 @@
                 <q-item-label>Usuarios</q-item-label>
               </q-item-section>
             </q-item>
+            <!--
             <q-item to="/Mantenimientos/Categorias" active-class="q-item-no-link-highlighting">
               <q-item-section avatar>
                 <q-icon name="list"/>
@@ -156,6 +157,7 @@
                 <q-item-label>Categorias</q-item-label>
               </q-item-section>
             </q-item>
+            -->
             <q-item to="/Mantenimientos/SubCategorias" active-class="q-item-no-link-highlighting">
               <q-item-section avatar>
                 <q-icon name="check"/>

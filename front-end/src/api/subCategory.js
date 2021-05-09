@@ -14,8 +14,20 @@ async function GetAllSubCategories () {
     return resp.data;
 }
 
+async function AddSubCategory (subCategory) {
+    var resp = await api.post(`${url}/SubCategory/AddSubCategory`,subCategory);
+    return resp.data;
+}
+
+async function EditSubCategory (subCategoryUpdate) {
+    var resp = await api.post(`${url}/SubCategory/EditSubCategory`,subCategoryUpdate);
+    return resp.data;
+}
+
 export default {
   ...category,
   getSubCategoryByCategory,
-  GetAllSubCategories
+  GetAllSubCategories,
+  AddSubCategory,
+  EditSubCategory
 }
